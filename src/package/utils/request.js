@@ -35,12 +35,12 @@ request.interceptors.response.use(
     err => {
         switch (err.response.status){
             case 401:{
-                router.push("/login")
+                location.href = "/login"
                 message.warning('请先登录')
                 break
             }
             case 402:{
-                router.push("/login")
+                location.href = "/login"
                 message.warning('登录过期，请重新登录')
                 break
             }

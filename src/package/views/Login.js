@@ -1,16 +1,11 @@
-import request from "../utils/request"
+
 import React from "react"
-import '../css/login.scss'
+import '@/package/css/login.scss'
 import { Form, Input, Button, Checkbox, message } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
-import { http } from "../../config"
-import { useNavigate } from 'react-router-dom'
-
-
-const withNavigation = (Component) => {
-    return (props) => <Component {...props} navigate={useNavigate()} />;
-  };
-
+import { http } from "@/config"
+import WithRouter from '@/package/components/hoc/WithRouter';
+import { sysUserLogin } from '@/package/request/system/user.js'
 
 class Login extends React.Component {
 
@@ -18,19 +13,19 @@ class Login extends React.Component {
      * 提交登录验证表单
      * @param {Object} values 
      */
-    onFinish = (values) => {
-        request.post("/system/user/login",values).then(res => {
-            switch(res){
-                case "login failed":{
+    onFinish = async (values) => {
+        sysUserLogin(values).then(res => {
+            switch (res) {
+                case "login failed": {
                     message.warning("用户名或密码错误")
                     break
                 }
-                case "less param":{
+                case "less param": {
                     message.warning("请填写完整")
                     break
                 }
-                default:{
-                    localStorage.setItem(http.header,res)
+                default: {
+                    localStorage.setItem(http.header, res)
                     this.props.navigate("/home")
                 }
             }
@@ -86,4 +81,4 @@ class Login extends React.Component {
     }
 }
 
-export default withNavigation(Login)
+export default WithRouter(Login)

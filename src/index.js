@@ -4,14 +4,17 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router } from 'react-router-dom'
+import zhCN from 'antd/lib/locale/zh_CN';
+import { ConfigProvider } from 'antd';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  // <React.StrictMode>
   <Router>
-    <App />
+    {/* 设置antd为中文主题 */}
+    <ConfigProvider locale={zhCN}>
+      <App />
+    </ConfigProvider>
   </Router>
-  // </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

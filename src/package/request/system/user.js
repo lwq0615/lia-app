@@ -1,0 +1,40 @@
+import request from "@/package/utils/request"
+
+const baseUrl = '/system/user'
+
+/**
+ * 用户登录
+ * @param {*} user 
+ * @returns 
+ */
+export function sysUserLogin(user) {
+    return request.post(`${baseUrl}/login`, user)
+}
+
+/**
+ * 获取用户信息
+ * @returns 
+ */
+export function getSysUserInfo() {
+    return request.get(`${baseUrl}/getInfo`)
+}
+
+
+/**
+ * 分页查询用户列表
+ * @param {*} user 查询参数
+ * @param {*} current 当前页（可为空）
+ * @param {*} size 没页条数（可为空）
+ */
+export function getSysUserPage(user,current,size){
+    return request.post(`${baseUrl}/getPage?current=${current || ''}&size=${size || ''}`,user || {})
+}
+
+
+/**
+ * 新增和编辑用户
+ * @param {*} users 用户列表，每条数据如果有userId则为修改，userId为null则为新增
+ */
+export function saveSysUsers(users){
+    return request.post(`${baseUrl}/saveUser`,users)
+}
