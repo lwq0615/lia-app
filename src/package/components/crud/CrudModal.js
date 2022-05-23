@@ -16,25 +16,24 @@ class CrudModal extends React.Component {
   }
 
   /**
-   * 点击确定
+   * 点击确定,表单提交
    */
   handleOk = async () => {
     this.setState({
       loading: true
     })
-    let form = null
+    let form = {}
     try {
-      form = await this.crudFormRef.formRef.validateFields()
-    }catch(error) {
+      form = await this.saveFormRef.getFormValue() || {}
+      if (await this.props.onSave(form, this.props.title)) {
+        this.props.search()
+      }
+    } catch (error) {
       this.setState({
         loading: false
       })
       return
     }
-    for (let key of Object.keys(form)) {
-      form[key] = form[key] === '' ? undefined : form[key]
-    }
-    await this.props.onSubmit(form, this.props.title)
     this.setState({
       loading: false
     })
@@ -52,14 +51,21 @@ class CrudModal extends React.Component {
     return (
       <>
         <Modal
-          width={700}
+          width={800}
+          destroyOnClose
           title={this.props.title}
           visible={this.props.visible}
           onOk={this.handleOk}
           confirmLoading={this.state.loading}
           onCancel={this.handleCancel}
         >
-          <CrudForm columns={this.props.columns} ref={ref => this.crudFormRef = ref} title={this.props.title} />
+          <CrudForm
+            formDefaultValues={{...this.props.formDefaultValues}}
+            columns={this.props.columns}
+            ref={ref => this.saveFormRef = ref}
+            title={this.props.title}
+            dict={this.props.dict}
+          />
         </Modal>
       </>
     )

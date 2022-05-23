@@ -38,3 +38,13 @@ export function getSysUserPage(user,current,size){
 export function saveSysUsers(users){
     return request.post(`${baseUrl}/saveUser`,users)
 }
+
+
+/**
+ * 批量删除用户
+ * @param {*} userIds 用户的id列表
+ * @returns 删除成功的数量
+ */
+export function deleteUsers(userIds){
+    return request.post(`${baseUrl}/deleteUsers`,userIds)
+}

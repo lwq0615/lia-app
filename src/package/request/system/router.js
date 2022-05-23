@@ -8,5 +8,5 @@ const baseUrl = '/system/router'
  * @returns 
  */
 export function getRouterOfRole(roleId) {
-    return request.get(`${baseUrl}/getRouterOfRole?roleId=${roleId}`)
+    return request.get(`${baseUrl}/getRouterOfRole?roleId=${roleId || ''}`)
 }

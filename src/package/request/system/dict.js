@@ -16,3 +16,11 @@ export function getRoleDict() {
 export function getSexDict(){
     return request.get(`${baseUrl}/getSysDict?type=sys:sex`)
 }
+
+/**
+ * 获取用户字典表
+ * @returns 
+ */
+export function getUserDict(){
+    return request.get(`${baseUrl}/sysUserDict`)
+}

@@ -10,36 +10,69 @@ class Crud extends React.Component {
     static propTypes = {
         getPage: propTypes.func.isRequired,
         columns: propTypes.array.isRequired,
-        selection: propTypes.func,
+        selection: propTypes.bool,
+        onSelection: propTypes.func,
         onRowClick: propTypes.func,
         editClick: propTypes.func,
         deleteClick: propTypes.func,
         addClick: propTypes.func,
         onSearch: propTypes.func,
-        onSubmit: propTypes.func
+        onSave: propTypes.func
+    }
+
+    state = {
+        dict: {}
     }
 
     nodes = {}
 
+    componentDidMount = async () => {
+        const newDict = {}
+        for (let column of this.props.columns) {
+            try {
+                if (column.dict) {
+                    let dict = null
+                    if (typeof column.dict === 'function') {
+                        dict = await column.dict()
+                    } else {
+                        dict = column.dict
+                    }
+                    newDict[column.dataIndex] = dict
+                }
+            } catch (err) {
+                continue
+            }
+        }
+        this.setState({
+            dict: newDict
+        })
+    }
+
     render() {
         return (
             <section>
-                <CrudSearch
-                    columns={this.props.columns}
-                    getPage={this.props.getPage}
-                    ref={ref => this.nodes.crudSearchRef = ref}
-                    nodes={this.nodes}
-                />
-                <CrudMenu
-                    onSubmit={this.props.onSubmit}
-                    nodes={this.nodes}
-                    columns={this.props.columns} 
-                    addClick={this.props.addClick}
-                />
+                {
+                    this.props.justShowTable
+                        ? null
+                        :(<>
+                            <CrudSearch
+                                {...this.props}
+                                ref={ref => this.nodes.crudSearchRef = ref}
+                                nodes={this.nodes}
+                                dict={this.state.dict}
+                            />
+                            <CrudMenu
+                                {...this.props}
+                                nodes={this.nodes}
+                                dict={this.state.dict}
+                            />
+                        </>)
+                }
                 <CrudTable
                     {...this.props}
                     ref={ref => this.nodes.crudTableRef = ref}
                     nodes={this.nodes}
+                    dict={this.state.dict}
                 />
             </section>
         )

@@ -1,6 +1,6 @@
 /* eslint-disable */
 import axios from "axios"
-import { http } from "../../config"
+import { http } from "@/config"
 import { message } from 'antd'
 
 
@@ -34,18 +34,28 @@ request.interceptors.response.use(
     },
     err => {
         switch (err.response.status){
+            case 400:{
+                message.error('请求有误')
+                break
+            }
             case 401:{
-                location.href = "/login"
                 message.warning('请先登录')
+                localStorage.removeItem(http.header)
+                setTimeout(() => {
+                    location.href = "/login"
+                },1000)
                 break
             }
             case 402:{
-                location.href = "/login"
                 message.warning('登录过期，请重新登录')
+                localStorage.removeItem(http.header)
+                setTimeout(() => {
+                    location.href = "/login"
+                },1000)
                 break
             }
             case 403:{
-                message.error('没有权限')
+                message.warning('没有权限')
                 break
             }
             case 404:{

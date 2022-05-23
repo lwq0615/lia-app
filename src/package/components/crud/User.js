@@ -1,3 +1,7 @@
+/**
+ * Crud组件使用示例
+ */
+
 
 import React from "react"
 import Crud from "@/package/components/crud/Crud"
@@ -14,6 +18,19 @@ const option = {
     justShowTable: false,
     // 表格行是否可选择(默认false)
     selection: true,
+    //点击新增触发事件 () => {}
+    addClick: () => {
+    },
+    // 搜索时触发 (params, page) => {}
+    onSearch: (params, page) => {
+    },
+    // 表格行点击事件钩子 (record, event) => {}
+    onRowClick: (record, event) => {
+        console.log("click");
+    },
+    // 点击行编辑按钮钩子 record => {}
+    editClick: record => {
+    },
     // 触发删除钩子 records => {}
     //return true刷新页面数据
     onDelete: async records => {
@@ -35,6 +52,7 @@ const option = {
     // 如果需要获取返回值再关闭弹窗，请使用await
     // return true刷新页面
     onSave: async (form, type) => {
+        console.log(form);
         return await saveSysUsers(form).then(res => {
             if(res === "用户名已存在"){
                 message.warning(res)
@@ -85,7 +103,6 @@ const option = {
             required: true,
             // type为select时必须提供dict
             type: "select",
-            // 配置了select后dict才会生效
             dict: getRoleDict
         },
         {
@@ -131,7 +148,6 @@ const option = {
             align: 'center',
             key: 'createBy',
             addEnable: false,
-            type: "select",
             dict: getUserDict
         },
         {
@@ -139,7 +155,6 @@ const option = {
             dataIndex: 'createTime',
             align: 'center',
             key: 'createTime',
-            addEnable: false,
             type: 'datetime',
             // 开启范围搜索,只在type为date或datetiime时生效(默认false)
             range: false,
