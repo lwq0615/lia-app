@@ -2,7 +2,7 @@
 import React from "react"
 import Crud from "@/package/components/crud/Crud"
 import { message } from "antd"
-import { getSysUserPage, saveSysUsers, deleteUsers } from '@/package/request/system/user'
+import { getSysUserPage, saveSysUser, deleteUsers } from '@/package/request/system/user'
 import { getRoleDict, getSexDict, getUserDict } from '@/package/request/system/dict'
 
 const option = {

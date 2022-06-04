@@ -33,10 +33,10 @@ export function getSysUserPage(user,current,size){
 
 /**
  * 新增和编辑用户
- * @param {*} users 用户列表，每条数据如果有userId则为修改，userId为null则为新增
+ * @param {*} user 用户参数，每条数据如果有userId则为修改，userId为null则为新增
  */
-export function saveSysUsers(users){
-    return request.post(`${baseUrl}/saveUser`,users)
+export function saveSysUser(user){
+    return request.post(`${baseUrl}/saveUser`,user)
 }
 
 

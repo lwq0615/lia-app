@@ -51,6 +51,8 @@ class CrudModal extends React.Component {
     return (
       <>
         <Modal
+          className='lia-crud-modal'
+          centered
           width={800}
           destroyOnClose
           title={this.props.title}

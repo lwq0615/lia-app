@@ -1,5 +1,6 @@
 
 import { Table, Space, Button, Modal } from 'antd';
+import * as icons from '@ant-design/icons'
 import React from 'react';
 import CrudConfirm from './CrudConfirm'
 import CrudModal from './CrudModal'
@@ -55,18 +56,25 @@ class CrudTable extends React.Component {
             }
             // 隐藏文本，通过按钮展开
             if (column.hideText) {
-                if(column.html){
-                    column.html = (text) => {
-                        return (
-                            <Button type="link" onClick={(e) => this.showHideText(column.html(text),column.title,e)}>查看</Button>
-                        )
+                const oldHtml = column.html
+                column.html = (text) => {
+                    return oldHtml ? (
+                        <Button type="link" onClick={(e) => this.showHideText(oldHtml(text),column.title,e)}>查看</Button>
+                    ):(
+                        <Button type="link" onClick={(e) => this.showHideText(text,column.title,e)}>查看</Button>
+                    )
+                }
+            }
+            if(column.type === 'icon'){
+                const oldHtml = column.html
+                column.html = (text) => {
+                    if(!text){
+                        return null
                     }
-                }else{
-                    column.html = (text) => {
-                        return (
-                            <Button type="link" onClick={(e) => this.showHideText(text,column.title,e)}>查看</Button>
-                        )
-                    }
+                    const Icon = icons[text]
+                    return oldHtml ? oldHtml(Icon) : (
+                        <Icon style={{fontSize: 20, color: '#40a9ff'}}/>
+                    )
                 }
             }
             newColumns.push(column)
@@ -183,11 +191,11 @@ class CrudTable extends React.Component {
     }
 
     render() {
-        /**
-         * 如果column配置了dict，则加载字典表并进行映射
-         */
         for (let column of this.state.columns) {
-            if (column.dict) {
+            /**
+             * 如果column配置了dict，则加载字典表并进行映射
+             */
+            if (column.type === 'select' && column.dict) {
                 const dict = this.props.dict && this.props.dict[column.dataIndex]
                 if (!dict) {
                     continue

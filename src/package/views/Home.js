@@ -18,7 +18,7 @@ class Home extends React.Component {
         routers: [],
         routePath: [],
         routes: [],
-        selectedKeys: []
+        selectedKeys: null
     }
 
     toggle = () => {
@@ -66,9 +66,9 @@ class Home extends React.Component {
     /**
      * 根据keyPath跳转路由
      */
-    goRouter = (keys, routers) => {
+    goRouter = (keys = [], routers) => {
         this.setState({
-            selectedKeys: keys || []
+            selectedKeys: keys
         })
         if (!keys || keys.length === 0) {
             this.setState({
@@ -77,18 +77,21 @@ class Home extends React.Component {
             this.props.navigate("/")
         } else {
             let list = routers
+            let parent = null
+            let path = ''
             this.setState({
                 routePath: keys.map(key => {
                     parent = this.findTarget(key, list)
                     list = parent.children
+                    path += "/" + parent.path
                     return (<Breadcrumb.Item key={key}>{parent.label}</Breadcrumb.Item>)
                 })
             })
             //跳转路由展示页面
-            if (parent.path[0] === '/') {
-                parent.path = parent.path.substring(1)
+            if (path[0] === '/') {
+                path = path.substring(1)
             }
-            this.props.navigate(parent.path)
+            this.props.navigate(path)
         }
     }
 
@@ -104,7 +107,7 @@ class Home extends React.Component {
      * 动态生成路由组件
      * @returns 
      */
-    createRoutes = async (routers, arr = []) => {
+    createRoutes = async (routers, arr = [], parentPath = '') => {
         for (let item of routers) {
             if (item.element) {
                 let element = item.element
@@ -112,11 +115,11 @@ class Home extends React.Component {
                     element = element.substring(1)
                 };
                 await import('@/package/views/' + element).then(({ default: Element }) => {
-                    arr.push(<Route key={'route:' + item.path} exact path={item.path} element={<Element />}></Route>)
+                    arr.push(<Route key={'route:' + item.path} exact path={parentPath + "/" + item.path} element={<Element />}></Route>)
                 })
             }
             if (item.children) {
-                await this.createRoutes(item.children, arr)
+                await this.createRoutes(item.children, arr, item.path)
             }
         }
         return arr
@@ -128,38 +131,33 @@ class Home extends React.Component {
     getPathKeys = (path, list, keyPath = []) => {
         for (let i in list) {
             let item = list[i]
-            keyPath.push(item.key)
-            if (item.path === path) {
-                return keyPath
-            } else {
-                if (item.children && item.children.length > 0) {
-                    let res = this.getPathKeys(path, item.children, keyPath)
-                    if (res) {
-                        return res
-                    }
+            if (item.path === path[0]) {
+                keyPath.push(item.key)
+                path.splice(0, 1)
+                if (path.length) {
+                    return this.getPathKeys(path, item.children, keyPath)
                 } else {
-                    keyPath.pop()
+                    return keyPath
                 }
             }
         }
-        keyPath.pop()
     }
 
     componentDidMount = () => {
         getSysUserInfo().then(user => {
             getRouterOfRole(user.roleId).then(async routers => {
                 routers = this.routerMap(routers)
+                //根据进入时的URI重新渲染视图
+                if (location.pathname === "/") {
+                    this.goRouter()
+                } else {
+                    var keyPath = this.getPathKeys(location.pathname.substring(1).split("/"), routers)
+                    this.goRouter(keyPath, routers)
+                }
                 this.setState({
                     routers: routers,
                     routes: await this.createRoutes(routers)
                 })
-                //根据进入时的URI重新渲染视图
-                const keyPath = this.getPathKeys(location.pathname, routers)
-                if (keyPath) {
-                    this.goRouter(keyPath, routers)
-                } else {
-                    this.goRouter()
-                }
             })
         })
     }
@@ -171,13 +169,19 @@ class Home extends React.Component {
                     <div className="logo" onClick={() => this.goRouter()}>
                         <icons.AmazonCircleFilled />&nbsp;lia
                     </div>
-                    <Menu
-                        onClick={this.routerClick}
-                        theme="dark"
-                        mode="inline"
-                        selectedKeys={this.state.selectedKeys}
-                        items={this.state.routers}
-                    />
+                    {
+                        this.state.selectedKeys
+                        ? <Menu
+                            onClick={this.routerClick}
+                            theme="dark"
+                            mode="inline"
+                            defaultOpenKeys={this.state.selectedKeys.slice(0,this.state.selectedKeys.length-1)}
+                            defaultSelectedKeys={this.state.selectedKeys}
+                            items={this.state.routers}
+                        />
+                        : null
+                    }
+
                 </Sider>
                 <Layout className="site-layout">
                     <Header className="site-layout-background" style={{ padding: 0 }}>

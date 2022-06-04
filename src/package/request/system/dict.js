@@ -24,3 +24,10 @@ export function getSexDict(){
 export function getUserDict(){
     return request.get(`${baseUrl}/sysUserDict`)
 }
+
+/**
+ * 获取路由字典表
+ */
+export function getRouterDict(){
+    return request.get(`${baseUrl}/sysRouterDict`)
+}

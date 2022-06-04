@@ -1,5 +1,6 @@
 import React from 'react';
-import { Form, Row, Col, Input, Select, DatePicker } from 'antd';
+import { Form, Row, Col, Input, Select, DatePicker, InputNumber } from 'antd';
+import { Icons } from './Icons';
 import moment from 'moment';
 
 const { Option } = Select;
@@ -42,6 +43,7 @@ class CrudForm extends React.Component {
             }
         }
     }
+
 
     createOptions = (dict) => {
         return dict.map(item => {
@@ -101,13 +103,29 @@ class CrudForm extends React.Component {
                 />
             )
         }
-        else if(column.type === 'textarea' && (this.props.title === '编辑' || this.props.title === '新增')){
+        else if (column.type === 'textarea' && (this.props.title === '编辑' || this.props.title === '新增')) {
             return (
                 <TextArea
                     disabled={column.editEnable === false && this.props.title === '编辑'}
                     allowClear
                     placeholder={"请选择" + column.title}
                     rows={4}
+                />
+            )
+        }
+        else if (column.type === 'icon') {
+            const value = this.props.formDefaultValues ? this.props.formDefaultValues[column.dataIndex] : null
+            return (
+                <Icons value={value}/>
+            )
+        }
+        else if (column.type === 'number') {
+            return (
+                <InputNumber 
+                    style={{width: '100%'}}
+                    placeholder={"请选择" + column.title}
+                    disabled={column.editEnable === false && this.props.title === '编辑'}
+                    onPressEnter={() => { this.props.title === '搜索' && this.props.submit && this.props.submit() }}
                 />
             )
         }
@@ -131,8 +149,10 @@ class CrudForm extends React.Component {
             if (column.addEnable === false && this.props.title === '新增') {
                 continue
             }
-            if (column.search === false && this.props.title === '搜索') {
-                continue
+            if (this.props.title === '搜索') {
+                if(column.search === false || column.type === 'icon'){
+                    continue
+                }
             }
             if (column.editShow === false && this.props.title === '编辑') {
                 continue
@@ -187,6 +207,7 @@ class CrudForm extends React.Component {
                 }
             }
         }
+        // 编辑时，有些字段虽然不被编辑，但是仍需要返回其初始值
         if (this.props.title === '编辑') {
             formValue = Object.assign(this.props.formDefaultValues, formValue)
         }
@@ -201,7 +222,6 @@ class CrudForm extends React.Component {
         return (
             <Form
                 initialValues={this.props.formDefaultValues || {}}
-                name="advanced_search"
                 className="ant-advanced-search-form"
                 ref={ref => this.formRef = ref}
             >

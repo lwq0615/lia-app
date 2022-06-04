@@ -3,6 +3,7 @@ import CrudSearch from './CurdSerach'
 import CrudMenu from './CurdMenu'
 import React from 'react'
 import propTypes from 'prop-types'
+import './crud.scss'
 
 
 class Crud extends React.Component {
@@ -50,7 +51,7 @@ class Crud extends React.Component {
 
     render() {
         return (
-            <section>
+            <section className='lia-crud'>
                 {
                     this.props.justShowTable
                         ? null
