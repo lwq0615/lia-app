@@ -32,7 +32,7 @@ class CrudModal extends React.Component {
       this.setState({
         loading: false
       })
-      return
+      throw error
     }
     this.setState({
       loading: false

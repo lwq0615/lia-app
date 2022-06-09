@@ -2,8 +2,8 @@
 import React from "react"
 import Crud from "@/package/components/crud/Crud"
 import { message } from "antd"
-import { getSysRouterPage, saveSysRouter, deleteRouters } from '@/package/request/system/router'
-import { getRouterDict, getUserDict } from '@/package/request/system/dict'
+import { getSysUserPage, saveSysUser, deleteUsers } from '@/package/request/system/user'
+import { getRoleDict, getSexDict, getUserDict } from '@/package/request/system/dict'
 
 const option = {
     // 是否显示行索引，默认true
@@ -17,7 +17,7 @@ const option = {
     // 触发删除钩子 records => {}
     //return true刷新页面数据
     onDelete: async records => {
-        return await deleteRouters(records.map(item => item.routerId)).then(res => {
+        return await deleteUsers(records.map(item => item.userId)).then(res => {
             if(res > 0){
                 message.success("删除成功")
                 return true
@@ -29,13 +29,14 @@ const option = {
     },
     // 需要加载数据时触发 params => {}
     getPage: (params, page) => {
-        return getSysRouterPage(params, page.current, page.size)
+        params.createTime = params.createTime?.join(",")
+        return getSysUserPage(params, page.current, page.size)
     },
     // 新增编辑提交钩子 async (form, type) => {}
     // 如果需要获取返回值再关闭弹窗，请使用await
     // return true刷新页面
     onSave: async (form, type) => {
-        return await saveSysRouter(form).then(res => {
+        return await saveSysUser(form).then(res => {
             if(res === "用户名已存在"){
                 message.warning(res)
                 return false
@@ -50,48 +51,80 @@ const option = {
     },
     columns: [
         {
-            title: '路由名称',
-            dataIndex: 'label',
+            title: '用户名',
+            dataIndex: 'username',
             align: 'center',
-            key: 'label',
+            key: 'username',
+            required: true,
+            // 不允许编辑该列的值
+            // editEnable: false
+        },
+        {
+            title: '密码',
+            dataIndex: 'password',
+            align: 'center',
+            key: 'password',
+            editShow: false,
+            required: true,
+            // 在表格内不显示该列，不影响新增和编辑
+            show: false,
+            // 不在搜索条件内显示该字段
+            search: false
+        },
+        {
+            title: '昵称',
+            dataIndex: 'nick',
+            align: 'center',
+            key: 'nick',
             required: true
         },
         {
-            title: '路由地址',
-            dataIndex: 'path',
+            title: '角色',
+            dataIndex: 'roleId',
             align: 'center',
-            key: 'path',
-            required: true
-        },
-        {
-            title: '组件地址',
-            dataIndex: 'element',
-            align: 'center',
-            key: 'element'
-        },
-        {
-            title: '父路由',
-            dataIndex: 'parent',
-            align: 'center',
-            key: 'parent',
+            key: 'roleId',
+            required: true,
             // type为select时必须提供dict
             type: "select",
-            //TODO 配置了select后dict才会生效
-            dict: getRouterDict
+            // 配置了select后dict才会生效
+            dict: getRoleDict
         },
         {
-            title: '排序',
-            dataIndex: 'index',
+            title: '性别',
+            dataIndex: 'sex',
             align: 'center',
-            type: 'number',
-            key: 'index'
+            key: 'sex',
+            type: "select",
+            dict: getSexDict,
+            // 自定义要渲染的内容 (text) => {}
+            // 如果配置了dict，text为字典映射后的内容
+            html: (text) => {
+                return text
+            }
         },
         {
-            title: '图标',
-            dataIndex: 'icon',
+            title: '电话',
+            dataIndex: 'phone',
             align: 'center',
-            key: 'icon',
-            type: 'icon'
+            key: 'phone'
+        },
+        {
+            title: '邮箱',
+            dataIndex: 'email',
+            align: 'center',
+            key: 'email'
+        },
+        {
+            title: '账号状态',
+            dataIndex: 'status',
+            align: 'center',
+            key: 'status',
+            addEnable: false,
+            type: "select",
+            dict: [
+                {label: '正常',value: '0'},
+                {label: '停用',value: '1'}
+            ]
         },
         {
             title: '创建人',
@@ -110,7 +143,7 @@ const option = {
             addEnable: false,
             type: 'datetime',
             // 开启范围搜索,只在type为date或datetiime时生效(默认false)
-            range: false,
+            range: true,
             //该列在搜索框所占宽度，最大24,默认6
             span: 6
         },
@@ -127,7 +160,7 @@ const option = {
 }
 
 
-class Router extends React.Component {
+class User extends React.Component {
 
     state = {
         option: option
@@ -140,4 +173,4 @@ class Router extends React.Component {
     }
 }
 
-export default Router
+export default User

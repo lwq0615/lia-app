@@ -36,7 +36,7 @@ const CrudConfirm = (props) => {
             {
                 props.type === 'default'
                 ? <Button type="primary" icon={<DeleteOutlined />} danger onClick={showPopconfirm}>删除</Button>
-                : <Button type="primary" danger size='small' onClick={showPopconfirm}>删除</Button>
+                : <Button type="primary" danger size={props.size || 'small'} onClick={showPopconfirm}>删除</Button>
             }
         </Popconfirm>
     );

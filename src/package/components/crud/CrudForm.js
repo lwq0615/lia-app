@@ -1,6 +1,6 @@
 import React from 'react';
-import { Form, Row, Col, Input, Select, DatePicker, InputNumber } from 'antd';
-import { Icons } from './Icons';
+import { Form, Row, Col, Input, Select, DatePicker, InputNumber, TreeSelect } from 'antd';
+import Icons from './Icons';
 import moment from 'moment';
 
 const { Option } = Select;
@@ -22,16 +22,6 @@ class CrudForm extends React.Component {
                         }
                     }
                 }
-                else if (column.type === "rangeDate") {
-                    for (let key of Object.keys(props.formDefaultValues)) {
-                        if (key === column.dataIndex && props.formDefaultValues[key]) {
-                            for (let item of props.formDefaultValues[key]) {
-                                item = moment(item)
-                            }
-                            break
-                        }
-                    }
-                }
                 else if (column.type === 'datetime') {
                     for (let key of Object.keys(props.formDefaultValues)) {
                         if (key === column.dataIndex && props.formDefaultValues[key]) {
@@ -45,11 +35,33 @@ class CrudForm extends React.Component {
     }
 
 
+    /**
+     * 生成Select组件的Option
+     * @param {*} dict 
+     * @returns 
+     */
     createOptions = (dict) => {
         return dict.map(item => {
             return (
                 <Option value={item.value} key={item.value}>{item.label}</Option>
             )
+        })
+    }
+
+    /**
+     * 将字典中的label换为title
+     * @param {*} treeData 
+     */
+    treeDataMap = (treeData) => {
+        if(!treeData){
+            return null
+        }
+        return treeData.map(item => {
+            return {
+                title: item.label,
+                value: item.value,
+                children: this.treeDataMap(item.children)
+            }
         })
     }
 
@@ -108,7 +120,7 @@ class CrudForm extends React.Component {
                 <TextArea
                     disabled={column.editEnable === false && this.props.title === '编辑'}
                     allowClear
-                    placeholder={"请选择" + column.title}
+                    placeholder={"请输入" + column.title}
                     rows={4}
                 />
             )
@@ -116,16 +128,30 @@ class CrudForm extends React.Component {
         else if (column.type === 'icon') {
             const value = this.props.formDefaultValues ? this.props.formDefaultValues[column.dataIndex] : null
             return (
-                <Icons value={value}/>
+                <Icons value={value} />
             )
         }
         else if (column.type === 'number') {
             return (
-                <InputNumber 
-                    style={{width: '100%'}}
+                <InputNumber
+                    style={{ width: '100%' }}
                     placeholder={"请选择" + column.title}
                     disabled={column.editEnable === false && this.props.title === '编辑'}
                     onPressEnter={() => { this.props.title === '搜索' && this.props.submit && this.props.submit() }}
+                />
+            )
+        }
+        else if (column.type === 'tree') {
+            return (
+                <TreeSelect
+                    dropdownStyle={{
+                        maxHeight: 400,
+                        overflow: 'auto',
+                    }}
+                    allowClear
+                    treeData={this.treeDataMap(this.props.dict[column.dataIndex])}
+                    placeholder={"请选择"+column.title}
+                    treeDefaultExpandAll
                 />
             )
         }
@@ -150,7 +176,7 @@ class CrudForm extends React.Component {
                 continue
             }
             if (this.props.title === '搜索') {
-                if(column.search === false || column.type === 'icon'){
+                if (column.search === false || column.type === 'icon') {
                     continue
                 }
             }
@@ -165,7 +191,7 @@ class CrudForm extends React.Component {
                         rules={this.props.title !== '搜索' && [
                             {
                                 required: column.required
-                            },
+                            }
                         ]}
                     >
                         {this.createField(column)}
@@ -180,31 +206,17 @@ class CrudForm extends React.Component {
     getFormValue = async () => {
         let formValue = await this.formRef.validateFields()
         for (let column of this.props.columns) {
-            if (column.type === "date") {
-                for (let key of Object.keys(formValue)) {
-                    if (key === column.dataIndex && formValue[key]) {
-                        formValue[key] = formValue[key].format("YYYY-MM-DD")
-                        break
-                    }
-                }
+            if(!formValue[column.dataIndex]){
+                continue
             }
-            else if (column.type === "rangeDate") {
-                for (let key of Object.keys(formValue)) {
-                    if (key === column.dataIndex && formValue[key]) {
-                        for (let item of formValue[key]) {
-                            item = item.format("YYYY-MM-DD")
-                        }
-                        break
-                    }
-                }
+            if ((column.type === 'date' || column.type === 'datetime') && column.range && this.props.title === '搜索') {
+                formValue[column.dataIndex] = formValue[column.dataIndex].map(item => item.format("YYYY-MM-DD"))
+            }
+            else if (column.type === "date") {
+                formValue[column.dataIndex] = formValue[key].format("YYYY-MM-DD")
             }
             else if (column.type === 'datetime') {
-                for (let key of Object.keys(formValue)) {
-                    if (key === column.dataIndex && formValue[key]) {
-                        formValue[key] = moment(formValue[key]).format("YYYY-MM-DD HH:mm:ss")
-                        break
-                    }
-                }
+                formValue[column.dataIndex] = moment(formValue[column.dataIndex]).format("YYYY-MM-DD HH:mm:ss")
             }
         }
         // 编辑时，有些字段虽然不被编辑，但是仍需要返回其初始值

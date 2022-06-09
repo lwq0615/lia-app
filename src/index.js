@@ -4,8 +4,12 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router } from 'react-router-dom'
-import zhCN from 'antd/lib/locale/zh_CN';
 import { ConfigProvider } from 'antd';
+import zhCN from 'antd/lib/locale/zh_CN';
+import moment from "moment";
+import "moment/locale/zh-cn";
+
+moment.locale("zh-cn");
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

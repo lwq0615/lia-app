@@ -41,6 +41,7 @@ class Crud extends React.Component {
                     newDict[column.dataIndex] = dict
                 }
             } catch (err) {
+                console.error(err)
                 continue
             }
         }

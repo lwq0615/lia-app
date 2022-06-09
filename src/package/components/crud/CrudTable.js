@@ -186,6 +186,27 @@ class CrudTable extends React.Component {
         this.props.onSelection && this.props.onSelection(selectedRowKeys || [], selectedRows || [])
     }
 
+    /**
+     * 根据value从字典中获取label值
+     * @param {*} dict 字典
+     * @param {*} value 
+     * @returns 
+     */
+    getDictLabel = (dict, value) => {
+        if(!dict.length){
+            return null
+        }
+        const children = []
+        for(let item of dict){
+            if(String(item.value) === String(value)){
+                return item.label
+            }else if(item.children){
+                children.push(...item.children)
+            }
+        }
+        return this.getDictLabel(children, value)
+    }
+
     componentDidMount = () => {
         this.getPage()
     }
@@ -195,7 +216,7 @@ class CrudTable extends React.Component {
             /**
              * 如果column配置了dict，则加载字典表并进行映射
              */
-            if (column.type === 'select' && column.dict) {
+            if (['select','tree'].includes(column.type) && column.dict) {
                 const dict = this.props.dict && this.props.dict[column.dataIndex]
                 if (!dict) {
                     continue
@@ -203,23 +224,13 @@ class CrudTable extends React.Component {
                 //配置了render，则回调参数变化为映射后的值
                 if (column.html) {
                     column.render = (text) => {
-                        for (let item of dict) {
-                            if (String(item.value) === String(text)) {
-                                return column.html(item.label)
-                            }
-                        }
-                        return null
+                        return column.html(this.getDictLabel(dict, text))
                     }
                 }
                 //没有配置render，直接输出映射后的值
                 else {
                     column.render = (text) => {
-                        for (let item of dict) {
-                            if (String(item.value) === String(text)) {
-                                return item.label
-                            }
-                        }
-                        return null
+                        return this.getDictLabel(dict, text)
                     }
                 }
             }else{

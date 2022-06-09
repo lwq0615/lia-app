@@ -14,12 +14,9 @@ export function getRouterOfRole(roleId) {
 
 /**
  * 分页查询路由列表
- * @param {*} router 查询参数
- * @param {*} current 当前页（可为空）
- * @param {*} size 没页条数（可为空）
  */
- export function getSysRouterPage(router,current,size){
-    return request.post(`${baseUrl}/getPage?current=${current || ''}&size=${size || ''}`,router || {})
+ export function getSysRouterTree(){
+    return request.get(`${baseUrl}/getRouterTree`)
 }
 
 
@@ -39,4 +36,12 @@ export function saveSysRouter(router){
  */
 export function deleteRouters(routerIds){
     return request.post(`${baseUrl}/deleteRouters`,routerIds)
+}
+
+
+/**
+ * 根据id查询路由
+ */
+export function getRouterById(routerId){
+    return request.get(`${baseUrl}/getRouterById?routerId=${routerId}`)
 }
