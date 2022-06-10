@@ -1,0 +1,47 @@
+.lia_home_container {
+    border-radius: 5px;
+    height: 100%;
+    .userInfo {
+        overflow: hidden;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-top: 20px;
+        padding-bottom: 10px;
+        img.headImg {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+        .ant-dropdown-trigger {
+            padding: 0 20px 0 10px;
+        }
+    }
+    .site-layout {
+        header {
+            background: #fff;
+            display: flex;
+            align-items: center;
+            padding: 0;
+            .trigger {
+                padding: 0 24px;
+                font-size: 18px;
+                line-height: 64px;
+                cursor: pointer;
+                transition: color 0.3s;
+            }
+            .trigger:hover {
+                color: #1890ff;
+            }
+            div.drag {
+                flex: 1;
+                height: 100%;
+                app-region: drag;
+            }
+        }
+        .site-layout-background {
+            background: #fff;
+        }
+    }
+}

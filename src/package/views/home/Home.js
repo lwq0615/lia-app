@@ -1,12 +1,15 @@
-import { Layout, Menu, Breadcrumb } from 'antd';
+import { Layout, Menu, Breadcrumb, Button, Dropdown, Space } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
 import * as icons from '@ant-design/icons'
 import React from 'react';
-import '@/package/css/home.scss'
+import './home.scss'
 import { Routes, Route } from 'react-router-dom';
+import Window from '@/package/components/window/Window'
 import { getSysUserInfo } from '@/package/request/system/user'
 import { getRouterOfRole } from '@/package/request/system/router'
 import WithRouter from '@/package/components/hoc/WithRouter';
-import Index from '@/package/views/Index'
+import Index from '@/package/views/index/Index'
+import { http } from "@/config"
 
 
 const { Header, Sider, Content } = Layout;
@@ -15,6 +18,7 @@ class Home extends React.Component {
 
     state = {
         collapsed: false,
+        userInfo: null,
         routers: [],
         routePath: [],
         routes: [],
@@ -143,8 +147,16 @@ class Home extends React.Component {
         }
     }
 
+    logout = () => {
+        localStorage.removeItem(http.header)
+        this.props.navigate("/login")
+    }
+
     componentDidMount = () => {
         getSysUserInfo().then(user => {
+            this.setState({
+                userInfo: user
+            })
             getRouterOfRole(user.roleId).then(async routers => {
                 routers = this.routerMap(routers)
                 //根据进入时的URI重新渲染视图
@@ -166,25 +178,53 @@ class Home extends React.Component {
         return (
             <Layout className='lia_home_container'>
                 <Sider collapsed={this.state.collapsed} style={{ overflow: 'auto' }}>
-                    <div className="logo" onClick={() => this.goRouter()}>
-                        <icons.AmazonCircleFilled />&nbsp;lia
+                    <div className='userInfo'>
+                        <img src={this.state.userInfo?.headImg} className="headImg" />
+                        {
+                            this.state.collapsed
+                            ? null
+                            : <Dropdown
+                                trigger={['click']}
+                                overlay={
+                                    <Menu
+                                        items={[
+                                            {
+                                                type: 'divider',
+                                            },
+                                            {
+                                                key: 'logout',
+                                                danger: true,
+                                                label: '退出登录',
+                                                onClick: this.logout
+                                            },
+                                        ]}
+                                    />
+                                }>
+                                <a onClick={(e) => e.preventDefault()}>
+                                    <Space>
+                                        {this.state.userInfo?.nick}
+                                        <DownOutlined />
+                                    </Space>
+                                </a>
+                            </Dropdown>
+                        }
                     </div>
                     {
                         this.state.selectedKeys
-                        ? <Menu
-                            onClick={this.routerClick}
-                            theme="dark"
-                            mode="inline"
-                            defaultOpenKeys={this.state.selectedKeys.slice(0,this.state.selectedKeys.length-1)}
-                            defaultSelectedKeys={this.state.selectedKeys}
-                            items={this.state.routers}
-                        />
-                        : null
+                            ? <Menu
+                                onClick={this.routerClick}
+                                theme="dark"
+                                mode="inline"
+                                defaultOpenKeys={this.state.selectedKeys.slice(0, this.state.selectedKeys.length - 1)}
+                                defaultSelectedKeys={this.state.selectedKeys}
+                                items={this.state.routers}
+                            />
+                            : null
                     }
 
                 </Sider>
                 <Layout className="site-layout">
-                    <Header className="site-layout-background" style={{ padding: 0 }}>
+                    <Header className="site-layout-background">
                         {React.createElement(this.state.collapsed ? icons.MenuUnfoldOutlined : icons.MenuFoldOutlined, {
                             className: 'trigger',
                             onClick: this.toggle,
@@ -192,6 +232,8 @@ class Home extends React.Component {
                         <Breadcrumb style={{ margin: '16px 0', display: 'inline-block' }}>
                             {this.state.routePath}
                         </Breadcrumb>
+                        <div className='drag'></div>
+                        <Window />
                     </Header>
                     <Content
                         className="site-layout-background"

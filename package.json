@@ -1,6 +1,7 @@
 {
   "name": "app",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "main": "main.js",
   "private": true,
   "dependencies": {
     "@babel/core": "^7.16.0",
@@ -65,7 +66,17 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+    "test": "node scripts/test.js",
+    "electron-dev": "electron main.js debug",
+    "electron-build": "electron-builder",
+    "electron": "electron main.js"
+  },
+  "build": {
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true, 
+      "perMachine": true
+    }
   },
   "eslintConfig": {
     "extends": [
@@ -145,5 +156,9 @@
     "presets": [
       "react-app"
     ]
+  },
+  "devDependencies": {
+    "electron": "^19.0.4",
+    "electron-builder": "^23.0.3"
   }
 }

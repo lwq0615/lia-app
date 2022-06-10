@@ -1,6 +1,6 @@
 
 import React from "react"
-import '@/package/css/login.scss'
+import './login.scss'
 import { Form, Input, Button, Checkbox, message } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { http } from "@/config"
@@ -26,7 +26,7 @@ class Login extends React.Component {
                 }
                 default: {
                     localStorage.setItem(http.header, res)
-                    this.props.navigate("/home")
+                    this.props.navigate("/")
                 }
             }
         })
