@@ -4,7 +4,7 @@ import RouterTree from "./RouterTree.js"
 import RouterForm from "./RouterForm.js"
 import moment from 'moment';
 import { getSysRouterTree } from '@/package/request/system/router'
-import { getRouterDict, getUserDict } from '@/package/request/system/dict'
+import { getUserDict } from '@/package/request/system/dict'
 
 
 
@@ -21,8 +21,8 @@ class Router extends React.Component {
 
     componentDidMount = async () => {
         this.setState({
-            routerTreeData: await getSysRouterTree(),
-            routerDict: await getRouterDict(),
+            routerTreeData: (await getSysRouterTree())[0].children,
+            routerDict: await getSysRouterTree(),
             userDict: await getUserDict()
         })
         this.setForm()
@@ -30,7 +30,7 @@ class Router extends React.Component {
 
     reloadTree = async () => {
         this.setState({
-            routerTreeData: await getSysRouterTree()
+            routerTreeData:(await getSysRouterTree())[0].children
         })
     }
 

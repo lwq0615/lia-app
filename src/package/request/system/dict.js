@@ -26,8 +26,8 @@ export function getUserDict(){
 }
 
 /**
- * 获取路由字典表
+ * 获取权限字典表
  */
-export function getRouterDict(){
-    return request.get(`${baseUrl}/sysRouterDict`)
+ export function getPowerDict(){
+    return request.get(`${baseUrl}/sysPowerDict`)
 }

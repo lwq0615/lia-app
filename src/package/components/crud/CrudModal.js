@@ -27,17 +27,17 @@ class CrudModal extends React.Component {
       form = await this.saveFormRef.getFormValue() || {}
       if (await this.props.onSave(form, this.props.title)) {
         this.props.search()
+        this.props.setVisible(false)
       }
+      this.setState({
+        loading: false
+      })
     } catch (error) {
       this.setState({
         loading: false
       })
       throw error
     }
-    this.setState({
-      loading: false
-    })
-    this.props.setVisible(false)
   };
 
   /**
@@ -62,7 +62,7 @@ class CrudModal extends React.Component {
           onCancel={this.handleCancel}
         >
           <CrudForm
-            formDefaultValues={{...this.props.formDefaultValues}}
+            formDefaultValues={{ ...this.props.formDefaultValues }}
             columns={this.props.columns}
             ref={ref => this.saveFormRef = ref}
             title={this.props.title}

@@ -8,16 +8,25 @@ class Window extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      max: false
+      max: false,
+      style: {
+        borderRadius: 5
+      }
     }
     ipcRenderer.on('max', (event) => {
       this.setState({
-        max: true
+        max: true,
+        style: {
+          borderRadius: 0
+        }
       })
     });
     ipcRenderer.on('unmax', (event) => {
       this.setState({
-        max: false
+        max: false,
+        style: {
+          borderRadius: 5
+        }
       })
     })
   }
@@ -36,7 +45,7 @@ class Window extends React.Component {
 
   render() {
     return (
-      <section className='body' style={this.props.style}>
+      <section className='window' style={this.state.style}>
         <div className='app-btns'>
           <div className='drag'></div>
           <MinusOutlined className='min' onClick={this.min}></MinusOutlined>

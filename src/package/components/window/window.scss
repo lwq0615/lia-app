@@ -1,12 +1,16 @@
-.body {
+.window {
     height: 100%;
-    display: flex;
-    flex-direction: column;
+    overflow: hidden;
+    border-radius: 5px;
+    position: relative;
     .container {
-        flex: 1;
+        height: 100%;
     }
-
     .app-btns {
+        position: absolute;
+        right: 0;
+        left: 0;
+        top: 0;
         display: flex;
         justify-content: flex-end;
         color: #555;

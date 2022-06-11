@@ -7,8 +7,18 @@ import CrudConfirm from './CrudConfirm';
 
 class CrudMenu extends React.Component {
 
-    state = {
-        visible: false
+    constructor(props){
+        super(props)
+        const formDefaultValues = {}
+        props.columns.forEach(item => {
+            if(item.defaultValue !== undefined){
+                formDefaultValues[item.dataIndex] = item.defaultValue
+            }
+        })
+        this.state = {
+            visible: false,
+            formDefaultValues
+        }
     }
 
     search = () => {
@@ -50,6 +60,7 @@ class CrudMenu extends React.Component {
                     onSave={this.props.onSave}
                     columns={this.props.columns}
                     visible={this.state.visible}
+                    formDefaultValues={this.state.formDefaultValues}
                     setVisible={this.setVisible}
                 />
             </>

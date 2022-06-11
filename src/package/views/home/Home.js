@@ -4,7 +4,6 @@ import * as icons from '@ant-design/icons'
 import React from 'react';
 import './home.scss'
 import { Routes, Route } from 'react-router-dom';
-import Window from '@/package/components/window/Window'
 import { getSysUserInfo } from '@/package/request/system/user'
 import { getRouterOfRole } from '@/package/request/system/router'
 import WithRouter from '@/package/components/hoc/WithRouter';
@@ -118,9 +117,13 @@ class Home extends React.Component {
                 if (element[0] === '/') {
                     element = element.substring(1)
                 };
-                await import('@/package/views/' + element).then(({ default: Element }) => {
-                    arr.push(<Route key={'route:' + item.path} exact path={parentPath + "/" + item.path} element={<Element />}></Route>)
-                })
+                try{
+                    await import('@/package/views/' + element).then(({ default: Element }) => {
+                        arr.push(<Route key={'route:' + item.path} exact path={parentPath + "/" + item.path} element={<Element />}></Route>)
+                    })
+                }catch(e){
+                    console.error(e)
+                }
             }
             if (item.children) {
                 await this.createRoutes(item.children, arr, item.path)
@@ -177,7 +180,7 @@ class Home extends React.Component {
     render() {
         return (
             <Layout className='lia_home_container'>
-                <Sider collapsed={this.state.collapsed} style={{ overflow: 'auto' }}>
+                <Sider collapsed={this.state.collapsed} style={{ overflow: 'auto',paddingTop: 15 }}>
                     <div className='userInfo'>
                         <img src={this.state.userInfo?.headImg} className="headImg" />
                         {
@@ -188,6 +191,13 @@ class Home extends React.Component {
                                 overlay={
                                     <Menu
                                         items={[
+                                            {
+                                                key: 'userInfo',
+                                                label: '个人资料',
+                                                onClick: () => {
+                                                    this.props.navigate("/")
+                                                }
+                                            },
                                             {
                                                 type: 'divider',
                                             },
@@ -232,8 +242,6 @@ class Home extends React.Component {
                         <Breadcrumb style={{ margin: '16px 0', display: 'inline-block' }}>
                             {this.state.routePath}
                         </Breadcrumb>
-                        <div className='drag'></div>
-                        <Window />
                     </Header>
                     <Content
                         className="site-layout-background"

@@ -95,6 +95,8 @@ const option = {
             align: 'center',
             key: 'sex',
             type: "select",
+            // 新增时的默认值
+            // defaultValue: '0',
             dict: getSexDict,
             // 自定义要渲染的内容 (text) => {}
             // 如果配置了dict，text为字典映射后的内容
@@ -145,7 +147,7 @@ const option = {
             // 开启范围搜索,只在type为date或datetiime时生效(默认false)
             range: true,
             //该列在搜索框所占宽度，最大24,默认6
-            span: 6
+            span: 8
         },
         {
             title: '备注',

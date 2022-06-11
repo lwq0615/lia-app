@@ -39,16 +39,14 @@ class RouterTree extends React.Component {
     expandedKeys: [],
     searchValue: '',
     autoExpandParent: true,
-    defaultData: [],
-    routerTree: []
+    defaultData: []
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const data = routerMap(nextProps.routerTree)
     generateList(data)
     return {
-      defaultData: data,
-      routerTree: nextProps.routerTree
+      defaultData: data
     }
   }
 

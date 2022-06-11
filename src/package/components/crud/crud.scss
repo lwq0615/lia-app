@@ -25,3 +25,16 @@
         transform: scale(1.2);
     }
 }
+
+.ant-modal-body .checkbox-group{
+    max-height: 400px;
+    overflow: auto;
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    row-gap: 10px;
+}
+
+.ant-modal-body .multiple-tree{
+    max-height: 400px;
+    overflow: auto;
+}

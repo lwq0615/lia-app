@@ -1,5 +1,7 @@
 import React from 'react';
 import { Form, Row, Col, Input, Select, DatePicker, InputNumber, TreeSelect } from 'antd';
+import CrudCheckbox from './CrudCheckbox';
+import CrudMultipleTree from './CrudMultipleTree';
 import Icons from './Icons';
 import moment from 'moment';
 
@@ -57,11 +59,11 @@ class CrudForm extends React.Component {
             return null
         }
         return treeData.map(item => {
-            return {
+            return Object.assign({...item},{
                 title: item.label,
                 value: item.value,
                 children: this.treeDataMap(item.children)
-            }
+            })
         })
     }
 
@@ -126,7 +128,7 @@ class CrudForm extends React.Component {
             )
         }
         else if (column.type === 'icon') {
-            const value = this.props.formDefaultValues ? this.props.formDefaultValues[column.dataIndex] : null
+            const value = this.props.formDefaultValues?.[column.dataIndex]
             return (
                 <Icons value={value} />
             )
@@ -141,6 +143,13 @@ class CrudForm extends React.Component {
                 />
             )
         }
+        else if(column.type === 'multipleTree'){
+            const treeData = this.props.dict && this.props.dict[column.dataIndex]
+            const values = this.props.formDefaultValues?.[column.dataIndex]
+            return (
+                <CrudMultipleTree values={values} treeData={treeData} column={column}/>
+            )
+        }
         else if (column.type === 'tree') {
             return (
                 <TreeSelect
@@ -153,6 +162,13 @@ class CrudForm extends React.Component {
                     placeholder={"请选择"+column.title}
                     treeDefaultExpandAll
                 />
+            )
+        }
+        else if(column.type === 'checkbox'){
+            const options = this.props.dict && this.props.dict[column.dataIndex]
+            const values = this.props.formDefaultValues?.[column.dataIndex]
+            return (
+                <CrudCheckbox options={options} values={values} column={column}/>
             )
         }
         else {
@@ -176,7 +192,10 @@ class CrudForm extends React.Component {
                 continue
             }
             if (this.props.title === '搜索') {
-                if (column.search === false || column.type === 'icon') {
+                if (column.search === false 
+                    || column.type === 'icon'
+                    || column.type === 'multipleTree'
+                    || column.type === 'checkbox') {
                     continue
                 }
             }
@@ -184,7 +203,7 @@ class CrudForm extends React.Component {
                 continue
             }
             children.push(
-                <Col span={this.props.title === '搜索' ? column.span || 6 : 12} key={i}>
+                <Col span={this.props.title === '搜索' ? column.span || 8 : 12} key={i}>
                     <Form.Item
                         label={column.title}
                         name={column.dataIndex}

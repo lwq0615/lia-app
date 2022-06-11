@@ -1,5 +1,5 @@
 
-import { Table, Space, Button, Modal } from 'antd';
+import { Table, Space, Button, Modal, Checkbox, Tree } from 'antd';
 import * as icons from '@ant-design/icons'
 import React from 'react';
 import CrudConfirm from './CrudConfirm'
@@ -41,6 +41,55 @@ class CrudTable extends React.Component {
     }
 
 
+    showCheckBox = (list, column, e) => {
+        e.stopPropagation()
+        const options = this.props.dict && this.props.dict[column.dataIndex]
+        Modal.success({
+            centered: true,
+            title: column.title,
+            destroyOnClose: true,
+            width: 700,
+            okText: '确定',
+            closable: true,
+            content: <Checkbox.Group className='checkbox-group' options={options} value={list} />
+        })
+    }
+
+
+    showTree = (list, column, e) => {
+        e.stopPropagation()
+        function treeMap(tree) {
+            if (!tree) {
+                return null
+            }
+            return tree.map(item => {
+                return Object.assign({...item},{
+                    title: item.label,
+                    key: item.value,
+                    children: treeMap(item.children)
+                })
+            })
+        }
+        const options = this.props.dict && this.props.dict[column.dataIndex]
+        Modal.success({
+            centered: true,
+            title: column.title,
+            destroyOnClose: true,
+            width: 700,
+            okText: '确定',
+            closable: true,
+            content: <Tree
+                className='multiple-tree'
+                checkable
+                checkStrictly
+                defaultExpandedKeys={list}
+                checkedKeys={list}
+                treeData={treeMap(options)}
+            />
+        })
+    }
+
+
     /**
      * 获取包装后的列组合
      * @param {*} props 
@@ -49,31 +98,45 @@ class CrudTable extends React.Component {
     getColumns = (props) => {
         const newColumns = []
         for (let i in props.columns) {
-            const column = {...props.columns[i]}
+            const column = { ...props.columns[i] }
             // 隐藏不展示的字段
             if (column.show === false) {
                 continue
             }
-            // 隐藏文本，通过按钮展开
-            if (column.hideText) {
-                const oldHtml = column.html
-                column.html = (text) => {
-                    return oldHtml ? (
-                        <Button type="link" onClick={(e) => this.showHideText(oldHtml(text),column.title,e)}>查看</Button>
-                    ):(
-                        <Button type="link" onClick={(e) => this.showHideText(text,column.title,e)}>查看</Button>
+            else if (column.type === 'checkbox') {
+                column.html = (list) => {
+                    return (
+                        <Button type="link" onClick={(e) => this.showCheckBox(list, column, e)}>查看</Button>
                     )
                 }
             }
-            if(column.type === 'icon'){
+            else if (column.type === 'multipleTree') {
+                column.html = (list) => {
+                    return (
+                        <Button type="link" onClick={(e) => this.showTree(list, column, e)}>查看</Button>
+                    )
+                }
+            }
+            // 隐藏文本，通过按钮展开
+            else if (column.hideText) {
                 const oldHtml = column.html
                 column.html = (text) => {
-                    if(!text){
+                    return oldHtml ? (
+                        <Button type="link" onClick={(e) => this.showHideText(oldHtml(text), column.title, e)}>查看</Button>
+                    ) : (
+                        <Button type="link" onClick={(e) => this.showHideText(text, column.title, e)}>查看</Button>
+                    )
+                }
+            }
+            else if (column.type === 'icon') {
+                const oldHtml = column.html
+                column.html = (text) => {
+                    if (!text) {
                         return null
                     }
                     const Icon = icons[text]
                     return oldHtml ? oldHtml(Icon) : (
-                        <Icon style={{fontSize: 20, color: '#40a9ff'}}/>
+                        <Icon style={{ fontSize: 20, color: '#40a9ff' }} />
                     )
                 }
             }
@@ -193,14 +256,14 @@ class CrudTable extends React.Component {
      * @returns 
      */
     getDictLabel = (dict, value) => {
-        if(!dict.length){
+        if (!dict.length) {
             return null
         }
         const children = []
-        for(let item of dict){
-            if(String(item.value) === String(value)){
+        for (let item of dict) {
+            if (String(item.value) === String(value)) {
                 return item.label
-            }else if(item.children){
+            } else if (item.children) {
                 children.push(...item.children)
             }
         }
@@ -216,24 +279,24 @@ class CrudTable extends React.Component {
             /**
              * 如果column配置了dict，则加载字典表并进行映射
              */
-            if (['select','tree'].includes(column.type) && column.dict) {
+            if (['select', 'tree'].includes(column.type) && column.dict) {
                 const dict = this.props.dict && this.props.dict[column.dataIndex]
                 if (!dict) {
                     continue
                 }
-                //配置了render，则回调参数变化为映射后的值
+                //配置了html，则回调参数变化为映射后的值
                 if (column.html) {
                     column.render = (text) => {
                         return column.html(this.getDictLabel(dict, text))
                     }
                 }
-                //没有配置render，直接输出映射后的值
+                //没有配置html，直接输出映射后的值
                 else {
                     column.render = (text) => {
                         return this.getDictLabel(dict, text)
                     }
                 }
-            }else{
+            } else {
                 column.render = column.html
             }
         }
