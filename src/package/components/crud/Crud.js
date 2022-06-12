@@ -27,6 +27,10 @@ class Crud extends React.Component {
 
     nodes = {}
 
+    refreshPage = () => {
+        this.nodes.crudTableRef?.getPage()
+    }
+
     componentDidMount = async () => {
         const newDict = {}
         for (let column of this.props.columns) {
@@ -52,7 +56,7 @@ class Crud extends React.Component {
 
     render() {
         return (
-            <section className='lia-crud'>
+            <section className={this.props.className + " lia-crud"} style={this.props.style}>
                 {
                     this.props.justShowTable
                         ? null

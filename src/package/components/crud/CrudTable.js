@@ -183,10 +183,10 @@ class CrudTable extends React.Component {
     /**
      * 点击编辑按钮
      */
-    editClick = (record, e) => {
+    editClick = async (record, e) => {
         e.stopPropagation()
-        if (this.props.editClick) {
-            this.props.editClick(record)
+        if (this.props.editClick && await this.props.editClick(record) === false) {
+            return
         }
         this.setState({
             formDefaultValues: record

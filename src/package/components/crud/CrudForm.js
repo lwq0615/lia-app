@@ -253,7 +253,7 @@ class CrudForm extends React.Component {
         return (
             <Form
                 initialValues={this.props.formDefaultValues || {}}
-                className="ant-advanced-search-form"
+                className="ant-advanced-search-form crud-form"
                 ref={ref => this.formRef = ref}
             >
                 <Row gutter={24}>{this.getFields()}</Row>

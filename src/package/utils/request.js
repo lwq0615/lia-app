@@ -57,6 +57,10 @@ request.interceptors.response.use(
                 message.error("目标资源不存在")
                 break
             }
+            case 405: {
+                message.error("请求类型有误")
+                break
+            }
             case 500: {
                 message.error('服务器内部错误')
                 break

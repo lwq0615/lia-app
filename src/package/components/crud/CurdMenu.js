@@ -25,11 +25,11 @@ class CrudMenu extends React.Component {
         this.props.nodes.crudTableRef.getPage()
     }
 
-    addClick = () => {
-        this.setVisible(true)
-        if (this.props.addClick) {
-            this.props.addClick()
+    addClick = async () => {
+        if (this.props.addClick && await this.props.addClick() === false) {
+            return
         }
+        this.setVisible(true)
     }
 
     deleteSubmit = async () => {

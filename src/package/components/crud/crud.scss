@@ -1,7 +1,11 @@
 .lia-crud{
+    height: 100%;
     .lia-crud-modal .ant-modal-body{
         max-height: 500px;
-        overflow: auto;
+    }
+
+    .crud-form{
+        max-width: 100%;
     }
 }
 

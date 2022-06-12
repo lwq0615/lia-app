@@ -1,0 +1,37 @@
+.system-dict_container{
+    height: 100%;
+    display: flex;
+    .ant-space{
+        padding-right: 10px;
+        padding-bottom: 5px;
+        min-width: 200px;
+    }
+    .system-dict-menu{
+        width: 100%;
+        padding-right: 20px;
+        height: 100%;
+        overflow: auto;
+    }
+    .system-dict-crud{
+        flex: 1;
+        overflow: hidden;
+        padding-left: 20px;
+    }
+}
+
+
+    .system-dict-form { 
+        width: 100%;
+        padding-top: 10px;
+        .collection-create-form_last-form-item {
+            margin-bottom: 0;
+        }
+        .btns {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            button {
+                margin: 0 10px;
+            }
+        }
+    }

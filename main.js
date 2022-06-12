@@ -61,6 +61,9 @@ function createWindow() {
     mainWindow.on('unmaximize', function () {
         mainWindow.webContents.send('unmax');
     })
+    mainWindow.on('resize', function () {
+        mainWindow.webContents.send('unmax');
+    })
     //如果是--debug 打开开发者工具
     if (debug) {
         mainWindow.webContents.openDevTools();
