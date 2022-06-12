@@ -111,6 +111,9 @@ class Home extends React.Component {
      * @returns 
      */
     createRoutes = async (routers, arr = [], parentPath = '') => {
+        if(parentPath[0] === "/"){
+            parentPath = parentPath.substring(1)
+        }
         for (let item of routers) {
             if (item.element) {
                 let element = item.element
@@ -126,7 +129,7 @@ class Home extends React.Component {
                 }
             }
             if (item.children) {
-                await this.createRoutes(item.children, arr, item.path)
+                await this.createRoutes(item.children, arr, parentPath+"/"+item.path)
             }
         }
         return arr

@@ -34,8 +34,11 @@ function createWindow() {
         }
     };
     mainWindow = new BrowserWindow(windowOptions);
-    mainWindow.loadURL("http://localhost:3000/");
-    // mainWindow.loadURL(path.join('file://', __dirname, '/build/index.html'));
+    if (debug) {
+        mainWindow.loadURL("http://localhost:3000/");
+    }else{
+        mainWindow.loadURL(path.join('file://', __dirname, './build/index.html'));
+    }
     //接收渲染进程的信息
     const ipc = require('electron').ipcMain;
     ipc.on('min', function () {

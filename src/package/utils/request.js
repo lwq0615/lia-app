@@ -4,7 +4,6 @@ import { http } from "@/config"
 import { message } from 'antd'
 
 
-
 const request = axios.create({
     baseURL: http.baseUrl,
     timeout: 60000,
@@ -19,10 +18,10 @@ const request = axios.create({
  */
 request.interceptors.request.use(config => {
     const token = localStorage.getItem(http.header)
-    if(token){
+    if (token) {
         config.headers[http.header] = token
     }
-    return config  
+    return config
 })
 
 /**
@@ -33,36 +32,32 @@ request.interceptors.response.use(
         return res.data;
     },
     err => {
-        switch (err.response.status){
-            case 400:{
+        switch (err.response.status) {
+            case 400: {
                 message.error('请求有误')
                 break
             }
-            case 401:{
+            case 401: {
                 message.warning('请先登录')
                 localStorage.removeItem(http.header)
-                setTimeout(() => {
-                    location.href = "/login"
-                },1000)
+                window.navigate("login")
                 break
             }
-            case 402:{
+            case 402: {
                 message.warning('登录过期，请重新登录')
                 localStorage.removeItem(http.header)
-                setTimeout(() => {
-                    location.href = "/login"
-                },1000)
+                window.navigate("login")
                 break
             }
-            case 403:{
+            case 403: {
                 message.warning('没有权限')
                 break
             }
-            case 404:{
+            case 404: {
                 message.error("目标资源不存在")
                 break
             }
-            case 500:{
+            case 500: {
                 message.error('服务器内部错误')
                 break
             }
