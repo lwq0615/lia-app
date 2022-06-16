@@ -163,7 +163,7 @@ class Dict extends React.Component {
         return (
             <section className="system-dict_container">
                 <div style={{ height: '100%' }}>
-                    <Space>
+                    <Space style={{paddingBottom: '5px'}}>
                         <Button type="primary" onClick={this.add}>新增</Button>
                         <Button type="primary" onClick={this.edit}>编辑</Button>
                     </Space>
@@ -193,6 +193,7 @@ class Dict extends React.Component {
                         reloadMenu={this.reloadMenu}
                         setVisible={(bool) => this.setState({ visible: bool })}
                         formValue={this.state.formValue}
+                        refreshPage={() => this.crudRef?.refreshPage()}
                     />
                 </Modal>
             </section>

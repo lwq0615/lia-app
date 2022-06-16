@@ -6,7 +6,21 @@ import { getSysRolePage, saveSysRole, deleteRoles } from '@/package/request/syst
 import { getUserDict, getPowerDict } from '@/package/request/system/dict'
 import { getSysRouterTree } from '@/package/request/system/router'
 
-
+async function getRouterTree() {
+    function routerMap(routers) {
+        if (!routers) {
+            return null
+        }
+        return routers.map(router => {
+            return {
+                label: router.label,
+                value: router.routerId,
+                children: routerMap(router.children)
+            }
+        })
+    }
+    return routerMap(await getSysRouterTree())
+}
 
 
 const option = {
@@ -22,10 +36,10 @@ const option = {
     //return true刷新页面数据
     onDelete: async records => {
         return await deleteRoles(records.map(item => item.roleId)).then(res => {
-            if(res > 0){
+            if (res > 0) {
                 message.success("删除成功")
                 return true
-            }else{
+            } else {
                 message.error("删除失败")
                 return false
             }
@@ -41,13 +55,13 @@ const option = {
     // return true刷新页面并关闭弹窗
     onSave: async (form, type) => {
         return await saveSysRole(form).then(res => {
-            if(res === "标识符已存在"){
+            if (res === "标识符已存在") {
                 message.warning(res)
                 return false
-            }else if(res === 'success'){
-                message.success(type+"成功")
+            } else if (res === 'success') {
+                message.success(type + "成功")
                 return true
-            }else{
+            } else {
                 message.error("未知错误")
                 return false
             }
@@ -84,25 +98,25 @@ const option = {
                     return routers.map(router => {
                         return {
                             label: router.label,
-                            value: "router-"+router.routerId,
+                            value: "router-" + router.routerId,
                             checkable: false,
                             children: routerMap(router.children)
                         }
                     })
                 }
-                function findNode(item, arr){
-                    if(!arr.length){
+                function findNode(item, arr) {
+                    if (!arr.length) {
                         return null
                     }
                     let newArr = []
-                    for(let node of arr){
-                        if(node.value === "router-"+item.remark){
-                            if(!node.children){
+                    for (let node of arr) {
+                        if (node.value === "router-" + item.remark) {
+                            if (!node.children) {
                                 node.children = []
                             }
                             return node
                         }
-                        if(node.children){
+                        if (node.children) {
                             newArr = newArr.concat(node.children)
                         }
                     }
@@ -123,20 +137,17 @@ const option = {
             key: 'routers',
             type: 'multipleTree',
             dict: async () => {
-                function routerMap(routers) {
-                    if (!routers) {
-                        return null
-                    }
-                    return routers.map(router => {
-                        return {
-                            label: router.label,
-                            value: router.routerId,
-                            children: routerMap(router.children)
-                        }
-                    })
-                }
-                return routerMap((await getSysRouterTree())[0].children)
+                return (await getRouterTree())[0].children
             }
+        },
+        {
+            title: '根路由',
+            dataIndex: 'rootRouterId',
+            align: 'center',
+            key: 'rootRouterId',
+            required: true,
+            type: 'tree',
+            dict: getRouterTree
         },
         {
             title: '创建人',
@@ -178,7 +189,7 @@ class Role extends React.Component {
 
     render() {
         return (
-            <Crud {...this.state.option}/>
+            <Crud {...this.state.option} />
         )
     }
 }

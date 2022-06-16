@@ -67,7 +67,7 @@ class Login extends React.Component {
                     <div className="login_img"></div>
                     <Form
                         name="normal_login"
-                        className="login-form login_form"
+                        className="login-form"
                         initialValues={this.state.form}
                         onFinish={this.onFinish}
                     >
@@ -94,14 +94,20 @@ class Login extends React.Component {
                         </Form.Item>
                         <div style={{padding: '10px 0 20px 0'}}>
                             <Checkbox onChange={this.rememberMeChange} checked={this.state.rememberMe}>记住我</Checkbox>
-                            <a className="login-form-forgot" href="">
+                            <a className="login-form-forgot" href="#">
                                 忘记密码
                             </a>
                         </div>
 
-                        <Form.Item>
+                        <Form.Item style={{margin: 0}}>
                             <Button type="primary" htmlType="submit" className="login-form-button">
                                 登录
+                            </Button>
+                            <Button type="primary" className="login-form-button" onClick={() => this.onFinish({
+                                username: 'visitor',
+                                password: '123456'
+                            })}>
+                                游客登录
                             </Button>
                         </Form.Item>
                     </Form>

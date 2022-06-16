@@ -20,21 +20,19 @@
             background-size: cover;
             background-position: 50%;
         }
-        .login_form {
-            width: 300px;
-            padding: 20px;
-        }
         .login-form {
             max-width: 300px;
-        }
-        .login-form-forgot {
-            float: right;
-        }
-        .ant-col-rtl .login-form-forgot {
-            float: left;
-        }
-        .login-form-button {
-            width: 100%;
+            width: 300px;
+            padding: 20px;
+            // 忘记密码按钮
+            .login-form-forgot {
+                float: right;
+            }
+            //登录按钮
+            .login-form-button {
+                width: 100%;
+                margin-bottom: 10px;
+            }
         }
     }
 }

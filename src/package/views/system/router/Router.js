@@ -85,6 +85,7 @@ class Router extends React.Component {
                     userDict={this.state.userDict}
                     formValue={this.state.form}
                     reloadTree={this.reloadTree}
+                    setForm={this.setForm}
                 />
             </section>
         )

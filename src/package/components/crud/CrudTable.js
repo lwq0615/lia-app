@@ -162,7 +162,7 @@ class CrudTable extends React.Component {
                 align: 'center',
                 fixed: 'right',
                 html: (record) => (
-                    <Space size="middle">
+                    <Space size="middle" style={{justifyContent: 'center'}}>
                         <Button type="primary" size='small' onClick={(e) => { this.editClick(record, e) }}>编辑</Button>
                         <CrudConfirm deleteSubmit={() => this.deleteSubmit([record])} />
                     </Space>

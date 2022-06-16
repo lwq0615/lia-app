@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form, Input, InputNumber, Row, Col, TreeSelect, Select, message } from 'antd';
+import { Button, Form, Input, InputNumber, Row, Col, TreeSelect, Select, message, Divider } from 'antd';
 import CrudConfirm from '@/package/components/crud/CrudConfirm.js'
 import { saveSysRouter, deleteRouters } from '@/package/request/system/router'
 import Icons from '@/package/components/crud/Icons.js'
@@ -48,7 +48,7 @@ function findFormValue(name, values) {
     }
 }
 
-const RouterForm = ({ routerDict, formValue, userDict, formTitle, routerId, reloadTree }) => {
+const RouterForm = ({ routerDict, formValue, userDict, formTitle, routerId, reloadTree, setForm }) => {
     const [form] = Form.useForm();
 
     function submit() {
@@ -59,8 +59,13 @@ const RouterForm = ({ routerDict, formValue, userDict, formTitle, routerId, relo
             saveSysRouter(router).then(res => {
                 if (res === 'success') {
                     message.success("保存成功")
+                    setForm()
                     reloadTree()
-                } else {
+                } 
+                else if(res === 'error'){
+                    message.error("未知错误")
+                }
+                else {
                     message.warning(res)
                 }
             })
@@ -72,6 +77,7 @@ const RouterForm = ({ routerDict, formValue, userDict, formTitle, routerId, relo
             if (res > 0) {
                 message.success("删除成功")
                 reloadTree()
+                setForm()
             } else {
                 message.warning("删除失败")
             }
@@ -183,10 +189,11 @@ const RouterForm = ({ routerDict, formValue, userDict, formTitle, routerId, relo
                     </Col>
                 </Row>
             </Form>
+            <Divider plain className='router-divider'>如果路由作为其他路由的父路由，则该路由会成为一个目录，无法进行页面跳转</Divider>
             <div className='btns'>
                 <Button type="primary" onClick={submit}>保存</Button>
                 {
-                    routerId ? <CrudConfirm deleteSubmit={deleteRouter} size="default"/> : null
+                    routerId ? <CrudConfirm msg="子路由也会被清空，确认删除？" deleteSubmit={deleteRouter} size="default"/> : null
                 }
             </div>
         </div>

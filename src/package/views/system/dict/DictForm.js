@@ -6,7 +6,7 @@ import { saveSysDict, deleteDictsByType, updateDictType } from '@/package/reques
 const { TextArea } = Input;
 
 
-const DictForm = ({ formValue = {}, reloadMenu, setVisible }) => {
+const DictForm = ({ formValue = {}, reloadMenu, setVisible, refreshPage }) => {
     const defaultValue = formValue
     formValue = Object.keys(formValue).map(key => {
         return {
@@ -56,6 +56,7 @@ const DictForm = ({ formValue = {}, reloadMenu, setVisible }) => {
                 message.success("删除成功")
                 setVisible(false)
                 reloadMenu()
+                refreshPage()
             } else {
                 message.warning("删除失败")
             }
