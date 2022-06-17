@@ -1,13 +1,14 @@
-import { Layout, Menu, Breadcrumb, Button, Dropdown, Space } from 'antd';
+import { Layout, Menu, Breadcrumb, Dropdown, Space } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import * as icons from '@ant-design/icons'
 import React from 'react';
 import './home.scss'
 import { Routes, Route } from 'react-router-dom';
-import { getSysUserInfo } from '@/package/request/system/user'
+import { getSysUserInfo, getHeadImg } from '@/package/request/system/user'
 import { getRouterOfRole } from '@/package/request/system/router'
 import WithRouter from '@/package/components/hoc/WithRouter';
-import Index from '@/package/views/index/Index'
+import Index from '@/package/views/system/index/Index'
+import defaultImg from './image/default.jpg'
 import { http } from "@/config"
 
 
@@ -18,6 +19,7 @@ class Home extends React.Component {
     state = {
         collapsed: false,
         userInfo: null,
+        headImg: null,
         routers: [],
         routePath: [],
         routes: [],
@@ -111,7 +113,7 @@ class Home extends React.Component {
      * @returns 
      */
     createRoutes = async (routers, arr = [], parentPath = '') => {
-        if(parentPath[0] === "/"){
+        if (parentPath[0] === "/") {
             parentPath = parentPath.substring(1)
         }
         for (let item of routers) {
@@ -120,16 +122,16 @@ class Home extends React.Component {
                 if (element[0] === '/') {
                     element = element.substring(1)
                 };
-                try{
+                try {
                     await import('@/package/views/' + element).then(({ default: Element }) => {
                         arr.push(<Route key={'route:' + item.path} exact path={parentPath + "/" + item.path} element={<Element />}></Route>)
                     })
-                }catch(e){
+                } catch (e) {
                     console.error(e)
                 }
             }
             if (item.children) {
-                await this.createRoutes(item.children, arr, parentPath+"/"+item.path)
+                await this.createRoutes(item.children, arr, parentPath + "/" + item.path)
             }
         }
         return arr
@@ -153,16 +155,31 @@ class Home extends React.Component {
         }
     }
 
+    /**
+     * 退出登录
+     */
     logout = () => {
         localStorage.removeItem(http.header)
         this.props.navigate("/login")
     }
 
+
+    /**
+     * 重新加载用户信息
+     * @param {*} path 
+     */
+    reloadUser = () => {
+        this.componentDidMount()
+    }
+
+
     componentDidMount = () => {
+        // 获取用户信息
         getSysUserInfo().then(user => {
             this.setState({
                 userInfo: user
             })
+            // 获取角色信息
             getRouterOfRole(user.roleId).then(async routers => {
                 routers = this.routerMap(routers)
                 //根据进入时的URI重新渲染视图
@@ -178,48 +195,59 @@ class Home extends React.Component {
                 })
             })
         })
+        getHeadImg().then(path => {
+            this.setState({
+                headImg: path
+            })
+        })
     }
 
     render() {
         return (
             <Layout className='lia_home_container'>
-                <Sider collapsed={this.state.collapsed} style={{ overflow: 'auto',paddingTop: 15 }}>
+                <Sider collapsed={this.state.collapsed} style={{ overflow: 'auto', paddingTop: 15 }} width={230}>
                     <div className='userInfo'>
-                        <img src={this.state.userInfo?.headImg} className="headImg" />
+                        <img
+                            src={this.state.headImg
+                                ? http.baseUrl + "/system/file/getPic?comp=true&path=" + this.state.headImg
+                                : defaultImg}
+                            className="headImg"
+                            onClick={() => this.goRouter()}
+                        />
                         {
                             this.state.collapsed
-                            ? null
-                            : <Dropdown
-                                trigger={['click']}
-                                overlay={
-                                    <Menu
-                                        items={[
-                                            {
-                                                key: 'userInfo',
-                                                label: '个人资料',
-                                                onClick: () => {
-                                                    this.props.navigate("/")
-                                                }
-                                            },
-                                            {
-                                                type: 'divider',
-                                            },
-                                            {
-                                                key: 'logout',
-                                                danger: true,
-                                                label: '退出登录',
-                                                onClick: this.logout
-                                            },
-                                        ]}
-                                    />
-                                }>
-                                <a onClick={(e) => e.preventDefault()}>
-                                    <Space>
-                                        {this.state.userInfo?.nick}
-                                        <DownOutlined />
-                                    </Space>
-                                </a>
-                            </Dropdown>
+                                ? null
+                                : <Dropdown
+                                    trigger={['click']}
+                                    overlay={
+                                        <Menu
+                                            items={[
+                                                {
+                                                    key: 'userInfo',
+                                                    label: '个人资料',
+                                                    onClick: () => {
+                                                        this.goRouter()
+                                                    }
+                                                },
+                                                {
+                                                    type: 'divider',
+                                                },
+                                                {
+                                                    key: 'logout',
+                                                    danger: true,
+                                                    label: '退出登录',
+                                                    onClick: this.logout
+                                                },
+                                            ]}
+                                        />
+                                    }>
+                                    <a onClick={(e) => e.preventDefault()}>
+                                        <Space>
+                                            {this.state.userInfo?.nick}
+                                            <DownOutlined />
+                                        </Space>
+                                    </a>
+                                </Dropdown>
                         }
                     </div>
                     {
@@ -255,7 +283,11 @@ class Home extends React.Component {
                         }}
                     >
                         <Routes>
-                            <Route exact index path="*" element={<Index />} />
+                            <Route exact index path="*" element={<Index
+                                userInfo={this.state.userInfo}
+                                headImg={this.state.headImg}
+                                reloadUser={this.reloadUser}
+                            />} />
                             {this.state.routes}
                         </Routes>
                     </Content>

@@ -23,7 +23,7 @@
             height: 30px;
             color: #555;
             user-select: none;
-            z-index: 99;
+            z-index: 9999;
             .logo {
                 /* 告诉程序哪里可以拖拽 */
                 app-region: drag;

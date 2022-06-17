@@ -48,3 +48,24 @@ export function saveSysUser(user){
 export function deleteUsers(userIds){
     return request.post(`${baseUrl}/deleteUsers`,userIds)
 }
+
+
+/**
+ * 获取用户头像地址
+ */
+export function getHeadImg(){
+    return request.get(`${baseUrl}/getHeadImg`)
+}
+
+
+/**
+ * 更换用户头像
+ */
+ export function updateHeadImg(file, fileId){
+    const formData = new FormData();
+    formData.append("file", file)
+    formData.append("fileId", fileId)
+    return request.post(`${baseUrl}/updateHeadImg`,formData, {
+        "Content-Type": false
+    })
+}
