@@ -19,6 +19,11 @@ class Dict extends React.Component {
             justShowTable: false,
             // 表格行是否可选择(默认false)
             selection: true,
+            addClick: () => {
+                if (!this.state.formValue?.type) {
+                    return false
+                }
+            },
             // 触发删除钩子 records => {}
             //return true刷新页面数据
             onDelete: async records => {
@@ -81,6 +86,7 @@ class Dict extends React.Component {
                     dataIndex: 'remark',
                     align: 'center',
                     key: 'remark',
+                    hideText: true,
                     span: 12
                 }
             ]

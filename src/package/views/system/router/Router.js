@@ -3,7 +3,7 @@ import React from "react"
 import RouterTree from "./RouterTree.js"
 import RouterForm from "./RouterForm.js"
 import moment from 'moment';
-import { getSysRouterTree } from '@/package/request/system/router'
+import { getSysRouterTree, getRouterById } from '@/package/request/system/router'
 import { getUserDict } from '@/package/request/system/dict'
 
 
@@ -34,6 +34,12 @@ class Router extends React.Component {
         })
     }
 
+    onTreeSelect = (key, keys) => {
+        getRouterById(key).then(res => {
+            this.setForm(res, res.label, res.routerId)
+        })
+    }
+
     setForm = (form, title, id) => {
         const keys = ['label', 'path', 'element', 'parent', 'index', 'icon', 'createBy', 'createTime', 'remark']
         let formValue = []
@@ -50,6 +56,11 @@ class Router extends React.Component {
                     value: form[key]
                 }
             })
+            this.setState({
+                form: formValue,
+                formTitle: title,
+                routerId: id
+            })
         } else {
             formValue = keys.map(key => {
                 if (key === 'parent') {
@@ -63,20 +74,22 @@ class Router extends React.Component {
                     value: undefined
                 }
             })
+            this.setState({
+                form: formValue,
+                formTitle: "新增",
+                routerId: null
+            })
         }
-        this.setState({
-            form: formValue,
-            formTitle: title || '新增',
-            routerId: id
-        })
     }
 
     render() {
         return (
             <section className="system-router">
                 <RouterTree
-                    setForm={this.setForm}
+                    onSelect={this.onTreeSelect}
+                    addClick={this.setForm}
                     routerTree={this.state.routerTreeData}
+                    addButton
                 />
                 <RouterForm
                     routerId={this.state.routerId}

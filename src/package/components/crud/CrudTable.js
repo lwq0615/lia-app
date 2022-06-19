@@ -227,8 +227,8 @@ class CrudTable extends React.Component {
             this.props.onSearch(params, { ...newPage })
         }
         const pageInfo = await this.props.getPage(params, { ...newPage })
-        newPage.list = pageInfo.list
-        newPage.total = pageInfo.total
+        newPage.list = pageInfo?.list
+        newPage.total = pageInfo?.total
         this.setState({
             page: newPage,
             loading: false
@@ -314,7 +314,7 @@ class CrudTable extends React.Component {
                         onChange: this.getPage
                     }}
                     loading={this.state.loading}
-                    dataSource={this.state.page.list}
+                    dataSource={this.state.page?.list}
                     rowKey={record => {
                         return this.state.page.list.indexOf(record)
                     }}

@@ -46,8 +46,8 @@ class Window extends React.Component {
 
   render() {
     return (
-      <section className='window'>
-        <div className="window-body">
+      <section className='window' style={{padding: this.state.style.borderRadius}}>
+        <div className="window-body" style={this.state.style}>
           <div className='app-btns'>
             <img src={tiantianquan} className='logo' />
             <div className='drag'></div>

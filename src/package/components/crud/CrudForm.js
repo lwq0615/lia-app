@@ -160,7 +160,6 @@ class CrudForm extends React.Component {
                     allowClear
                     treeData={this.treeDataMap(this.props.dict[column.dataIndex])}
                     placeholder={"请选择"+column.title}
-                    treeDefaultExpandAll
                 />
             )
         }

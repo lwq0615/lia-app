@@ -135,7 +135,6 @@ const RouterForm = ({ routerDict, formValue, userDict, formTitle, routerId, relo
                                 }}
                                 treeData={treeDataMap(routerDict)}
                                 placeholder={"请选择父路由"}
-                                treeDefaultExpandAll
                             />
                         </Form.Item>
                     </Col>
@@ -193,7 +192,7 @@ const RouterForm = ({ routerDict, formValue, userDict, formTitle, routerId, relo
             <div className='btns'>
                 <Button type="primary" onClick={submit}>保存</Button>
                 {
-                    routerId ? <CrudConfirm msg="子路由也会被清空，确认删除？" deleteSubmit={deleteRouter} size="default"/> : null
+                    routerId ? <CrudConfirm msg="子路由和该路由下的权限也会被清空，确认删除？" deleteSubmit={deleteRouter} size="default"/> : null
                 }
             </div>
         </div>

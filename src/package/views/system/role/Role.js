@@ -125,7 +125,12 @@ const option = {
                 const pDict = await getPowerDict()
                 const rTree = routerMap((await getSysRouterTree())[0].children)
                 pDict.forEach(item => {
-                    findNode(item, rTree).children.push(item)
+                    const parent = findNode(item, rTree)
+                    if(parent){
+                        findNode(item, rTree).children.push(item)
+                    }else{
+                        rTree.push(item)
+                    }
                 })
                 return rTree
             }

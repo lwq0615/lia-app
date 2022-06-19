@@ -28,7 +28,7 @@ class Login extends React.Component {
      * 提交登录验证表单
      * @param {Object} values 
      */
-    onFinish = async (values) => {
+    onFinish = async (values, visitor) => {
         sysUserLogin(values).then(res => {
             switch (res) {
                 case "login failed": {
@@ -41,12 +41,14 @@ class Login extends React.Component {
                 }
                 default: {
                     localStorage.setItem(http.header, res)
-                    if(this.state.rememberMe){
-                        localStorage.setItem("username", values.username)
-                        localStorage.setItem("password", values.password)
-                    }else{
-                        localStorage.removeItem("username")
-                        localStorage.removeItem("password")
+                    if(!visitor){
+                        if(this.state.rememberMe){
+                            localStorage.setItem("username", values.username)
+                            localStorage.setItem("password", values.password)
+                        }else{
+                            localStorage.removeItem("username")
+                            localStorage.removeItem("password")
+                        }
                     }
                     this.props.navigate("/")
                 }
@@ -106,7 +108,7 @@ class Login extends React.Component {
                             <Button type="primary" className="login-form-button" onClick={() => this.onFinish({
                                 username: 'visitor',
                                 password: '123456'
-                            })}>
+                            },true)}>
                                 游客登录
                             </Button>
                         </Form.Item>

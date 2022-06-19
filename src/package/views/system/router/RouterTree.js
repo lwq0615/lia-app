@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button, Tree, Input } from 'antd';
-import { getRouterById } from '@/package/request/system/router'
 import './router.scss'
 
 
@@ -11,7 +10,7 @@ function routerMap(routers) {
   return routers.map(router => {
     return {
       title: router.label,
-      key: String(router.routerId),
+      key: router.routerId,
       children: routerMap(router.children)
     }
   })
@@ -90,10 +89,8 @@ class RouterTree extends React.Component {
     })
   };
 
-  onSelect = (key, e) => {
-    getRouterById(e.node.key).then(res => {
-      this.props.setForm(res, res.label, res.routerId)
-    })
+  onSelect = (keys, e) => {
+    this.props.onSelect(e.node.key, keys)
   }
 
   loop = (data) => {
@@ -128,14 +125,23 @@ class RouterTree extends React.Component {
     return (
       <div className='system-router-tree'>
         <div className='option'>
-          <Button type="primary" className='addBtn' onClick={() => this.props.setForm()}>新增</Button>
-          <Input
-            style={{
-              marginBottom: 8,
-            }}
-            placeholder="搜索"
-            onChange={this.onChange}
-          />
+          {
+            this.props.addButton
+              ? <Button type="primary" className='addBtn' onClick={() => this.props.addClick()}>新增</Button>
+              : null
+          }
+          {
+            this.props.search !== false
+              ? <Input
+                style={{
+                  marginBottom: 8,
+                }}
+                placeholder="搜索"
+                onChange={this.onChange}
+              />
+              : null
+          }
+
         </div>
         <Tree
           showLine={{

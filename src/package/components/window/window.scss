@@ -1,12 +1,10 @@
 .window {
     height: 100%;
     overflow: hidden;
-    padding: 5px;
     background-color: transparent;
     .window-body {
         height: 100%;
         overflow: hidden;
-        border-radius: 5px;
         position: relative;
         box-shadow: 0 0 5px #555;
         .container {
