@@ -30,6 +30,7 @@ class Router extends React.Component {
 
     reloadTree = async () => {
         this.setState({
+            routerDict: await getSysRouterTree(),
             routerTreeData:(await getSysRouterTree())[0].children
         })
     }
