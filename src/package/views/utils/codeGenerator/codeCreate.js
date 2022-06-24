@@ -357,7 +357,7 @@ export function mybatisCode(data, tableName, primaryKey){
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.lia.server.mapper.${className}Mapper">
+<mapper namespace="com.lia.server.modules.${objName}.${className}Mapper">
 
     <resultMap type="${className}" id="${className}Result">${getResultMap()}
     </resultMap>
