@@ -175,16 +175,11 @@ export default class CodeGenerator extends React.Component {
 
 
     onFinish = (values) => {
-        let { tableName, httpUrl, primaryKeyName, primaryKeyType } = values
+        let { tableName, httpUrl, primaryKeyType } = values
         tableName = tableName.replace(/ /g,'')
-        primaryKeyName = primaryKeyName.replace(/ /g,'')
         httpUrl = httpUrl?.replace(/ /g,'')
         if (!/^[A-Za-z_]+$/.test(tableName[0]) || !/^[A-Za-z0-9_]+$/.test(tableName)) {
             message.warning("表名不合法")
-            return
-        }
-        if (!/^[A-Za-z_]+$/.test(primaryKeyName[0]) || !/^[A-Za-z0-9_]+$/.test(primaryKeyName)) {
-            message.warning("主键名不合法")
             return
         }
         if (!this.state.data || this.state.data.length == 0) {
@@ -206,7 +201,7 @@ export default class CodeGenerator extends React.Component {
             item.name = codeCreate.firstLow(codeCreate.toHump(item.name))
         }
         const primaryKey = {
-            name: codeCreate.firstLow(codeCreate.toHump(primaryKeyName.replace(/ /g,''))),
+            name: codeCreate.firstLow(codeCreate.toHump(tableName.replace(/ /g,'')))+"Id",
             type: primaryKeyType
         }
         this.generator(data, tableName, primaryKey, httpUrl)
@@ -233,20 +228,6 @@ export default class CodeGenerator extends React.Component {
                             ]}
                         >
                             <Input placeholder="请输入表名" />
-                        </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                        <Form.Item
-                            name="primaryKeyName"
-                            label="主键名称"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: '请输入主键名称',
-                                }
-                            ]}
-                        >
-                            <Input placeholder="请输入主键名称" />
                         </Form.Item>
                     </Col>
                     <Col span={8}>
