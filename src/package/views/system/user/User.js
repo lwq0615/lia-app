@@ -96,7 +96,7 @@ const option = {
             key: 'sex',
             type: "select",
             // 新增时的默认值
-            // defaultValue: '0',
+            // defaultValue: '2',
             dict: getSexDict,
             // 自定义要渲染的内容 (text) => {}
             // 如果配置了dict，text为字典映射后的内容

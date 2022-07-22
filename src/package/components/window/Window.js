@@ -4,6 +4,11 @@ import { MinusOutlined, CloseOutlined, BorderOutlined, SwitcherOutlined } from '
 import tiantianquan from './tiantianquan.png'
 import './window.scss'
 
+
+
+/**
+ * electron的窗口配置
+ */
 class Window extends React.Component {
 
   constructor(props) {

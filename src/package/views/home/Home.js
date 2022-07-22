@@ -179,7 +179,7 @@ class Home extends React.Component {
             this.setState({
                 userInfo: user
             })
-            // 获取角色信息
+            // 获取角色可访问的路由
             getRouterOfRole(user.roleId).then(async routers => {
                 routers = this.routerMap(routers)
                 //根据进入时的URI重新渲染视图

@@ -40,13 +40,13 @@ request.interceptors.response.use(
             case 401: {
                 message.warning('请先登录')
                 localStorage.removeItem(http.header)
-                window.navigate("login")
+                window.goRouter("login")
                 break
             }
             case 402: {
                 message.warning('登录过期，请重新登录')
                 localStorage.removeItem(http.header)
-                window.navigate("login")
+                window.goRouter("login")
                 break
             }
             case 403: {
