@@ -3,7 +3,7 @@ import React from "react"
 import Crud from "@/package/components/crud/Crud"
 import { message } from "antd"
 import { getSysRolePage, saveSysRole, deleteRoles } from '@/package/request/system/role'
-import { getUserDict, getPowerDict } from '@/package/request/system/dict'
+import { getUserDict, getAuthDict } from '@/package/request/system/dict'
 import { getSysRouterTree } from '@/package/request/system/router'
 
 async function getRouterTree() {
@@ -86,9 +86,9 @@ const option = {
         },
         {
             title: '权限',
-            dataIndex: 'powers',
+            dataIndex: 'auths',
             align: 'center',
-            key: 'powers',
+            key: 'auths',
             type: 'multipleTree',
             dict: async () => {
                 function routerMap(routers) {
@@ -122,7 +122,7 @@ const option = {
                     }
                     return findNode(item, newArr)
                 }
-                const pDict = await getPowerDict()
+                const pDict = await getAuthDict()
                 const rTree = routerMap((await getSysRouterTree())[0].children)
                 pDict.forEach(item => {
                     const parent = findNode(item, rTree)

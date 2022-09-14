@@ -79,7 +79,7 @@ export function getUserDict(){
 /**
  * 获取权限字典表
  */
- export function getPowerDict(){
-    return request.get(`${baseUrl}/sysPowerDict`)
+ export function getAuthDict(){
+    return request.get(`${baseUrl}/sysAuthDict`)
 }
 

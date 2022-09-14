@@ -1,4 +1,4 @@
-.system-power {
+.system-auth {
     display: flex;
     .system-router-tree {
         padding-right: 20px;
@@ -14,7 +14,7 @@
             }
         }
     }
-    .system-power-crud {
+    .system-auth-crud {
         flex: 1;
         overflow: hidden;
     }

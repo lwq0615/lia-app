@@ -2,14 +2,14 @@
 import React from "react"
 import Crud from "@/package/components/crud/Crud"
 import { message } from "antd"
-import { getSysPowerPage, saveSysPower, deletePowers } from '@/package/request/system/power'
+import { getSysAuthPage, saveSysAuth, deleteAuths } from '@/package/request/system/auth'
 import { getUserDict } from '@/package/request/system/dict'
 import { getSysRouterTree } from '@/package/request/system/router'
 import RouterTree from "../router/RouterTree.js"
-import './power.scss'
+import './auth.scss'
 
 
-class Power extends React.Component {
+class Auth extends React.Component {
 
     state = {
         option: {
@@ -29,7 +29,7 @@ class Power extends React.Component {
             // 触发删除钩子 records => {}
             //return true刷新页面数据
             onDelete: async records => {
-                return await deletePowers(records.map(item => item.powerId)).then(res => {
+                return await deleteAuths(records.map(item => item.authId)).then(res => {
                     if (res > 0) {
                         message.success("删除成功")
                         return true
@@ -118,11 +118,11 @@ class Power extends React.Component {
         option.getPage = (params, page) => {
             params.createTime = params.createTime?.join(",")
             params.routerId = key
-            return getSysPowerPage(params, page.current, page.size)
+            return getSysAuthPage(params, page.current, page.size)
         }
         option.onSave = async (form, type) => {
             form.routerId = key
-            return await saveSysPower(form).then(res => {
+            return await saveSysAuth(form).then(res => {
                 if (res === 'success') {
                     message.success(type + "成功")
                     return true
@@ -149,13 +149,13 @@ class Power extends React.Component {
 
     render() {
         return (
-            <section className="system-power">
+            <section className="system-auth">
                 <RouterTree
                     onSelect={this.onTreeSelect}
                     routerTree={this.state.routerTreeData}
                 />
                 <Crud
-                    className="system-power-crud"
+                    className="system-auth-crud"
                     ref={ref => this.crudRef = ref}
                     {...this.state.option}
                 />
@@ -164,4 +164,4 @@ class Power extends React.Component {
     }
 }
 
-export default Power
+export default Auth
