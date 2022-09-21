@@ -150,22 +150,28 @@ export default class CodeGenerator extends React.Component {
             title: '生成代码',
             content: (
                 <Tabs defaultActiveKey="1">
-                    <TabPane tab="entity" key="1">
+                    <TabPane tab="request" key="request">
+                        {codeCreate.requestCode(tableName)}
+                    </TabPane>
+                    <TabPane tab="view" key="view">
+                        {codeCreate.viewCode(data, tableName, primaryKey)}
+                    </TabPane>
+                    <TabPane tab="entity" key="entity">
                         {codeCreate.entityCode(data, tableName, primaryKey)}
                     </TabPane>
-                    <TabPane tab="controller" key="2">
+                    <TabPane tab="controller" key="controller">
                         {codeCreate.controllerCode(data, tableName, httpUrl)}
                     </TabPane>
-                    <TabPane tab="service" key="3">
+                    <TabPane tab="service" key="service">
                         {codeCreate.serviceCode(tableName, primaryKey)}
                     </TabPane>
-                    <TabPane tab="mapper" key="4">
+                    <TabPane tab="mapper" key="mapper">
                         {codeCreate.mapperCode(tableName)}
                     </TabPane>
-                    <TabPane tab="mybatis" key="5">
+                    <TabPane tab="mybatis" key="mybatis">
                         {codeCreate.mybatisCode(data, tableName, primaryKey)}
                     </TabPane>
-                    <TabPane tab="mysql" key="6">
+                    <TabPane tab="mysql" key="mysql">
                         {codeCreate.mysqlCode(tableName,data,primaryKey)}
                     </TabPane>
                 </Tabs>

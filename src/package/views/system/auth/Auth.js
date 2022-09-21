@@ -3,7 +3,7 @@ import React from "react"
 import Crud from "@/package/components/crud/Crud"
 import { message } from "antd"
 import { getSysAuthPage, saveSysAuth, deleteAuths } from '@/package/request/system/auth'
-import { getUserDict } from '@/package/request/system/dict'
+import { getCreateByDict } from '@/package/request/system/user'
 import { getSysRouterTree } from '@/package/request/system/router'
 import RouterTree from "../router/RouterTree.js"
 import './auth.scss'
@@ -76,16 +76,18 @@ class Auth extends React.Component {
                     dataIndex: 'createBy',
                     align: 'center',
                     key: 'createBy',
-                    addEnable: false,
+                    addShow: false,
+                    editShow: false,
                     type: "select",
-                    dict: getUserDict
+                    dict: getCreateByDict
                 },
                 {
                     title: '创建时间',
                     dataIndex: 'createTime',
                     align: 'center',
                     key: 'createTime',
-                    addEnable: false,
+                    addShow: false,
+                    editShow: false,
                     type: 'datetime',
                     // 开启范围搜索,只在type为date或datetiime时生效(默认false)
                     range: true

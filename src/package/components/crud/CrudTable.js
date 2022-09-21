@@ -286,8 +286,8 @@ class CrudTable extends React.Component {
                 }
                 //配置了html，则回调参数变化为映射后的值
                 if (column.html) {
-                    column.render = (text) => {
-                        return column.html(this.getDictLabel(dict, text))
+                    column.render = (text, record) => {
+                        return column.html(this.getDictLabel(dict, text), record)
                     }
                 }
                 //没有配置html，直接输出映射后的值

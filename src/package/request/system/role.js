@@ -30,3 +30,19 @@ export function saveSysRole(role){
 export function deleteRoles(roleIds){
     return request.post(`${baseUrl}/deleteRoles`,roleIds)
 }
+
+
+/**
+ * 根据企业ID获取某企业下的角色字典表
+ */
+export function getRoleOfCompanyDict(companyId){
+    return request.get(`${baseUrl}/getRoleOfCompanyDict?companyId=${companyId}`)
+}
+
+
+/**
+ * 获取角色字典表
+ */
+ export function getRoleDict() {
+    return request.get(`${baseUrl}/sysRoleDict`)
+}

@@ -30,3 +30,10 @@ export function saveSysAuth(auth){
 export function deleteAuths(authIds){
     return request.post(`${baseUrl}/delete`,authIds)
 }
+
+/**
+ * 获取权限字典表
+ */
+export function getAuthDict(){
+    return request.get(`${baseUrl}/sysAuthDict`)
+}

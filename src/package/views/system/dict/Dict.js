@@ -2,7 +2,8 @@
 import React from "react"
 import Crud from "@/package/components/crud/Crud"
 import { message, Menu, Button, Space, Modal } from "antd"
-import { getSysDictPage, saveSysDict, deleteDicts, getUserDict, typeNameMap } from '@/package/request/system/dict'
+import { getSysDictPage, saveSysDict, deleteDicts, typeNameMap } from '@/package/request/system/dict'
+import { getCreateByDict } from '@/package/request/system/user'
 import DictForm from "./DictForm"
 import "./dict.scss"
 
@@ -67,16 +68,18 @@ class Dict extends React.Component {
                     dataIndex: 'createBy',
                     align: 'center',
                     key: 'createBy',
-                    addEnable: false,
+                    addShow: false,
+                    editShow: false,
                     type: "select",
-                    dict: getUserDict
+                    dict: getCreateByDict
                 },
                 {
                     title: '创建时间',
                     dataIndex: 'createTime',
                     align: 'center',
                     key: 'createTime',
-                    addEnable: false,
+                    addShow: false,
+                    editShow: false,
                     range: true,
                     type: "datetime",
                     span: 12

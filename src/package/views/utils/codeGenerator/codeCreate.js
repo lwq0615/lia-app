@@ -33,6 +33,124 @@ export function firstLow(str){
 }
 
 
+/**
+ * 接口调用代码生成
+ */
+export function requestCode(tableName){
+    return `
+import request from "@/package/utils/request"
+
+const baseUrl = '/server/${firstLow(toHump(tableName))}'
+
+/**
+ * 分页查询列表
+ * @param {*} ${firstLow(toHump(tableName))} 查询参数
+ * @param {*} current 当前页（可为空）
+ * @param {*} size 没页条数（可为空）
+ */
+export function get${firstUp(toHump(tableName))}Page(${firstLow(toHump(tableName))},current,size){
+    return request.post(\`\${baseUrl}/getPage?current=\${current || ''}&size=\${size || ''}\`,${firstLow(toHump(tableName))} || {})
+}
+
+
+/**
+ * 新增和编辑
+ */
+export function save${firstUp(toHump(tableName))}(${firstLow(toHump(tableName))}){
+    return request.post(\`\${baseUrl}/save\`,${firstLow(toHump(tableName))})
+}
+
+
+/**
+ * 批量删除
+ * @param {*} ${firstLow(toHump(tableName))}Ids id列表
+ * @returns 删除成功的数量
+ */
+export function delete${firstUp(toHump(tableName))}s(${firstLow(toHump(tableName))}Ids){
+    return request.post(\`\${baseUrl}/delete\`,${firstLow(toHump(tableName))}Ids)
+}               
+`
+}
+
+
+/**
+ * 前端文件代码生成
+ */
+export function viewCode(data, tableName, primaryKey){
+    function getColumnsCode(){
+        return data.map(item => {
+            return `        {
+            title: '${item.remark}',
+            dataIndex: '${item.name}',
+            align: 'center',
+            key: '${item.name}',
+            required: ${item.notNull}
+        }`
+        }).join(",\n")
+    }
+    return `
+import Crud from '@/package/components/crud/Crud'
+import { get${firstUp(toHump(tableName))}Page, save${firstUp(toHump(tableName))}, delete${firstUp(toHump(tableName))}s } from '@/package/request/system/${firstLow(toHump(tableName))}'
+import { message } from "antd"
+
+const option = {
+    // 是否显示行索引，默认true
+    showIndex: true,
+    // 是否展示右侧操作栏，默认false
+    rightAction: true,
+    // 只展示表格，不展示搜索和按钮组（默认false）
+    justShowTable: false,
+    // 表格行是否可选择(默认false)
+    selection: true,
+    // 触发删除钩子 records => {}
+    //return true刷新页面数据
+    onDelete: async records => {
+        return await delete${firstUp(toHump(tableName))}s(records.map(item => item.${primaryKey.name})).then(res => {
+            if(res > 0){
+                message.success("删除成功")
+                return true
+            }else{
+                message.error("删除失败")
+                return false
+            }
+        })
+    },
+    // 需要加载数据时触发 params => {}
+    getPage: (params, page) => {
+        params.createTime = params.createTime?.join(",")
+        return get${firstUp(toHump(tableName))}Page(params, page.current, page.size)
+    },
+    // 新增编辑提交钩子 async (form, type) => {}
+    // 如果需要获取返回值再关闭弹窗，请使用await
+    // return true刷新页面
+    onSave: async (form, type) => {
+        return await save${firstUp(toHump(tableName))}(form).then(res => {
+            if(res === 'error'){
+                message.warning("未知错误")
+                return false
+            }else if(res === 'success'){
+                message.success(type+"成功")
+                return true
+            }else{
+                message.warning(res)
+                return false
+            }
+        })
+    },
+    columns: [
+${getColumnsCode()}
+    ]
+}
+
+
+export default function ${firstUp(toHump(tableName))}(props){
+    return (
+        <Crud {...option}/>
+    )
+}          
+`
+}
+
 
 /**
  * 实体类代码生成
@@ -41,7 +159,11 @@ export function entityCode(data, tableName, primaryKey) {
     const columnCode = () => {
         let str = `    private Long ${primaryKey.name};\n`
         data.forEach(item => {
-            str += `    private ${item.type} ${item.name};\n`
+            if(item.type === "date" || item.type === "datetime"){
+                str += `    private String ${item.name};\n`
+            }else{
+                str += `    private ${item.type} ${item.name};\n`
+            }
         })
         return str
     }
@@ -98,9 +220,7 @@ package com.lia.server.modules.${objName};
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.lia.server.entity.${className};
 import com.lia.system.exception.HttpException;
-import com.lia.server.service.${className}Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -180,8 +300,6 @@ export function serviceCode(tableName, primaryKey) {
     return `
 package com.lia.server.modules.${objName};
 
-import com.lia.server.entity.${className};
-import com.lia.server.mapper.${className}Mapper;
 import com.lia.system.security.LoginUser;
 import com.lia.system.utils.SnowflakeId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -265,7 +383,6 @@ export function mapperCode(tableName){
     return `
 package com.lia.server.modules.${objName};
 
-import com.lia.server.entity.${className};
 import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 

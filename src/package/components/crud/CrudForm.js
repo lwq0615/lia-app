@@ -187,7 +187,7 @@ class CrudForm extends React.Component {
         const children = [];
         for (let i = 0; i < this.props.columns.length; i++) {
             const column = this.props.columns[i]
-            if (column.addEnable === false && this.props.title === '新增') {
+            if (column.addShow === false && this.props.title === '新增') {
                 continue
             }
             if (this.props.title === '搜索') {

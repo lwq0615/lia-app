@@ -138,40 +138,11 @@ const RouterForm = ({ routerDict, formValue, userDict, formTitle, routerId, relo
                             />
                         </Form.Item>
                     </Col>
-                    {
-                        routerId ? <Col span={12}>
-                            <Form.Item name="createBy" label="创建人">
-                                <Select
-                                    allowClear
-                                    placeholder="请选择创建人"
-                                    showSearch
-                                    filterOption={(input, option) =>
-                                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                    }
-                                >
-                                    {userDict ? createOptions(userDict) : null}
-                                </Select>
-                            </Form.Item>
-                        </Col> : null
-                    }
                     <Col span={12}>
                         <Form.Item name="index" label="排序">
                             <InputNumber style={{ width: '100%' }} placeholder="请选择排序" />
                         </Form.Item>
                     </Col>
-                    {
-                        routerId ? <Col span={12}>
-                            <Form.Item name="createTime" label="创建时间">
-                                <Input
-                                    style={{ width: '100%' }}
-                                    type='datetime-local'
-                                    picker='date'
-                                    placeholder="请选择时间"
-                                    allowClear
-                                />
-                            </Form.Item>
-                        </Col> : null
-                    }
                     <Col span={12}>
                         <Form.Item name="icon" label="图标">
                             <Icons value={findFormValue('icon', formValue)} />
