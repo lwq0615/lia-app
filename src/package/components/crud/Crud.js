@@ -13,15 +13,24 @@ class Crud extends React.Component {
         columns: propTypes.array.isRequired,
         selection: propTypes.bool,
         showIndex: propTypes.bool,
-        rightAction: propTypes.bool,
-        justShowTable: propTypes.bool,
+        rightAction: propTypes.oneOfType([propTypes.array, propTypes.bool]),
         onSelection: propTypes.func,
         onRowClick: propTypes.func,
         editClick: propTypes.func,
         deleteClick: propTypes.func,
         addClick: propTypes.func,
         onSearch: propTypes.func,
-        onSave: propTypes.func
+        onSave: propTypes.func,
+        showSearch: propTypes.bool,
+        menuBtns: propTypes.oneOfType([propTypes.array, propTypes.bool])
+    }
+
+    static defaultProps = {
+        selection: true,
+        showIndex: true,
+        rightAction: ["edit", "delete"],
+        showSearch: true,
+        menuBtns: ["add", "delete", "search"]
     }
 
     state = {
@@ -61,21 +70,27 @@ class Crud extends React.Component {
         return (
             <section className={this.props.className + " lia-crud"} style={this.props.style}>
                 {
-                    this.props.justShowTable
+                    !this.props.showSearch
                         ? null
-                        :(<>
+                        : (
                             <CrudSearch
                                 {...this.props}
                                 ref={ref => this.nodes.crudSearchRef = ref}
                                 nodes={this.nodes}
                                 dict={this.state.dict}
                             />
+                        )
+                }
+                {
+                    !this.props.menuBtns
+                        ? null
+                        : (
                             <CrudMenu
                                 {...this.props}
                                 nodes={this.nodes}
                                 dict={this.state.dict}
                             />
-                        </>)
+                        )
                 }
                 <CrudTable
                     {...this.props}

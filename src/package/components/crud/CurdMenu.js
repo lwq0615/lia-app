@@ -45,13 +45,28 @@ class CrudMenu extends React.Component {
         })
     }
 
+    getBtns = () => {
+        let config = []
+        const btns = {
+            "add": (<Button key="add" type="primary" icon={<PlusOutlined />} onClick={this.addClick}>新增</Button>),
+            "delete": (<CrudConfirm key="delete" deleteSubmit={this.deleteSubmit} type='default' />),
+            "search": (<Button key="search" type="primary" icon={<SearchOutlined />} onClick={this.search}>搜索</Button>)
+        }
+        if(this.props.menuBtns === true){
+            config = Object.keys(btns)
+        }else if(Array.isArray(this.props.menuBtns)){
+            config = this.props.menuBtns
+        }
+        return config.map(item => {
+            return btns[item] || item
+        })
+    }
+
     render() {
         return (
             <>
                 <Space style={{ paddingBottom: 15 }}>
-                    <Button type="primary" icon={<PlusOutlined />} onClick={this.addClick}>新增</Button>
-                    <CrudConfirm deleteSubmit={this.deleteSubmit} type='default' />
-                    <Button type="primary" icon={<SearchOutlined />} onClick={this.search}>搜索</Button>
+                    {this.getBtns()}
                 </Space>
                 <CrudModal
                     title='新增'

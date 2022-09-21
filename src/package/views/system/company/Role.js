@@ -2,12 +2,11 @@
 import React from "react"
 import Crud from "@/package/components/crud/Crud"
 import { message } from "antd"
-import { getSysRolePage, saveSysRole, deleteRoles, getRoleDict, getRoleOfCompanyDict } from '@/package/request/system/role'
+import { getSysRolePage, saveSysRole, deleteRoles, getRoleOfCompanyDict } from '@/package/request/system/role'
 import { getAuthDict } from '@/package/request/system/auth'
 import { getCreateByDict } from '@/package/request/system/user'
-import { getCompanyDict } from '@/package/request/system/company'
 import { getSysRouterTree } from '@/package/request/system/router'
-import RoleModal from './RoleModal'
+import propTypes from 'prop-types'
 
 async function getRouterTree() {
     function routerMap(routers) {
@@ -74,36 +73,22 @@ async function getAuthTree() {
 
 class Role extends React.Component {
 
+    static propTypes = {
+        companyId: propTypes.number.isRequired
+    }
+
     constructor(props) {
         super(props)
         this.state = {
-            visible: false,
-            form: null,
             option: {
                 // 是否显示行索引，默认true
                 showIndex: true,
-                // 是否展示右侧操作栏，默认false
-                rightAction: true,
-                // 只展示表格，不展示搜索和按钮组（默认false）
-                justShowTable: false,
+                // 是否展示右侧操作栏，默认["edit", "delete"]
+                rightAction: ["edit", "delete"],
                 // 表格行是否可选择(默认false)
                 selection: true,
-                //点击新增按钮
-                addClick: () => {
-                    this.setState({
-                        form: null
-                    })
-                    this.setVisible(true)
-                    return false
-                },
-                //点击编辑按钮
-                editClick: (record) => {
-                    this.setState({
-                        form: record
-                    })
-                    this.setVisible(true)
-                    return false
-                },
+                // 配置显示的按钮
+                menuBtns: ["add", "delete", "search"],
                 // 触发删除钩子 records => {}
                 //return true刷新页面数据
                 onDelete: async records => {
@@ -119,6 +104,7 @@ class Role extends React.Component {
                 },
                 // 需要加载数据时触发 params => {}
                 getPage: (params, page) => {
+                    params.companyId = this.props.companyId
                     params.createTime = params.createTime?.join(",")
                     return getSysRolePage(params, page.current, page.size)
                 },
@@ -126,6 +112,7 @@ class Role extends React.Component {
                 // 如果需要获取返回值再关闭弹窗，请使用await
                 // return true刷新页面并关闭弹窗
                 onSave: async (form, type) => {
+                    form.companyId = this.props.companyId
                     return await saveSysRole(form).then(res => {
                         if (res === "标识符已存在") {
                             message.warning(res)
@@ -157,23 +144,12 @@ class Role extends React.Component {
                         required: true
                     },
                     {
-                        title: '所属企业',
-                        dataIndex: 'companyId',
-                        align: 'center',
-                        key: 'companyId',
-                        required: true,
-                        type: "select",
-                        dict: getCompanyDict
-                    },
-                    {
                         title: '上级',
                         dataIndex: 'superior',
                         align: 'center',
                         key: 'superior',
-                        editShow: false,
-                        addShow: false,
                         type: "select",
-                        dict: getRoleDict
+                        dict: () => getRoleOfCompanyDict(this.props.companyId)
                     },
                     {
                         title: '根路由',
@@ -237,26 +213,9 @@ class Role extends React.Component {
         }
     }
 
-    setVisible = (visible) => {
-        this.setState({ visible: visible })
-    }
-
-    crudRef = null
-
     render() {
         return (
-            <>
-                <Crud {...this.state.option} ref={ref => this.crudRef = ref}/>
-                <RoleModal
-                    visible={this.state.visible}
-                    setVisible={this.setVisible}
-                    form={this.state.form}
-                    getRouterTree={getRouterTree}
-                    getAuthTree={getAuthTree}
-                    onSave={this.state.option.onSave}
-                    onSearch={this.crudRef?.refreshPage}
-                />
-            </>
+            <Crud {...this.state.option}/>
         )
     }
 }

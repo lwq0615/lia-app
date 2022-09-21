@@ -156,6 +156,19 @@ class CrudTable extends React.Component {
         }
         // 添加右侧操作栏
         if (props.rightAction) {
+            const getBtns = (record) => {
+                let config = []
+                const btns = {
+                    "edit": (<Button key="edit" type="primary" size='small' onClick={(e) => { this.editClick(record, e) }}>编辑</Button>),
+                    "delete": (<CrudConfirm key="delete" deleteSubmit={() => this.deleteSubmit([record])} />)
+                }
+                if(props.rightAction === true){
+                    config = Object.keys(btns)
+                }else if(Array.isArray(props.rightAction)){
+                    config = props.rightAction
+                }
+                return config.map(item => btns[item] || item(record))
+            }
             newColumns.push({
                 title: '操作',
                 key: 'table-action',
@@ -163,8 +176,9 @@ class CrudTable extends React.Component {
                 fixed: 'right',
                 html: (record) => (
                     <Space size="middle" style={{justifyContent: 'center'}}>
-                        <Button type="primary" size='small' onClick={(e) => { this.editClick(record, e) }}>编辑</Button>
-                        <CrudConfirm deleteSubmit={() => this.deleteSubmit([record])} />
+                        {
+                            getBtns(record)
+                        }
                     </Space>
                 )
             })

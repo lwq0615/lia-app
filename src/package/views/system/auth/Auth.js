@@ -17,8 +17,6 @@ class Auth extends React.Component {
             showIndex: true,
             // 是否展示右侧操作栏，默认false
             rightAction: true,
-            // 只展示表格，不展示搜索和按钮组（默认false）
-            justShowTable: false,
             // 表格行是否可选择(默认false)
             selection: true,
             addClick: () => {

@@ -96,10 +96,10 @@ import { message } from "antd"
 const option = {
     // 是否显示行索引，默认true
     showIndex: true,
-    // 是否展示右侧操作栏，默认false
+    // 是否展示右侧操作栏，默认["edit", "delete"]
     rightAction: true,
-    // 只展示表格，不展示搜索和按钮组（默认false）
-    justShowTable: false,
+    // 配置按钮组，默认["add", "delete", "search"]
+    menuBtns: true,
     // 表格行是否可选择(默认false)
     selection: true,
     // 触发删除钩子 records => {}

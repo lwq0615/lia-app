@@ -61,14 +61,13 @@ request.interceptors.response.use(
                 message.error("请求类型有误")
                 break
             }
-            case 406: {
-                message.warning("该资源游客无法访问，请先登录")
-                break
-            }
             case 500: {
                 message.error('服务器内部错误')
                 break
             }
+            default:
+                message.error('未知错误')
+                break
         }
         return Promise.reject(err)
     }

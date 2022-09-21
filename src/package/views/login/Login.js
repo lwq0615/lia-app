@@ -28,7 +28,7 @@ class Login extends React.Component {
      * 提交登录验证表单
      * @param {Object} values 
      */
-    onFinish = async (values, visitor) => {
+    onFinish = async (values) => {
         sysUserLogin(values).then(res => {
             switch (res) {
                 case "login failed": {
@@ -41,14 +41,12 @@ class Login extends React.Component {
                 }
                 default: {
                     localStorage.setItem(http.header, res)
-                    if(!visitor){
-                        if(this.state.rememberMe){
-                            localStorage.setItem("username", values.username)
-                            localStorage.setItem("password", values.password)
-                        }else{
-                            localStorage.removeItem("username")
-                            localStorage.removeItem("password")
-                        }
+                    if(this.state.rememberMe){
+                        localStorage.setItem("username", values.username)
+                        localStorage.setItem("password", values.password)
+                    }else{
+                        localStorage.removeItem("username")
+                        localStorage.removeItem("password")
                     }
                     this.props.navigate("/")
                 }
@@ -105,11 +103,8 @@ class Login extends React.Component {
                             <Button type="primary" htmlType="submit" className="login-form-button">
                                 登录
                             </Button>
-                            <Button type="primary" className="login-form-button" onClick={() => this.onFinish({
-                                username: 'visitor',
-                                password: '123456'
-                            },true)}>
-                                游客登录
+                            <Button type="primary" className="login-form-button">
+                                注册
                             </Button>
                         </Form.Item>
                     </Form>
