@@ -160,7 +160,7 @@ class CrudTable extends React.Component {
                 let config = []
                 const btns = {
                     "edit": (<Button key="edit" type="primary" size='small' onClick={(e) => { this.editClick(record, e) }}>编辑</Button>),
-                    "delete": (<CrudConfirm key="delete" deleteSubmit={() => this.deleteSubmit([record])} />)
+                    "delete": (<CrudConfirm msg={props.deleteMsg} key="delete" deleteSubmit={() => this.deleteSubmit([record])} />)
                 }
                 if(props.rightAction === true){
                     config = Object.keys(btns)

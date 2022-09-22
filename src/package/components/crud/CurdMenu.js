@@ -49,7 +49,7 @@ class CrudMenu extends React.Component {
         let config = []
         const btns = {
             "add": (<Button key="add" type="primary" icon={<PlusOutlined />} onClick={this.addClick}>新增</Button>),
-            "delete": (<CrudConfirm key="delete" deleteSubmit={this.deleteSubmit} type='default' />),
+            "delete": (<CrudConfirm msg={this.props.deleteMsg} key="delete" deleteSubmit={this.deleteSubmit} type='default' />),
             "search": (<Button key="search" type="primary" icon={<SearchOutlined />} onClick={this.search}>搜索</Button>)
         }
         if(this.props.menuBtns === true){

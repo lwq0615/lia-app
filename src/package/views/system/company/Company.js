@@ -26,6 +26,8 @@ export default class Company extends React.Component {
             }, "delete"],
             // 表格行是否可选择(默认false)
             selection: true,
+            // 删除按钮提示信息
+            deleteMsg: "企业下的角色都将被删除，确认删除？",
             // 触发删除钩子 records => {}
             //return true刷新页面数据
             onDelete: async records => {
@@ -152,7 +154,9 @@ export default class Company extends React.Component {
                     confirmLoading={this.state.loading}
                     onCancel={() => this.setState({visible: false})}
                 >
-                    <Role companyId={this.state.companyId}/>
+                    {
+                        this.state.companyId && <Role companyId={this.state.companyId}/>
+                    }
                 </Modal>
             </>
         )

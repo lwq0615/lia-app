@@ -5,6 +5,8 @@ import { message } from "antd"
 import { getSysUserPage, saveSysUser, deleteUsers, getCreateByDict } from '@/package/request/system/user'
 import { getSexDict } from '@/package/request/system/dict'
 import { getRoleDict } from '@/package/request/system/role'
+import { getCompanyDict } from '@/package/request/system/company'
+import { symbol } from "prop-types"
 
 const option = {
     // 是否显示行索引，默认true
@@ -78,15 +80,47 @@ const option = {
             required: true
         },
         {
+            title: '企业',
+            dataIndex: 'companyId',
+            align: 'center',
+            key: 'companyId',
+            addShow: false,
+            editShow: false,
+            // type为select时必须提供dict
+            type: "select",
+            // 配置了select后dict才会生效
+            dict: getCompanyDict
+        },
+        {
             title: '角色',
             dataIndex: 'roleId',
             align: 'center',
             key: 'roleId',
             required: true,
             // type为select时必须提供dict
-            type: "select",
+            type: "tree",
             // 配置了select后dict才会生效
-            dict: getRoleDict
+            dict: () => {
+                const roleTreeDict = []
+                return getRoleDict().then(res => {
+                    const companyRoleTree = {}
+                    res.forEach(item => {
+                        if(!Array.isArray(companyRoleTree[item.remark])){
+                            companyRoleTree[item.remark] = []
+                        }
+                        companyRoleTree[item.remark].push(item)
+                    })
+                    Object.keys(companyRoleTree).forEach(item => {
+                        roleTreeDict.push({
+                            label: item,
+                            value: Symbol(item).toString(),
+                            selectable: false,
+                            children: companyRoleTree[item]
+                        })
+                    })
+                    return roleTreeDict
+                })
+            }
         },
         {
             title: '性别',
