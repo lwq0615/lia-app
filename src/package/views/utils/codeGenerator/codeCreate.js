@@ -14,7 +14,7 @@ export function toHump(name) {
  * 驼峰转下划线
  */
 export function toLine(name) {
-    return name.replace(/([A-Z])/g, "_$1").toLowerCase();
+    return firstLow(name).replace(/([A-Z])/g, "_$1").toLowerCase();
 }
 
 
@@ -218,6 +218,8 @@ export function controllerCode(data, tableName, httpUrl) {
     return `
 package com.lia.server.modules.${objName};
 
+import com.lia.server.modules.${objName}.${className};
+import com.lia.server.modules.${objName}.${className}Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lia.system.exception.HttpException;
@@ -300,6 +302,8 @@ export function serviceCode(tableName, primaryKey) {
     return `
 package com.lia.server.modules.${objName};
 
+import com.lia.server.modules.${objName}.${className};
+import com.lia.server.modules.${objName}.${className}Mapper;
 import com.lia.system.security.LoginUser;
 import com.lia.system.utils.SnowflakeId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -383,6 +387,7 @@ export function mapperCode(tableName){
     return `
 package com.lia.server.modules.${objName};
 
+import com.lia.server.modules.${objName}.${className};
 import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 

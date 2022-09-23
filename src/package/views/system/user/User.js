@@ -3,10 +3,9 @@ import React from "react"
 import Crud from "@/package/components/crud/Crud"
 import { message } from "antd"
 import { getSysUserPage, saveSysUser, deleteUsers, getCreateByDict } from '@/package/request/system/user'
-import { getSexDict } from '@/package/request/system/dict'
+import { getSexDict } from '@/package/request/system/dictData'
 import { getRoleDict } from '@/package/request/system/role'
 import { getCompanyDict } from '@/package/request/system/company'
-import { symbol } from "prop-types"
 
 const option = {
     // 是否显示行索引，默认true

@@ -149,9 +149,7 @@ export default class Company extends React.Component {
                     keyboard
                     title={this.state.companyName}
                     visible={this.state.visible}
-                    onOk={this.handleOk}
                     footer={null}
-                    confirmLoading={this.state.loading}
                     onCancel={() => this.setState({visible: false})}
                 >
                     {
