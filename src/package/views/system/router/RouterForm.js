@@ -48,7 +48,7 @@ function findFormValue(name, values) {
     }
 }
 
-const RouterForm = ({ routerDict, formValue, userDict, formTitle, routerId, reloadTree, setForm }) => {
+const RouterForm = ({ routerDict, formValue, formTitle, routerId, reloadTree, setForm }) => {
     const [form] = Form.useForm();
 
     function submit() {

@@ -1,6 +1,8 @@
 import React from "react";
 import { Table, Input, Space, Button, Switch, Select, message, Modal, Tabs, Form, Col, Row } from 'antd';
-import { PlusOutlined, MinusOutlined, CheckOutlined } from '@ant-design/icons';
+import { PlusOutlined, MinusOutlined, CheckOutlined, ClockCircleOutlined } from '@ant-design/icons';
+import { saveSysToolCode } from "@/package/request/system/tool/code"
+import HistoryCode from './HistoryCode'
 import './codeGenerator.scss'
 import * as codeCreate from './codeCreate.js'
 
@@ -94,7 +96,19 @@ export default class CodeGenerator extends React.Component {
     ]
 
     state = {
-        data: []
+        data: [],
+        visible: false,
+        heads: null
+    }
+
+    /**
+     * 查看历史记录
+     */
+    showModal = (e, record) => {
+        e.stopPropagation()
+        this.setState({
+            visible: true
+        })
     }
 
     switchChange = (value, e, index) => {
@@ -141,38 +155,71 @@ export default class CodeGenerator extends React.Component {
     }
 
 
+    /**
+     * 点击复制
+     */
+    copy = (e) => {
+        navigator.clipboard.writeText(e.target.innerText)
+        message.success("复制成功")
+    }
+
+
     generator = (data, tableName, primaryKey, httpUrl) => {
+        const record = {
+            columns: JSON.stringify(data),
+            tableName,
+            primaryKey: JSON.stringify(primaryKey),
+            httpUrl
+        }
+        saveSysToolCode(record)
         Modal.success({
             width: 800,
             okText: '确定',
+            centered: true,
             className: 'code-generator-modal',
             destroyOnClose: true,
             title: '生成代码',
             content: (
                 <Tabs defaultActiveKey="1">
                     <TabPane tab="request" key="request">
-                        {codeCreate.requestCode(tableName)}
+                        <div onClick={this.copy}>
+                            {codeCreate.requestCode(tableName)}
+                        </div>
                     </TabPane>
                     <TabPane tab="view" key="view">
-                        {codeCreate.viewCode(data, tableName, primaryKey)}
+                        <div onClick={this.copy}>
+                            {codeCreate.viewCode(data, tableName, primaryKey)}
+                        </div>
                     </TabPane>
                     <TabPane tab="entity" key="entity">
-                        {codeCreate.entityCode(data, tableName, primaryKey)}
+                        <div onClick={this.copy}>
+                            {codeCreate.entityCode(data, tableName, primaryKey)}
+                        </div>
                     </TabPane>
                     <TabPane tab="controller" key="controller">
-                        {codeCreate.controllerCode(data, tableName, httpUrl)}
+                        <div onClick={this.copy}>
+                            {codeCreate.controllerCode(data, tableName, httpUrl)}
+                        </div>
                     </TabPane>
                     <TabPane tab="service" key="service">
-                        {codeCreate.serviceCode(tableName, primaryKey)}
+                        <div onClick={this.copy}>
+                            {codeCreate.serviceCode(tableName, primaryKey)}
+                        </div>
                     </TabPane>
                     <TabPane tab="mapper" key="mapper">
-                        {codeCreate.mapperCode(tableName)}
+                        <div onClick={this.copy}>
+                            {codeCreate.mapperCode(tableName)}
+                        </div>
                     </TabPane>
                     <TabPane tab="mybatis" key="mybatis">
-                        {codeCreate.mybatisCode(data, tableName, primaryKey)}
+                        <div onClick={this.copy}>
+                            {codeCreate.mybatisCode(data, tableName, primaryKey)}
+                        </div>
                     </TabPane>
                     <TabPane tab="mysql" key="mysql">
-                        {codeCreate.mysqlCode(tableName,data,primaryKey)}
+                        <div onClick={this.copy}>
+                            {codeCreate.mysqlCode(tableName, data, primaryKey)}
+                        </div>
                     </TabPane>
                 </Tabs>
             )
@@ -182,8 +229,8 @@ export default class CodeGenerator extends React.Component {
 
     onFinish = (values) => {
         let { tableName, httpUrl, primaryKeyType } = values
-        tableName = tableName.replace(/ /g,'')
-        httpUrl = httpUrl?.replace(/ /g,'')
+        tableName = tableName.replace(/ /g, '')
+        httpUrl = httpUrl?.replace(/ /g, '')
         if (!/^[A-Za-z_]+$/.test(tableName[0]) || !/^[A-Za-z0-9_]+$/.test(tableName)) {
             message.warning("表名不合法")
             return
@@ -199,7 +246,7 @@ export default class CodeGenerator extends React.Component {
                 message.warning("第" + (parseInt(i) + 1) + "条数据字段名为空")
                 return
             }
-            item.name = item.name.replace(/ /g,'')
+            item.name = item.name.replace(/ /g, '')
             if (!/^[A-Za-z_]+$/.test(item.name[0]) || !/^[A-Za-z0-9_]+$/.test(item.name)) {
                 message.warning("字段名" + item.name + "不合法")
                 return
@@ -207,7 +254,7 @@ export default class CodeGenerator extends React.Component {
             item.name = codeCreate.firstLow(codeCreate.toHump(item.name))
         }
         const primaryKey = {
-            name: codeCreate.firstLow(codeCreate.toHump(tableName.replace(/ /g,'')))+"Id",
+            name: codeCreate.firstLow(codeCreate.toHump(tableName.replace(/ /g, ''))) + "Id",
             type: primaryKeyType
         }
         this.generator(data, tableName, primaryKey, httpUrl)
@@ -220,7 +267,7 @@ export default class CodeGenerator extends React.Component {
      */
     createBtns = () => {
         return (
-            <Form onFinish={this.onFinish} initialValues={{primaryKeyType: "autoIncrement"}}>
+            <Form onFinish={this.onFinish} initialValues={{ primaryKeyType: "autoIncrement" }} fields={this.state.heads}>
                 <Row gutter={24}>
                     <Col span={8}>
                         <Form.Item
@@ -266,6 +313,7 @@ export default class CodeGenerator extends React.Component {
                     <Space>
                         <Button key="add" type="primary" icon={<PlusOutlined />} onClick={this.addRow}>添加一行</Button>
                         <Button htmlType="submit" key="generator" type="primary" icon={<CheckOutlined />}>生成代码</Button>
+                        <Button key="history" type="primary" icon={<ClockCircleOutlined />} onClick={this.showModal}>历史记录</Button>
                     </Space>
                 </Row>
             </Form>
@@ -284,6 +332,22 @@ export default class CodeGenerator extends React.Component {
                     dataSource={this.state.data}
                     title={this.createBtns}
                 />
+                <Modal
+                    centered
+                    width={1200}
+                    destroyOnClose
+                    keyboard
+                    title="历史记录"
+                    visible={this.state.visible}
+                    footer={null}
+                    onCancel={() => this.setState({visible: false})}
+                >
+                    <HistoryCode 
+                        close={() => this.setState({visible: false})}
+                        setData={(data) => this.setState({data: data})}
+                        setHeads={(heads) => this.setState({heads: heads})}
+                    />
+                </Modal>
             </section>
         )
     }

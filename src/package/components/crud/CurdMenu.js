@@ -58,7 +58,9 @@ class CrudMenu extends React.Component {
             config = this.props.menuBtns
         }
         return config.map(item => {
-            return btns[item] || item
+            return btns[item] || item(() => {
+                return this.props.nodes.crudTableRef?.state.selectedRows.slice()
+            })
         })
     }
 

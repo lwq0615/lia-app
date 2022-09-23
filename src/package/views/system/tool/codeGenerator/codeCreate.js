@@ -79,74 +79,81 @@ export function delete${firstUp(toHump(tableName))}s(${firstLow(toHump(tableName
 export function viewCode(data, tableName, primaryKey){
     function getColumnsCode(){
         return data.map(item => {
-            return `        {
-            title: '${item.remark}',
-            dataIndex: '${item.name}',
-            align: 'center',
-            key: '${item.name}',
-            required: ${item.notNull}
-        }`
+            return `                {
+                    title: '${item.remark}',
+                    dataIndex: '${item.name}',
+                    align: 'center',
+                    key: '${item.name}',
+                    required: ${item.notNull}
+                }`
         }).join(",\n")
     }
     return `
+import React from 'react'
 import Crud from '@/package/components/crud/Crud'
 import { get${firstUp(toHump(tableName))}Page, save${firstUp(toHump(tableName))}, delete${firstUp(toHump(tableName))}s } from '@/package/request/system/${firstLow(toHump(tableName))}'
 import { message } from "antd"
 
-const option = {
-    // 是否显示行索引，默认true
-    showIndex: true,
-    // 是否展示右侧操作栏，默认["edit", "delete"]
-    rightAction: true,
-    // 配置按钮组，默认["add", "delete", "search"]
-    menuBtns: true,
-    // 表格行是否可选择(默认false)
-    selection: true,
-    // 触发删除钩子 records => {}
-    //return true刷新页面数据
-    onDelete: async records => {
-        return await delete${firstUp(toHump(tableName))}s(records.map(item => item.${primaryKey.name})).then(res => {
-            if(res > 0){
-                message.success("删除成功")
-                return true
-            }else{
-                message.error("删除失败")
-                return false
-            }
-        })
-    },
-    // 需要加载数据时触发 params => {}
-    getPage: (params, page) => {
-        params.createTime = params.createTime?.join(",")
-        return get${firstUp(toHump(tableName))}Page(params, page.current, page.size)
-    },
-    // 新增编辑提交钩子 async (form, type) => {}
-    // 如果需要获取返回值再关闭弹窗，请使用await
-    // return true刷新页面
-    onSave: async (form, type) => {
-        return await save${firstUp(toHump(tableName))}(form).then(res => {
-            if(res === 'error'){
-                message.warning("未知错误")
-                return false
-            }else if(res === 'success'){
-                message.success(type+"成功")
-                return true
-            }else{
-                message.warning(res)
-                return false
-            }
-        })
-    },
-    columns: [
+
+export default class ${firstUp(toHump(tableName))} extends React.Component{
+
+    state = {
+        option: {
+            // 是否显示行索引，默认true
+            showIndex: true,
+            // 是否展示右侧操作栏，默认["edit", "delete"]
+            rightAction: true,
+            // 配置按钮组，默认["add", "delete", "search"]
+            menuBtns: true,
+            // 表格行是否可选择(默认false)
+            selection: true,
+            // 触发删除钩子 records => {}
+            //return true刷新页面数据
+            onDelete: async records => {
+                return await delete${firstUp(toHump(tableName))}s(records.map(item => item.${primaryKey.name})).then(res => {
+                    if(res > 0){
+                        message.success("删除成功")
+                        return true
+                    }else{
+                        message.error("删除失败")
+                        return false
+                    }
+                })
+            },
+            // 需要加载数据时触发 params => {}
+            getPage: (params, page) => {
+                params.createTime = params.createTime?.join(",")
+                return get${firstUp(toHump(tableName))}Page(params, page.current, page.size)
+            },
+            // 新增编辑提交钩子 async (form, type) => {}
+            // 如果需要获取返回值再关闭弹窗，请使用await
+            // return true刷新页面
+            onSave: async (form, type) => {
+                return await save${firstUp(toHump(tableName))}(form).then(res => {
+                    if(res === 'error'){
+                        message.warning("未知错误")
+                        return false
+                    }else if(res === 'success'){
+                        message.success(type+"成功")
+                        return true
+                    }else{
+                        message.warning(res)
+                        return false
+                    }
+                })
+            },
+            columns: [
 ${getColumnsCode()}
-    ]
-}
+            ]
+        }
+    }
 
-
-export default function ${firstUp(toHump(tableName))}(props){
-    return (
-        <Crud {...option}/>
-    )
+    render(){
+        return (
+            <Crud {...this.state.option}/>
+        )
+    }
+    
 }          
 `
 }
@@ -168,7 +175,7 @@ export function entityCode(data, tableName, primaryKey) {
         return str
     }
     return `
-package com.lia.server.moudles.${firstUp(toHump(tableName))};
+package com.lia.server.modules.${firstLow(toHump(tableName))};
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
