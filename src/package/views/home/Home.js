@@ -1,5 +1,4 @@
-import { Layout, Menu, Breadcrumb, Dropdown, Space } from 'antd';
-import { DownOutlined } from '@ant-design/icons';
+import { Layout, Menu, Breadcrumb, Space, Button, Tooltip } from 'antd';
 import * as icons from '@ant-design/icons'
 import React from 'react';
 import './home.scss'
@@ -8,8 +7,10 @@ import { getSysUserInfo, getHeadImg } from '@/package/request/system/user'
 import { getRouterOfRole } from '@/package/request/system/router'
 import WithRouter from '@/package/components/hoc/WithRouter';
 import Index from '@/package/views/system/index/Index'
+import Message from './Message'
 import defaultImg from './image/default.jpg'
 import { http } from "@/config"
+import { wsClose } from './websocket';
 
 
 const { Header, Sider, Content } = Layout;
@@ -160,20 +161,15 @@ class Home extends React.Component {
      */
     logout = () => {
         localStorage.removeItem(http.header)
+        wsClose()
         this.props.navigate("/login")
     }
 
 
     /**
-     * 重新加载用户信息
-     * @param {*} path 
+     * 加载路由相关和用户信息
      */
-    reloadUser = () => {
-        this.componentDidMount()
-    }
-
-
-    componentDidMount = () => {
+    loadUserAndRouter = () => {
         // 获取用户信息
         getSysUserInfo().then(user => {
             this.setState({
@@ -202,6 +198,11 @@ class Home extends React.Component {
         })
     }
 
+
+    componentDidMount = () => {
+        this.loadUserAndRouter()
+    }
+
     render() {
         return (
             <Layout className='lia_home_container'>
@@ -214,41 +215,9 @@ class Home extends React.Component {
                             className="headImg"
                             onClick={() => this.goRouter()}
                         />
-                        {
-                            this.state.collapsed
-                                ? null
-                                : <Dropdown
-                                    trigger={['click']}
-                                    overlay={
-                                        <Menu
-                                            items={[
-                                                {
-                                                    key: 'userInfo',
-                                                    label: '个人资料',
-                                                    onClick: () => {
-                                                        this.goRouter()
-                                                    }
-                                                },
-                                                {
-                                                    type: 'divider',
-                                                },
-                                                {
-                                                    key: 'logout',
-                                                    danger: true,
-                                                    label: '退出登录',
-                                                    onClick: this.logout
-                                                },
-                                            ]}
-                                        />
-                                    }>
-                                    <a onClick={(e) => e.preventDefault()}>
-                                        <Space>
-                                            {this.state.userInfo?.nick}
-                                            <DownOutlined />
-                                        </Space>
-                                    </a>
-                                </Dropdown>
-                        }
+                        <span style={{ color: '#1890ff', padding: 5, cursor: "pointer" }} onClick={() => this.goRouter()}>
+                            {this.state.userInfo?.nick}
+                        </span>
                     </div>
                     {
                         this.state.selectedKeys
@@ -273,6 +242,14 @@ class Home extends React.Component {
                         <Breadcrumb style={{ margin: '16px 0', display: 'inline-block' }}>
                             {this.state.routePath}
                         </Breadcrumb>
+                        <div className='action'>
+                            <Space size={"middle"}>
+                                <Message/>
+                                <Tooltip title="退出登录">
+                                    <Button size='large' danger type="primary" shape="circle" icon={<icons.LogoutOutlined />} onClick={this.logout} />
+                                </Tooltip>
+                            </Space>
+                        </div>
                     </Header>
                     <Content
                         className="site-layout-background"
@@ -286,7 +263,7 @@ class Home extends React.Component {
                             <Route exact index path="*" element={<Index
                                 userInfo={this.state.userInfo}
                                 headImg={this.state.headImg}
-                                reloadUser={this.reloadUser}
+                                reloadUser={this.loadUserAndRouter}
                             />} />
                             {this.state.routes}
                         </Routes>

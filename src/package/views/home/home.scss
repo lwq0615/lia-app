@@ -40,6 +40,11 @@
             .trigger:hover {
                 color: #1890ff;
             }
+            .action {
+                flex: 1;
+                text-align: right;
+                padding-right: 25px;
+            }
         }
         .site-layout-background {
             background: #fff;
