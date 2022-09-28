@@ -31,9 +31,7 @@ export function wsOpen() {
         console.log("与服务器端的websocket连接断开");
     }
 
-    window.onclose = function(){
-        wsClose()
-    }
+    window.addEventListener("close", wsClose)
 
 }
 
