@@ -3,7 +3,7 @@ import React from "react"
 import Crud from "@/package/components/crud/Crud"
 import { message } from "antd"
 import { getSysUserPage, saveSysUser, deleteUsers, getCreateByDict } from '@/package/request/system/user'
-import { getSexDict } from '@/package/request/system/dictData'
+import { getSexDict, getUserStatusDict } from '@/package/request/system/dictData'
 import { getRoleDict } from '@/package/request/system/role'
 import { getCompanyDict } from '@/package/request/system/company'
 
@@ -153,12 +153,8 @@ const option = {
             dataIndex: 'status',
             align: 'center',
             key: 'status',
-            addShow: false,
             type: "select",
-            dict: [
-                {label: '正常',value: '0'},
-                {label: '停用',value: '1'}
-            ]
+            dict: getUserStatusDict
         },
         {
             title: '创建人',

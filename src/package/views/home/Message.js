@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Tooltip, Badge, Modal } from 'antd';
 import * as icons from '@ant-design/icons'
-import { wsOpen } from './websocket';
+import { wsOpen, wsClose } from './websocket';
 
 export default class Message extends React.Component {
 
@@ -12,6 +12,10 @@ export default class Message extends React.Component {
 
     componentDidMount = () => {
         wsOpen()
+    }
+
+    componentWillUnmount = () => {
+        wsClose()
     }
 
     render() {
@@ -38,7 +42,6 @@ export default class Message extends React.Component {
                     onCancel={() => this.setState({visible: false})}
                 >
                     <section style={{height: 500}}>
-                        
                     </section>
                 </Modal>
             </>

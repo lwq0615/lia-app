@@ -39,3 +39,11 @@ export function deleteSysDictDatas(sysDictDataIds){
 export function getSexDict(){
     return request.get(`${baseUrl}/getSexDict`)
 }
+
+
+/**
+ * 获取角色状态字典表
+ */
+export function getUserStatusDict(){
+    return request.get(`${baseUrl}/getUserStatusDict`)
+}

@@ -11,6 +11,15 @@ export function sysUserLogin(user) {
     return request.post(`${baseUrl}/login`, user)
 }
 
+
+/**
+ * 退出登录
+ */
+export function logout(){
+    return request.get(`${baseUrl}/logout`)
+}
+
+
 /**
  * 获取用户信息
  * @returns 

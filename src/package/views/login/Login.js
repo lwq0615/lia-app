@@ -39,6 +39,10 @@ class Login extends React.Component {
                     message.warning("请填写完整")
                     break
                 }
+                case "user deactivate": {
+                    message.warning("账号已停用")
+                    break
+                }
                 default: {
                     localStorage.setItem(http.header, res)
                     if(this.state.rememberMe){

@@ -3,14 +3,13 @@ import * as icons from '@ant-design/icons'
 import React from 'react';
 import './home.scss'
 import { Routes, Route } from 'react-router-dom';
-import { getSysUserInfo, getHeadImg } from '@/package/request/system/user'
+import { getSysUserInfo, getHeadImg, logout } from '@/package/request/system/user'
 import { getRouterOfRole } from '@/package/request/system/router'
 import WithRouter from '@/package/components/hoc/WithRouter';
 import Index from '@/package/views/system/index/Index'
 import Message from './Message'
 import defaultImg from './image/default.jpg'
 import { http } from "@/config"
-import { wsClose } from './websocket';
 
 
 const { Header, Sider, Content } = Layout;
@@ -160,9 +159,10 @@ class Home extends React.Component {
      * 退出登录
      */
     logout = () => {
-        localStorage.removeItem(http.header)
-        wsClose()
-        this.props.navigate("/login")
+        logout().then(() => {
+            localStorage.removeItem(http.header)
+            this.props.navigate("/login")
+        })
     }
 
 
@@ -244,7 +244,7 @@ class Home extends React.Component {
                         </Breadcrumb>
                         <div className='action'>
                             <Space size={"middle"}>
-                                <Message/>
+                                <Message />
                                 <Tooltip title="退出登录">
                                     <Button size='large' danger type="primary" shape="circle" icon={<icons.LogoutOutlined />} onClick={this.logout} />
                                 </Tooltip>

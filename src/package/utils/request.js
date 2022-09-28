@@ -25,6 +25,41 @@ request.interceptors.request.use(config => {
 })
 
 /**
+ * 防止消息提示重复
+ */
+const msgMap = {}
+
+
+/**
+ * 生成消息提示弹窗
+ * @param {*} errCode 错误状态码
+ * @returns 
+ */
+function createMsg(errCode){
+    const msgText = {
+        400: "请求有误",
+        401: "请先登录",
+        402: "登录过期，请重新登录",
+        403: "没有权限",
+        404: "目标资源不存在",
+        405: "请求类型有误",
+        500: "服务器内部错误"
+    }
+    // 已经有该消息则不重复提示
+    if(msgMap[errCode]){
+        return
+    }
+    msgMap[errCode] = true
+    message.warning(msgText[errCode] || "未知错误", 3, () => {
+        delete msgMap[errCode]
+    })
+    if([401, 402].includes(errCode)){
+        localStorage.removeItem(http.header)
+        window.goRouter("login")
+    }
+}
+
+/**
  * 对不同的http返回状态码进行处理
  */
 request.interceptors.response.use(
@@ -32,43 +67,7 @@ request.interceptors.response.use(
         return res.data;
     },
     err => {
-        switch (err.response.status) {
-            case 400: {
-                message.error('请求有误')
-                break
-            }
-            case 401: {
-                message.warning('请先登录')
-                localStorage.removeItem(http.header)
-                window.goRouter("login")
-                break
-            }
-            case 402: {
-                message.warning('登录过期，请重新登录')
-                localStorage.removeItem(http.header)
-                window.goRouter("login")
-                break
-            }
-            case 403: {
-                message.warning('没有权限')
-                break
-            }
-            case 404: {
-                message.error("目标资源不存在")
-                break
-            }
-            case 405: {
-                message.error("请求类型有误")
-                break
-            }
-            case 500: {
-                message.error('服务器内部错误')
-                break
-            }
-            default:
-                message.error('未知错误')
-                break
-        }
+        createMsg(err.response.status)
         return Promise.reject(err)
     }
 )
