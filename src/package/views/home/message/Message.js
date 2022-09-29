@@ -3,14 +3,8 @@ import { Button, Tooltip, Badge, Modal } from 'antd';
 import * as icons from '@ant-design/icons'
 import { wsOpen, wsClose } from './websocket';
 import PersonList from './PersonList'
-import propTypes from 'prop-types'
 
 export default class Message extends React.Component {
-
-    static propTypes = {
-        userInfo: propTypes.object
-    }
-
     state = {
         // 未读消息数
         msgCount: 0,
@@ -51,7 +45,7 @@ export default class Message extends React.Component {
                     onCancel={() => this.setState({visible: false})}
                 >
                     <section style={{height: 500, display: "flex"}}>
-                        <PersonList userInfo={this.props.userInfo}/>
+                        <PersonList/>
                     </section>
                 </Modal>
             </>

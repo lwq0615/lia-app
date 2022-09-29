@@ -2,13 +2,8 @@ import React from 'react';
 import { getPersonList, getNoReadCount, getLastMsg } from '@/package/request/system/message'
 import { getRoleDict } from '@/package/request/system/role'
 import Person from './Person';
-import propTypes from 'prop-types'
 
 export default class PersonList extends React.Component {
-
-    static propTypes = {
-        userInfo: propTypes.object
-    }
 
     state = {
         // 聊天用户列表
@@ -56,7 +51,6 @@ export default class PersonList extends React.Component {
                         active={this.state.nowPerson === item.userId}
                         item={item}
                         key={item.userId} 
-                        userInfo={this.props.userInfo}
                         roleMap={this.state.roleMap}
                         onClick={this.onClick}/>
                     )  

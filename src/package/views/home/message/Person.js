@@ -19,7 +19,7 @@ export default function Person(props){
             return
         }
         if(lastMsg.sendBy === null){
-            return props.userInfo?.nick +": "+ lastMsg.content
+            return "我: "+ lastMsg.content
         }else{
             return props.item.nick +": "+ lastMsg.content
         }
@@ -42,6 +42,5 @@ Person.propTypes = {
     item: propTypes.object,
     roleMap: propTypes.object,
     onClick: propTypes.func,
-    active: propTypes.bool,
-    userInfo: propTypes.object
+    active: propTypes.bool
 }
