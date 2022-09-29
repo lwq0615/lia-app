@@ -40,8 +40,23 @@ export function wsOpen() {
  * websocket关闭连接
  */
 export function wsClose() {
+    if(webSocket && webSocket.readyState === 1){
+        webSocket.close()
+    }
+}
+
+
+/**
+ * 发送消息
+ */
+export function wsSend(msg){
     if(!webSocket){
+        message.warning("未连接")
         return
     }
-    webSocket.close()
+    if(webSocket.readyState === 3){
+        message.warning("连接已断开")
+        return
+    }
+    webSocket.send(msg)
 }

@@ -7,7 +7,7 @@ import { getSysUserInfo, getHeadImg, logout } from '@/package/request/system/use
 import { getRouterOfRole } from '@/package/request/system/router'
 import WithRouter from '@/package/components/hoc/WithRouter';
 import Index from '@/package/views/system/index/Index'
-import Message from './Message'
+import Message from './message/Message'
 import defaultImg from './image/default.jpg'
 import { http } from "@/config"
 
@@ -244,7 +244,7 @@ class Home extends React.Component {
                         </Breadcrumb>
                         <div className='action'>
                             <Space size={"middle"}>
-                                <Message />
+                                <Message userInfo={this.state.userInfo}/>
                                 <Tooltip title="退出登录">
                                     <Button size='large' danger type="primary" shape="circle" icon={<icons.LogoutOutlined />} onClick={this.logout} />
                                 </Tooltip>

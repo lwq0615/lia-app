@@ -1,0 +1,42 @@
+.person-item {
+    width: 250px;
+    display: flex;
+    padding: 7px;
+    padding-left: 15px;
+    cursor: pointer;
+    border-top: 1px solid rgba($color: #1890ff, $alpha: 0.1);
+    transition: background-color linear 0.08s;
+    .head-img {
+        width: 43px;
+        height: 43px;
+        border-radius: 5px;
+        object-fit: cover;
+    }
+    p.name {
+        margin: 0;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        width: 100%;
+        overflow: hidden;
+    }
+    p.lastMsg {
+        font-size: 13px;
+        margin: 0;
+        opacity: 0.8;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        width: 100%;
+        overflow: hidden;
+    }
+}
+.person-item.active {
+    color: #1890ff;
+    background-color: rgba($color: #1890ff, $alpha: 0.1);
+}
+.person-item:first-child {
+    border-top: none;
+}
+.person-item:hover {
+    color: #1890ff;
+    background-color: rgba($color: #1890ff, $alpha: 0.1);
+}
