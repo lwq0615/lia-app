@@ -20,9 +20,6 @@ export function wsOpen(onmessage) {
     webSocket = new WebSocket(`ws://${baseUrl}/ws?${http.header}=${localStorage.getItem(http.header)}`);
 
     webSocket.onmessage = onmessage
-    webSocket.onclose = function (ev) {
-        message.warning("与服务器端的websocket连接断开");
-    }
 
     window.addEventListener("close", wsClose)
 
