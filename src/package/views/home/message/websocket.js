@@ -7,7 +7,7 @@ let webSocket = null
 /**
  * websocket建立连接
  */
-export function wsOpen() {
+export function wsOpen(onmessage) {
     if (!window.WebSocket) {
         message.warning("该环境不支持websocket")
         return
@@ -19,16 +19,9 @@ export function wsOpen() {
     //如果服务端有配置上下文 context-path，需要加入路径
     webSocket = new WebSocket(`ws://${baseUrl}/ws?${http.header}=${localStorage.getItem(http.header)}`);
 
-    webSocket.onmessage = function (ev) {
-        console.log(ev);
-        console.log("收到消息");
-    }
-
-    webSocket.onopen = function (ev) {
-        console.log("与服务器端的websocket连接建立");
-    }
+    webSocket.onmessage = onmessage
     webSocket.onclose = function (ev) {
-        console.log("与服务器端的websocket连接断开");
+        message.warning("与服务器端的websocket连接断开");
     }
 
     window.addEventListener("close", wsClose)
@@ -58,5 +51,9 @@ export function wsSend(msg){
         message.warning("连接已断开")
         return
     }
-    webSocket.send(msg)
+    if(msg.sendBy && msg.sendTo && msg.type && msg.content){
+        webSocket.send(JSON.stringify(msg))
+    }else{
+        message.warning("发送失败")
+    }
 }

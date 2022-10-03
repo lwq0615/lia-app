@@ -12,7 +12,7 @@ export function getMsgRecordPage(message,current,size){
 }
 
 /**
- * 获取可以聊天的用户（只有相同企业的用户可以相互聊天）
+ * 获取联系人列表（只有相同企业的用户可以相互聊天）
  */
 export function getPersonList(){
     return request.get(`${baseUrl}/personList`)
@@ -31,4 +31,11 @@ export function getPersonList(){
  */
  export function getLastMsg(userIds){
     return request.post(`${baseUrl}/getLastMsg`, userIds)
+}
+
+/**
+ * 将用户1与用户2的聊天记录都标记为已读
+ */
+ export function readMessage(message){
+    return request.post(`${baseUrl}/readMessage`, message)
 }
