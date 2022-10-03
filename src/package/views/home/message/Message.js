@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Tooltip, Badge, Modal } from 'antd';
 import * as icons from '@ant-design/icons'
 import { wsOpen, wsClose } from './websocket';
-import { getNoReadCount } from '@/package/request/system/message'
+import { getNoReadCount, readMessage } from '@/package/request/system/message'
 import PersonList from './PersonList'
 import MsgBox from './MsgBox'
 import './message.scss'
@@ -61,6 +61,22 @@ export default class Message extends React.Component {
         wsClose()
     }
 
+    /**
+     * 点击消息按钮
+     */
+    openMsgBox = () => {
+        this.setState({visible: true})
+        if(this.state.nowPerson){
+            // 当前聊天的联系人消息设置为已读
+            readMessage({
+                sendBy: this.state.nowPerson.userId,
+                sendTo: this.props.userInfo.userId
+            }).then(res => {
+                this.setMsgCount(-res)
+            })
+        }
+    }
+
     render() {
         return (
             <>
@@ -71,7 +87,7 @@ export default class Message extends React.Component {
                             type="primary"
                             shape="circle"
                             icon={<icons.MessageOutlined />}
-                            onClick={() => this.setState({visible: true})}
+                            onClick={this.openMsgBox}
                         />
                     </Badge>
                 </Tooltip>
