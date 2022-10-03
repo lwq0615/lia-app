@@ -15,6 +15,7 @@
             justify-content: end;
             p {
                 background-color: #1e6eff;
+                word-break: break-all;
                 color: white;
                 border-radius: 5px 0 5px 5px;
                 padding: 5px 10px;
@@ -42,6 +43,7 @@
             display: flex;
             p {
                 background-color: white;
+                word-break: break-all;
                 border-radius: 0 5px 5px 5px;
                 padding: 5px 10px;
                 color: rgba($color: #000000, $alpha: 0.85);
