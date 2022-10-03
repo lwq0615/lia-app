@@ -135,7 +135,7 @@ export default class MsgBox extends React.Component {
                 view.push(
                     <div key={i} className="right">
                         <p>{item.content}</p>
-                        <img className="headImg" src={http.baseUrl + "/system/file/getPic?comp=true&path=" + this.props.userHeadImg} />
+                        <img className="headImg" src={getHeadImg(this.props.userHeadImg)} />
                     </div>
                 )
             } else {

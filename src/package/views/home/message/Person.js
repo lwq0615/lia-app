@@ -5,10 +5,15 @@ import { Badge } from 'antd';
 import defaultImg from '../image/default.jpg'
 
 export function getHeadImg(item){
-    if(item.remark){
-        return http.baseUrl+"/system/file/getPic?comp=true&path="+item.remark
-    }else{
-        return defaultImg
+    if(typeof item === "object"){
+        if(item.remark){
+            return http.baseUrl+"/system/file/getPic?comp=true&path="+item.remark
+        }else{
+            return defaultImg
+        }
+    }
+    if(typeof item === "string"){
+        return item ? http.baseUrl+"/system/file/getPic?comp=true&path="+item : defaultImg
     }
 }
 
