@@ -154,14 +154,16 @@ export default class MsgBox extends React.Component {
     /**
      * 收到消息并且正处于该聊天界面时更新列表并更改消息状态为已读
      */
-    onMessage = (list) => {
+    onMessage = (msg) => {
         this.setState({
-            msgList: this.state.msgList.concat(list)
+            msgList: this.state.msgList.concat(msg)
         })
-        readMessage({
-            sendBy: this.props.person.userId,
-            sendTo: this.props.userInfo.userId
-        })
+        if(msg.sendTo === this.props.userInfo.userId){
+            readMessage({
+                sendBy: this.props.person.userId,
+                sendTo: this.props.userInfo.userId
+            })
+        }
     }
 
     /**
