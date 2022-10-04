@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Tooltip, Badge, Modal } from 'antd';
+import { Button, Tooltip, Badge, Modal, message } from 'antd';
 import * as icons from '@ant-design/icons'
 import { wsOpen, wsClose } from './websocket';
 import { getNoReadCount, readMessage } from '@/package/request/system/message'
@@ -38,6 +38,11 @@ export default class Message extends React.Component {
     componentDidMount = () => {
         wsOpen((e) => {
             // 收到消息时
+            if(e.data === "账号在其他设备登录"){
+                message.warning("账号在其他设备登录")
+                this.props.logout()
+                return
+            }
             const msg = JSON.parse(e.data)
             // 如果用户正处于聊天界面，则更新聊天记录列表
             if(this.state.visible && [msg.sendBy, msg.sendTo].includes(this.state.nowPerson?.userId)){

@@ -141,7 +141,7 @@ export default class MsgBox extends React.Component {
             } else {
                 view.push(
                     <div key={i} className="left">
-                        <img className="headImg" src={getHeadImg(item)} />
+                        <img className="headImg" src={getHeadImg(this.props.person)} />
                         <p>{item.content}</p>
                     </div>
                 )
