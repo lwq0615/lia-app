@@ -244,7 +244,7 @@ class Home extends React.Component {
                         </Breadcrumb>
                         <div className='action'>
                             <Space size={"middle"}>
-                                <Message userInfo={this.state.userInfo} userHeadImg={this.state.headImg} logout={this.logout}/>
+                                <Message userInfo={this.state.userInfo} userHeadImg={this.state.headImg}/>
                                 <Tooltip title="退出登录">
                                     <Button size='large' danger type="primary" shape="circle" icon={<icons.LogoutOutlined />} onClick={this.logout} />
                                 </Tooltip>

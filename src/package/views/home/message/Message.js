@@ -6,8 +6,10 @@ import { getNoReadCount, readMessage } from '@/package/request/system/message'
 import PersonList from './PersonList'
 import MsgBox from './MsgBox'
 import './message.scss'
+import WithRouter from '@/package/components/hoc/WithRouter';
+import { http } from "@/config"
 
-export default class Message extends React.Component {
+class Message extends React.Component {
     state = {
         // 未读消息数
         msgCount: 0,
@@ -40,7 +42,8 @@ export default class Message extends React.Component {
             // 收到消息时
             if(e.data === "账号在其他设备登录"){
                 message.warning("账号在其他设备登录")
-                this.props.logout()
+                localStorage.removeItem(http.header)
+                this.props.navigate("/login")
                 return
             }
             const msg = JSON.parse(e.data)
@@ -127,3 +130,6 @@ export default class Message extends React.Component {
     }
 
 }
+
+
+export default WithRouter(Message)
