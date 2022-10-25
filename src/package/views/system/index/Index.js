@@ -15,7 +15,7 @@ class Index extends React.Component {
      * @param {} info 
      */
     uploadHeadImg = (info) => {
-        updateHeadImg(info.file, this.props.userInfo?.headImg).then(res => {
+        updateHeadImg(info.file).then(res => {
             message.success(`上传成功`);
             this.props.reloadUser()
         }, err => {

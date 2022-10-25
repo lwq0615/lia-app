@@ -70,10 +70,9 @@ export function getHeadImg(){
 /**
  * 更换用户头像
  */
- export function updateHeadImg(file, fileId){
+ export function updateHeadImg(file){
     const formData = new FormData();
     formData.append("file", file)
-    formData.append("fileId", fileId)
     return request.post(`${baseUrl}/updateHeadImg`,formData, {
         "Content-Type": false
     })
