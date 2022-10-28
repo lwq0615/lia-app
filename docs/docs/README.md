@@ -12,12 +12,12 @@ lia是一个前后端分离的权限管理系统，前端使用React进行开发
 
 #### 项目演示
 * 首页
-![图片](/index.png)
+![图片](/lia-nest/index.png)
 * 消息通知
-![图片](/message.png)
+![图片](/lia-nest/message.png)
 * 用户管理
-![图片](/user.png)
+![图片](/lia-nest/user.png)
 * 字典配置
-![图片](/dict.png)
+![图片](/lia-nest/dict.png)
 * 代码生成
-![图片](/code.png)
+![图片](/lia-nest/code.png)
