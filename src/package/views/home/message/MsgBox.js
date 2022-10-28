@@ -1,7 +1,6 @@
 import React from "react";
 import { getMsgRecordPage, readMessage } from '@/package/request/system/message'
 import propTypes from 'prop-types'
-import { http } from "@/config"
 import { getHeadImg } from './Person'
 import { wsSend } from "./websocket";
 

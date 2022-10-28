@@ -35,7 +35,7 @@ class Index extends React.Component {
                     <img
                         className="headImg"
                         src={this.props.headImg
-                            ? http.baseUrl + "/system/file/getPic?comp=true&path=" + this.props.headImg
+                            ? http.baseUrl + "/system/file/getPic?comp=true&fileId=" + this.props.headImg
                             : defaultImg}
                     />
                 </Upload>

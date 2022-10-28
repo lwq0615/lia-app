@@ -7,13 +7,13 @@ import defaultImg from '../image/default.jpg'
 export function getHeadImg(item){
     if(typeof item === "object"){
         if(item.remark){
-            return http.baseUrl+"/system/file/getPic?comp=true&path="+item.remark
+            return http.baseUrl+"/system/file/getPic?comp=true&fileId="+item.remark
         }else{
             return defaultImg
         }
     }
-    if(typeof item === "string"){
-        return item ? http.baseUrl+"/system/file/getPic?comp=true&path="+item : defaultImg
+    if(typeof item === "number"){
+        return item ? http.baseUrl+"/system/file/getPic?comp=true&fileId="+item : defaultImg
     }
 }
 

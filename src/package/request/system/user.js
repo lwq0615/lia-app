@@ -60,7 +60,7 @@ export function deleteUsers(userIds){
 
 
 /**
- * 获取用户头像地址
+ * 获取用户头像文件ID
  */
 export function getHeadImg(){
     return request.get(`${baseUrl}/getHeadImg`)

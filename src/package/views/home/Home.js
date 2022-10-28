@@ -191,9 +191,9 @@ class Home extends React.Component {
                 })
             })
         })
-        getHeadImg().then(path => {
+        getHeadImg().then(fileId => {
             this.setState({
-                headImg: path
+                headImg: fileId
             })
         })
     }
@@ -210,7 +210,7 @@ class Home extends React.Component {
                     <div className='userInfo'>
                         <img
                             src={this.state.headImg
-                                ? http.baseUrl + "/system/file/getPic?comp=true&path=" + this.state.headImg
+                                ? http.baseUrl + "/system/file/getPic?comp=true&fileId=" + this.state.headImg
                                 : defaultImg}
                             className="headImg"
                             onClick={() => this.goRouter()}

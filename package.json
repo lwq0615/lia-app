@@ -60,7 +60,6 @@
     "tailwindcss": "^3.0.2",
     "terser-webpack-plugin": "^5.2.5",
     "web-vitals": "^2.1.4",
-    "webpack": "^5.64.4",
     "webpack-dev-server": "^4.6.0",
     "webpack-manifest-plugin": "^4.0.2",
     "workbox-webpack-plugin": "^6.4.1"
@@ -71,9 +70,7 @@
     "test": "node scripts/test.js",
     "electron-dev": "electron main.js debug",
     "electron-build": "./node_modules/.bin/electron-builder",
-    "electron": "electron main.js",
-    "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs"
+    "electron": "electron main.js"
   },
   "build": {
     "productName": "lia",
@@ -178,6 +175,6 @@
   "devDependencies": {
     "electron": "^19.0.4",
     "electron-builder": "^23.0.3",
-    "vuepress": "^1.9.7"
+    "webpack": "^5.64.4"
   }
 }

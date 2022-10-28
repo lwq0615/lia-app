@@ -22,7 +22,7 @@ module.exports = {
             {
                 title: '快速开始',
                 collapsable: false,
-                path: '/start'
+                path: '/markdown/start'
             },
             {
                 title: '前端手册',
@@ -31,7 +31,28 @@ module.exports = {
                     {
                         title: 'Crud组件',
                         collapsable: false,
-                        path: '/crud'
+                        path: '/markdown/crud'
+                    }
+                ]
+            },
+            {
+                title: '后端手册',
+                collapsable: true,
+                children: [
+                    {
+                        title: '异常处理',
+                        collapsable: false,
+                        path: '/markdown/exception'
+                    },
+                    {
+                        title: 'Redis',
+                        collapsable: false,
+                        path: '/markdown/redis'
+                    },
+                    {
+                        title: '文件系统',
+                        collapsable: false,
+                        path: '/markdown/file'
                     }
                 ]
             }
