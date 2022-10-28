@@ -71,7 +71,9 @@
     "test": "node scripts/test.js",
     "electron-dev": "electron main.js debug",
     "electron-build": "./node_modules/.bin/electron-builder",
-    "electron": "electron main.js"
+    "electron": "electron main.js",
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
   },
   "build": {
     "productName": "lia",
@@ -175,6 +177,7 @@
   },
   "devDependencies": {
     "electron": "^19.0.4",
-    "electron-builder": "^23.0.3"
+    "electron-builder": "^23.0.3",
+    "vuepress": "^1.9.7"
   }
 }

@@ -160,7 +160,7 @@ class CrudTable extends React.Component {
                 let config = []
                 const btns = {
                     "edit": (<Button key="edit" type="primary" size='small' onClick={(e) => { this.editClick(record, e) }}>编辑</Button>),
-                    "delete": (<CrudConfirm msg={props.deleteMsg} key="delete" deleteSubmit={() => this.deleteSubmit([record])} />)
+                    "delete": (<CrudConfirm nodes={props.nodes} deleteClick={props.deleteClick} msg={props.deleteMsg} key="delete" deleteSubmit={() => this.deleteSubmit([record])} />)
                 }
                 if(props.rightAction === true){
                     config = Object.keys(btns)
@@ -237,9 +237,6 @@ class CrudTable extends React.Component {
             size: pageSize || this.state.page.size
         }
         const params = this.props.nodes.crudSearchRef ? { ...await this.props.nodes.crudSearchRef.getParams() } : {}
-        if (this.props.onSearch) {
-            this.props.onSearch(params, { ...newPage })
-        }
         const pageInfo = await this.props.getPage(params, { ...newPage })
         newPage.list = pageInfo?.list
         newPage.total = pageInfo?.total

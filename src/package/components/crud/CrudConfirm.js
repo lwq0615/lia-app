@@ -8,6 +8,8 @@ const CrudConfirm = (props) => {
     const [confirmLoading, setConfirmLoading] = React.useState(false);
 
     const showPopconfirm = (e) => {
+        const records = [...props.nodes?.crudTableRef?.state?.selectedRows]
+        if(props.deleteClick) props.deleteClick(records)
         e.stopPropagation()
         setVisible(true);
     };

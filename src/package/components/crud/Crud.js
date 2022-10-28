@@ -10,6 +10,8 @@ class Crud extends React.Component {
 
     static propTypes = {
         getPage: propTypes.func.isRequired,
+        onSave: propTypes.func,
+        onDelete: propTypes.func,
         columns: propTypes.array.isRequired,
         selection: propTypes.bool,
         showIndex: propTypes.bool,
@@ -19,8 +21,6 @@ class Crud extends React.Component {
         editClick: propTypes.func,
         deleteClick: propTypes.func,
         addClick: propTypes.func,
-        onSearch: propTypes.func,
-        onSave: propTypes.func,
         showSearch: propTypes.bool,
         menuBtns: propTypes.oneOfType([propTypes.array, propTypes.bool]),
         deleteMsg: propTypes.string
