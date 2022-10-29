@@ -1,6 +1,6 @@
 module.exports = {
     title: 'lia后台管理系统',
-    base: '/lia-nest/',
+    base: '/lia-app/',
     description: '基于React+SpringBoot的权限管理系统',
     themeConfig: {
         nav: [
