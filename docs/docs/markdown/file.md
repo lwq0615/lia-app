@@ -1,6 +1,6 @@
 # 文件系统
 
-lia-nest已经创建好了一个文件系统，请根据com.lia.system.modules.file.SysFileService类内的方法获取文件传输流来上传或者下载文件
+lia-nest已经创建好了一个文件系统，请通过注入com.lia.system.modules.file.SysFileService类来上传或者下载文件
 
 #### 示例
 
