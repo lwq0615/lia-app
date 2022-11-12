@@ -17,7 +17,7 @@ export default function CrudCheckbox(props) {
         <>
             <Button type="link" onClick={(e) => setVisible(true)}>编辑</Button>
             <Modal
-                visible={visible}
+                open={visible}
                 centered={true}
                 title={props.column.title}
                 okText='确定'

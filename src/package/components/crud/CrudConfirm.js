@@ -30,7 +30,7 @@ const CrudConfirm = (props) => {
     return (
         <Popconfirm
             title={props.msg || "确定删除？"}
-            visible={visible}
+            open={visible}
             onConfirm={handleOk}
             okButtonProps={{ loading: confirmLoading }}
             onCancel={handleCancel}

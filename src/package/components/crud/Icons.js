@@ -61,7 +61,7 @@ export default class Icons extends React.Component {
                 }
                 <Modal
                     title="选择图标"
-                    visible={this.state.show}
+                    open={this.state.show}
                     footer={null}
                     onCancel={this.hideList}
                     className="icons-modal"

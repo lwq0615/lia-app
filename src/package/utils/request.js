@@ -45,6 +45,10 @@ function createMsg(errCode){
         405: "请求类型有误",
         500: "服务器内部错误"
     }
+    if([401, 402].includes(errCode)){
+        localStorage.removeItem(http.header)
+        location.href = "/login"
+    }
     // 已经有该消息则不重复提示
     if(msgMap[errCode]){
         return
@@ -53,10 +57,6 @@ function createMsg(errCode){
     message.warning(msgText[errCode] || "未知错误", 3, () => {
         delete msgMap[errCode]
     })
-    if([401, 402].includes(errCode)){
-        localStorage.removeItem(http.header)
-        window.goRouter("login")
-    }
 }
 
 /**

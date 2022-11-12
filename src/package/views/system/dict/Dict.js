@@ -129,7 +129,7 @@ export default class SysDictType extends React.Component {
                 destroyOnClose
                 keyboard
                 title={this.state.typeName}
-                visible={this.state.visible}
+                open={this.state.visible}
                 footer={null}
                 onCancel={() => this.setState({ visible: false })}
             >

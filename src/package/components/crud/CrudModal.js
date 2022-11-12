@@ -56,7 +56,7 @@ class CrudModal extends React.Component {
           width={800}
           destroyOnClose
           title={this.props.title}
-          visible={this.props.visible}
+          open={this.props.visible}
           onOk={this.handleOk}
           confirmLoading={this.state.loading}
           onCancel={this.handleCancel}

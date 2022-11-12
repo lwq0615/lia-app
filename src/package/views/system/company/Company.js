@@ -148,7 +148,7 @@ export default class Company extends React.Component {
                     destroyOnClose
                     keyboard
                     title={this.state.companyName}
-                    visible={this.state.visible}
+                    open={this.state.visible}
                     footer={null}
                     onCancel={() => this.setState({visible: false})}
                 >

@@ -338,7 +338,7 @@ export default class CodeGenerator extends React.Component {
                     destroyOnClose
                     keyboard
                     title="历史记录"
-                    visible={this.state.visible}
+                    open={this.state.visible}
                     footer={null}
                     onCancel={() => this.setState({visible: false})}
                 >

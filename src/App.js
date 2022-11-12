@@ -5,24 +5,29 @@ import Login from '@/package/views/login/Login'
 // import Window from '@/package/components/window/Window'
 import { Route, Routes } from 'react-router-dom'
 import WithRouter from '@/package/components/hoc/WithRouter';
+// electron环境下无法使用BrowserRouter
+// import { HashRouter as Router } from 'react-router-dom'
+import { BrowserRouter as Router } from 'react-router-dom'
+import { ConfigProvider } from 'antd';
+import zhCN from 'antd/lib/locale/zh_CN';
 
 class App extends React.Component {
 
-  constructor(props){
-      super(props)
-      window.goRouter = props.navigate
-  }
-
   render() {
     return (
-      // <Window>
-        <Routes>
-          <Route exact index path='*' element={<Home />} />
-          <Route exact index path='/login' element={<Login />} />
-        </Routes>
-      // </Window>
+      <Router>
+        {/* 设置antd为中文主题 */}
+        <ConfigProvider locale={zhCN}>
+          {/* <Window> */}
+            <Routes>
+              <Route exact index path='*' element={<Home />} />
+              <Route exact index path='/login' element={<Login />} />
+            </Routes>
+          {/* </Window> */}
+        </ConfigProvider>
+      </Router>
     )
   }
 }
 
-export default WithRouter(App)
+export default App

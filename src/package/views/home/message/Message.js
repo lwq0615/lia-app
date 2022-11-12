@@ -104,7 +104,7 @@ class Message extends React.Component {
                     width={1000}
                     keyboard
                     title="消息通知"
-                    visible={this.state.visible}
+                    open={this.state.visible}
                     bodyStyle={{padding: 0}}
                     footer={null}
                     onCancel={() => this.setState({visible: false})}
