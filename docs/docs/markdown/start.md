@@ -19,12 +19,6 @@
 ```
 
 
-#### 客户端
-1. 前往Github下载页面下载<a href="https://github.com/lwq0615/lia-app">lia-app</a>
-2. 在VsCode中打开，终端运行yarn start
-3. 客户端启动成功
-
-
 #### application.yml配置文件
 ```yml
 server:
@@ -132,3 +126,10 @@ upload:
   # 上传文件的保存位置
   basePath: public
 ```
+
+
+#### 客户端
+1. 前往Github下载页面下载<a href="https://github.com/lwq0615/lia-app">lia-app</a>
+2. 在VsCode中打开，终端运行`npm install`下载依赖
+3. 运行`npm run start`启动项目
+4. 客户端启动成功
