@@ -35,7 +35,7 @@ const msgMap = {}
  * @param {*} errCode 错误状态码
  * @returns 
  */
-function createMsg(errCode){
+function createMsg(errCode) {
     const msgText = {
         400: "请求有误",
         401: "请先登录",
@@ -45,18 +45,17 @@ function createMsg(errCode){
         405: "请求类型有误",
         500: "服务器内部错误"
     }
-    if([401, 402].includes(errCode)){
-        localStorage.removeItem(http.header)
-        location.href = "/login"
-    }
     // 已经有该消息则不重复提示
-    if(msgMap[errCode]){
-        return
+    if (!msgMap[errCode]) {
+        msgMap[errCode] = true
+        message.warning(msgText[errCode] || "未知错误", 3, () => {
+            delete msgMap[errCode]
+        })
     }
-    msgMap[errCode] = true
-    message.warning(msgText[errCode] || "未知错误", 3, () => {
-        delete msgMap[errCode]
-    })
+    if ([401, 402].includes(errCode)) {
+        localStorage.removeItem(http.header)
+        window.navigate("/login")
+    }
 }
 
 /**

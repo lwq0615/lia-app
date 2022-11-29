@@ -16,6 +16,11 @@ const { Header, Sider, Content } = Layout;
 
 class Home extends React.Component {
 
+    constructor(props){
+        super(props)
+        window.navigate = props.navigate
+    }
+
     state = {
         collapsed: false,
         userInfo: null,

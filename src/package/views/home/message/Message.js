@@ -40,8 +40,8 @@ class Message extends React.Component {
     componentDidMount = () => {
         wsOpen((e) => {
             // 收到消息时
-            if(e.data === "账号在其他设备登录"){
-                message.warning("账号在其他设备登录")
+            if(e.data === "账号在其他设备登录" || e.data === "账号状态发生改变"){
+                message.warning(e.data)
                 localStorage.removeItem(http.header)
                 this.props.navigate("/login")
                 return

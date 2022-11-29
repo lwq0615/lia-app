@@ -4,7 +4,6 @@ import Home from '@/package/views/home/Home'
 import Login from '@/package/views/login/Login'
 // import Window from '@/package/components/window/Window'
 import { Route, Routes } from 'react-router-dom'
-import WithRouter from '@/package/components/hoc/WithRouter';
 // electron环境下无法使用BrowserRouter
 // import { HashRouter as Router } from 'react-router-dom'
 import { BrowserRouter as Router } from 'react-router-dom'
