@@ -46,8 +46,30 @@
                 padding-right: 25px;
             }
         }
-        .site-layout-background {
-            background: #fff;
+        .content-body {
+            background-color: #fff;
+            // 路由切换过渡动画
+            .route-exit {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            .route-exit-active {
+                opacity: 0;
+                transform: scale(0.9);
+                transition: all 200ms;
+            }
+
+            .route-enter {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            .route-enter-active {
+                opacity: 1;
+                transform: scale(1);
+                transition: all 200ms;
+            }
         }
     }
 }

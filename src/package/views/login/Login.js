@@ -6,6 +6,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { http } from "@/config"
 import WithRouter from '@/package/components/hoc/WithRouter';
 import { sysUserLogin } from '@/package/request/system/user.js'
+import { getParamValue } from '@/package/request/system/param'
 
 class Login extends React.Component {
 
@@ -20,8 +21,19 @@ class Login extends React.Component {
         }
         this.state = {
             rememberMe: true,
-            form: form
+            form: form,
+            // 开启注册
+            enableRegister: false
         }
+    }
+
+    componentDidMount = () => {
+        // 判断是否开启注册功能
+        getParamValue("enable_register").then(res => {
+            this.setState({
+                enableRegister: Boolean(res)
+            })
+        })
     }
 
     /**
@@ -107,9 +119,12 @@ class Login extends React.Component {
                             <Button type="primary" htmlType="submit" className="login-form-button">
                                 登录
                             </Button>
-                            <Button type="primary" className="login-form-button">
-                                注册
-                            </Button>
+                            {
+                                this.state.enableRegister && 
+                                <Button type="primary" className="login-form-button">
+                                    注册
+                                </Button>
+                            }
                         </Form.Item>
                     </Form>
                 </div>

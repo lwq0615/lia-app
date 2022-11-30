@@ -198,12 +198,12 @@ export default class CodeGenerator extends React.Component {
                     </TabPane>
                     <TabPane tab="controller" key="controller">
                         <div onClick={this.copy}>
-                            {codeCreate.controllerCode(data, tableName, httpUrl)}
+                            {codeCreate.controllerCode(tableName, httpUrl)}
                         </div>
                     </TabPane>
                     <TabPane tab="service" key="service">
                         <div onClick={this.copy}>
-                            {codeCreate.serviceCode(tableName, primaryKey)}
+                            {codeCreate.serviceCode(data, tableName, primaryKey)}
                         </div>
                     </TabPane>
                     <TabPane tab="mapper" key="mapper">

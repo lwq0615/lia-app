@@ -2,7 +2,7 @@ import { Layout, Menu, Breadcrumb, Space, Button, Tooltip } from 'antd';
 import * as icons from '@ant-design/icons'
 import React from 'react';
 import './home.scss'
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import { getSysUserInfo, getHeadImg, logout } from '@/package/request/system/user'
 import { getRouterOfRole } from '@/package/request/system/router'
 import WithRouter from '@/package/components/hoc/WithRouter';
@@ -10,13 +10,14 @@ import Index from '@/package/views/system/index/Index'
 import Message from './message/Message'
 import defaultImg from './image/default.jpg'
 import { http } from "@/config"
+import { SwitchTransition, CSSTransition } from 'react-transition-group'
 
 
 const { Header, Sider, Content } = Layout;
 
 class Home extends React.Component {
 
-    constructor(props){
+    constructor(props) {
         super(props)
         window.navigate = props.navigate
     }
@@ -249,7 +250,7 @@ class Home extends React.Component {
                         </Breadcrumb>
                         <div className='action'>
                             <Space size={"middle"}>
-                                <Message userInfo={this.state.userInfo} userHeadImg={this.state.headImg}/>
+                                <Message userInfo={this.state.userInfo} userHeadImg={this.state.headImg} />
                                 <Tooltip title="退出登录">
                                     <Button size='large' danger type="primary" shape="circle" icon={<icons.LogoutOutlined />} onClick={this.logout} />
                                 </Tooltip>
@@ -257,21 +258,29 @@ class Home extends React.Component {
                         </div>
                     </Header>
                     <Content
-                        className="site-layout-background"
+                        className="content-body"
                         style={{
                             margin: '24px 16px',
                             padding: 24,
                             overflow: 'auto'
                         }}
                     >
-                        <Routes>
-                            <Route exact index path="*" element={<Index
-                                userInfo={this.state.userInfo}
-                                headImg={this.state.headImg}
-                                reloadUser={this.loadUserAndRouter}
-                            />} />
-                            {this.state.routes}
-                        </Routes>
+                        <SwitchTransition mode="out-in">
+                            <CSSTransition 
+                                key={this.props.location.key} 
+                                timeout={200} 
+                                classNames="route"
+                            >
+                                <Routes location={this.props.location}>
+                                    <Route exact index path="*" element={<Index
+                                        userInfo={this.state.userInfo}
+                                        headImg={this.state.headImg}
+                                        reloadUser={this.loadUserAndRouter}
+                                    />} />
+                                    {this.state.routes}
+                                </Routes>
+                            </CSSTransition>
+                        </SwitchTransition>
                     </Content>
                 </Layout>
             </Layout>

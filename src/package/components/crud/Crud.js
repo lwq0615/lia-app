@@ -69,7 +69,7 @@ class Crud extends React.Component {
 
     render() {
         return (
-            <section className={this.props.className + " lia-crud"} style={this.props.style}>
+            <section className={this.props.className ? this.props.className+" lia-crud" : "lia-crud"} style={this.props.style}>
                 {
                     !this.props.showSearch
                         ? null

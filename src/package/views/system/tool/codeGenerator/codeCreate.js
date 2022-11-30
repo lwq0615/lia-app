@@ -196,7 +196,7 @@ ${columnCode()}
 /**
  * 控制层代码生成
  */
-export function controllerCode(data, tableName, httpUrl) {
+export function controllerCode(tableName, httpUrl) {
     if(httpUrl && httpUrl[0] === '/'){
         httpUrl = httpUrl.substring(1)
     }
@@ -209,24 +209,9 @@ export function controllerCode(data, tableName, httpUrl) {
         return httpUrl ? `
     @PreAuthorize("hasAuthority('${httpUrl.split("/").join(':')+":"+method}')")` : ''
     }
-    function requireCode(){
-        let str = ``
-        data.forEach(item => {
-            if(item.notNull){
-                let name = item.name
-                str += `if(${objName}.get${firstUp(name)}() == null${item.type === 'String' ? ` || ${objName}.get${firstUp(name)}().equals("")` : ''}){
-            throw new HttpException(400,"缺少参数${name}");
-        }
-        `
-            }
-        })
-        return str
-    }
     return `
 package com.lia.server.modules.${objName};
 
-import com.lia.server.modules.${objName}.${className};
-import com.lia.server.modules.${objName}.${className}Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lia.system.exception.HttpException;
@@ -270,7 +255,7 @@ public class ${className}Controller {
      */
     @PostMapping("/save")${getPreAuthorize('save')}
     public String save${className}(@RequestBody ${className} ${objName}){
-        ${requireCode()}return ${objName}Service.save${className}(${objName});
+        return ${objName}Service.save${className}(${objName});
     }
 
 
@@ -295,7 +280,7 @@ public class ${className}Controller {
 /**
  * 业务层代码生成
  */
-export function serviceCode(tableName, primaryKey) {
+export function serviceCode(data, tableName, primaryKey) {
     const className = firstUp(toHump(tableName))
     const objName = firstLow(toHump(tableName))
     function setPrimaryKey(){
@@ -306,11 +291,22 @@ export function serviceCode(tableName, primaryKey) {
                 ${objName}.set${firstUp(toHump(primaryKey.name))}(SnowflakeId.nextId());`
         }
     }
+    function requireCode(){
+        let str = ``
+        data.forEach(item => {
+            if(item.notNull){
+                let name = item.name
+                str += `if(${objName}.get${firstUp(name)}() == null${item.type === 'String' ? ` || ${objName}.get${firstUp(name)}().equals("")` : ''}){
+            throw new HttpException(400,"缺少参数${name}");
+        }
+        `
+            }
+        })
+        return str
+    }
     return `
 package com.lia.server.modules.${objName};
 
-import com.lia.server.modules.${objName}.${className};
-import com.lia.server.modules.${objName}.${className}Mapper;
 import com.lia.system.security.LoginUser;
 import com.lia.system.utils.SnowflakeId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -346,7 +342,7 @@ public class ${className}Service {
      * @return
      */
     public String save${className}(${className} ${objName}) {
-        int success = 0;
+        ${requireCode()}int success = 0;
         try {
             if (${objName}.get${firstUp(primaryKey.name)}() == null) {
                 // 新增${setPrimaryKey()}
@@ -394,7 +390,6 @@ export function mapperCode(tableName){
     return `
 package com.lia.server.modules.${objName};
 
-import com.lia.server.modules.${objName}.${className};
 import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 
@@ -481,8 +476,7 @@ export function mybatisCode(data, tableName, primaryKey){
         return data.map(item => `
         \`${toLine(item.name)}\` = #{${toHump(item.name)}}`).join(",")
     }
-    return `
-<?xml version="1.0" encoding="UTF-8" ?>
+    return `<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
@@ -519,8 +513,7 @@ export function mybatisCode(data, tableName, primaryKey){
         </trim>
     </delete>
 
-</mapper>                                   
-    `
+</mapper>`
 }
 
 
