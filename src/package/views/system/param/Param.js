@@ -21,7 +21,7 @@ export default class SysParam extends React.Component{
             // 触发删除钩子 records => {}
             //return true刷新页面数据
             onDelete: async records => {
-                return await deleteSysParams(records.map(item => item.sysParamId)).then(res => {
+                return await deleteSysParams(records.map(item => item.paramId)).then(res => {
                     if(res > 0){
                         message.success("删除成功")
                         return true
@@ -96,9 +96,7 @@ export default class SysParam extends React.Component{
                     dataIndex: 'remark',
                     align: 'center',
                     key: 'remark',
-                    type: "textarea",
-                    // 是否隐藏文本，通过点击按钮展开（默认false）
-                    hideText: true
+                    type: "textarea"
                 }
             ]
         }

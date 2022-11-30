@@ -337,7 +337,6 @@ public class ${className}Service {
 
     /**
      * 新增或编辑
-     *
      * @param ${objName}
      * @return
      */
@@ -363,7 +362,6 @@ public class ${className}Service {
 
     /**
      * 批量删除
-     *
      * @param ${objName}Ids id列表
      * @return 删除成功的数量
      */

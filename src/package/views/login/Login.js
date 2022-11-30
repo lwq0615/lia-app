@@ -7,23 +7,27 @@ import { http } from "@/config"
 import WithRouter from '@/package/components/hoc/WithRouter';
 import { sysUserLogin } from '@/package/request/system/user.js'
 import { getParamValue } from '@/package/request/system/param'
+import CheckCode from "@/package/components/checkCode/CheckCode"
 
 class Login extends React.Component {
 
-    constructor(props){
+    constructor(props) {
         super(props)
         let form = {}
-        if(localStorage.getItem("username") && localStorage.getItem("password")){
+        if (localStorage.getItem("username") && localStorage.getItem("password")) {
             form = {
                 username: localStorage.getItem("username"),
                 password: localStorage.getItem("password")
             }
         }
         this.state = {
+            // 记住密码
             rememberMe: true,
             form: form,
             // 开启注册
-            enableRegister: false
+            enableRegister: false,
+            // 登录是否需要验证码
+            loginCheckCode: false
         }
     }
 
@@ -34,6 +38,12 @@ class Login extends React.Component {
                 enableRegister: Boolean(res)
             })
         })
+        // 判断是否开启验证码
+        getParamValue("login_check_code").then(res => {
+            this.setState({
+                loginCheckCode: Boolean(res)
+            })
+        })
     }
 
     /**
@@ -41,6 +51,10 @@ class Login extends React.Component {
      * @param {Object} values 
      */
     onFinish = async (values) => {
+        if (this.state.loginCheckCode && !this.codeRef?.checkCode(values.code)) {
+            message.warning("验证码错误")
+            return
+        }
         sysUserLogin(values).then(res => {
             switch (res) {
                 case "login failed": {
@@ -57,10 +71,10 @@ class Login extends React.Component {
                 }
                 default: {
                     localStorage.setItem(http.header, res)
-                    if(this.state.rememberMe){
+                    if (this.state.rememberMe) {
                         localStorage.setItem("username", values.username)
                         localStorage.setItem("password", values.password)
-                    }else{
+                    } else {
                         localStorage.removeItem("username")
                         localStorage.removeItem("password")
                     }
@@ -91,10 +105,9 @@ class Login extends React.Component {
                             name="username"
                             rules={[{ required: true, message: '请输入用户名' }]}
                         >
-                            <Input 
-                                prefix={<UserOutlined className="site-form-item-icon" />} 
-                                placeholder="用户名" 
-                                value={this.state.username}
+                            <Input
+                                prefix={<UserOutlined className="site-form-item-icon" />}
+                                placeholder="用户名"
                             />
                         </Form.Item>
                         <Form.Item
@@ -105,22 +118,40 @@ class Login extends React.Component {
                                 prefix={<LockOutlined className="site-form-item-icon" />}
                                 type="password"
                                 placeholder="密码"
-                                value={this.state.password}
                             />
                         </Form.Item>
-                        <div style={{padding: '10px 0 20px 0'}}>
+
+                        {
+                            this.state.loginCheckCode &&
+                            <div style={{ display: "flex" }}>
+                                <Form.Item
+                                    style={{ flex: 1 }}
+                                    name="code"
+                                    rules={[{ required: true, message: '请输入验证码' }]}
+                                >
+                                    <Input
+                                        prefix={<LockOutlined className="site-form-item-icon" />}
+                                        type="text"
+                                        placeholder="验证码"
+                                    />
+                                </Form.Item>
+                                <CheckCode ref={ref => this.codeRef = ref} style={{ marginLeft: "5px", height: 32 }} />
+                            </div>
+                        }
+
+                        <div style={{ padding: '10px 0 20px 0' }}>
                             <Checkbox onChange={this.rememberMeChange} checked={this.state.rememberMe}>记住我</Checkbox>
                             <a className="login-form-forgot" href="#">
                                 忘记密码
                             </a>
                         </div>
 
-                        <Form.Item style={{margin: 0}}>
+                        <Form.Item style={{ margin: 0 }}>
                             <Button type="primary" htmlType="submit" className="login-form-button">
                                 登录
                             </Button>
                             {
-                                this.state.enableRegister && 
+                                this.state.enableRegister &&
                                 <Button type="primary" className="login-form-button">
                                     注册
                                 </Button>

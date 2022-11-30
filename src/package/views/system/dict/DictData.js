@@ -61,7 +61,7 @@ export default function SysDictData(props) {
                 required: true
             },
             {
-                title: '值',
+                title: '标签',
                 dataIndex: 'label',
                 align: 'center',
                 key: 'label',
