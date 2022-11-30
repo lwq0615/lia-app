@@ -44,6 +44,11 @@
                 flex: 1;
                 text-align: right;
                 padding-right: 25px;
+                .icon{
+                    font-size: 20px;
+                    color: #5a5e66;
+                    cursor: pointer;
+                }
             }
         }
         .content-body {

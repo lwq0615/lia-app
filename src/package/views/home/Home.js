@@ -2,7 +2,7 @@ import { Layout, Menu, Breadcrumb, Space, Button, Tooltip } from 'antd';
 import * as icons from '@ant-design/icons'
 import React from 'react';
 import './home.scss'
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { getSysUserInfo, getHeadImg, logout } from '@/package/request/system/user'
 import { getRouterOfRole } from '@/package/request/system/router'
 import WithRouter from '@/package/components/hoc/WithRouter';
@@ -209,6 +209,15 @@ class Home extends React.Component {
         this.loadUserAndRouter()
     }
 
+    openGitHub = () => {
+        window.open("https://github.com/lwq0615/lia-nest")
+        window.open("https://github.com/lwq0615/lia-app")
+    }
+
+    openDocs = () => {
+        window.open("https://lwq0615.github.io/lia-app/")
+    }
+
     render() {
         return (
             <Layout className='lia_home_container'>
@@ -250,6 +259,12 @@ class Home extends React.Component {
                         </Breadcrumb>
                         <div className='action'>
                             <Space size={"middle"}>
+                                <Tooltip title="源码地址">
+                                    <icons.GithubOutlined className='icon' onClick={this.openGitHub}/>
+                                </Tooltip>
+                                <Tooltip title="开发文档">
+                                    <icons.QuestionCircleOutlined className='icon' onClick={this.openDocs}/>
+                                </Tooltip>
                                 <Message userInfo={this.state.userInfo} userHeadImg={this.state.headImg} />
                                 <Tooltip title="退出登录">
                                     <Button size='large' danger type="primary" shape="circle" icon={<icons.LogoutOutlined />} onClick={this.logout} />
@@ -266,9 +281,9 @@ class Home extends React.Component {
                         }}
                     >
                         <SwitchTransition mode="out-in">
-                            <CSSTransition 
-                                key={this.props.location.key} 
-                                timeout={200} 
+                            <CSSTransition
+                                key={this.props.location.key}
+                                timeout={200}
                                 classNames="route"
                             >
                                 <Routes location={this.props.location}>
