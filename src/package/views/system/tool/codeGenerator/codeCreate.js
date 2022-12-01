@@ -36,7 +36,7 @@ export function firstLow(str){
 /**
  * 接口调用代码生成
  */
-export function requestCode(tableName){
+export function requestCode({tableName}){
     return `
 import request from "@/package/utils/request"
 
@@ -72,11 +72,59 @@ export function delete${firstUp(toHump(tableName))}s(${firstLow(toHump(tableName
 `
 }
 
+function dataConcat(data, createByFlag, createTimeFlag, updateTimeFlag){
+    if(createByFlag){
+        data = data.concat({
+            len: 0,
+            name: "createBy",
+            notNull: false,
+            remark: "创建人",
+            type: "Long",
+            unique: false,
+            createBy: true
+        })
+    }
+    if(createTimeFlag){
+        data = data.concat({
+            len: 0,
+            name: "createTime",
+            notNull: false,
+            remark: "创建时间",
+            type: "datetime",
+            unique: false,
+            createTime: true
+        })
+    }
+    if(updateTimeFlag){
+        data = data.concat({
+            len: 0,
+            name: "updateTime",
+            notNull: false,
+            remark: "更新时间",
+            type: "datetime",
+            unique: false,
+            updateTime: true
+        })
+    }
+    if(remarkFlag){
+        data = data.concat({
+            len: 500,
+            name: "remarkFlag",
+            notNull: false,
+            remark: "备注",
+            type: "String",
+            unique: false,
+            like: true
+        })
+    }
+    return data
+}
 
 /**
  * 前端文件代码生成
  */
-export function viewCode(data, tableName, primaryKey){
+export function viewCode({data, tableName, primaryKey, createByFlag, createTimeFlag, updateTimeFlag}){
+    data = dataConcat(data, createByFlag, createTimeFlag, updateTimeFlag)
     function getColumnsCode(){
         return data.map(item => {
             return `                {
@@ -162,7 +210,8 @@ ${getColumnsCode()}
 /**
  * 实体类代码生成
  */
-export function entityCode(data, tableName, primaryKey) {
+export function entityCode({data, tableName, primaryKey, createByFlag, createTimeFlag, updateTimeFlag}) {
+    data = dataConcat(data, createByFlag, createTimeFlag, updateTimeFlag)
     const columnCode = () => {
         let str = `    /**
      * 主键
@@ -175,14 +224,14 @@ export function entityCode(data, tableName, primaryKey) {
                 str += `    /**
      * ${item.remark}
      */
-    @DateType
+    @${item.updateTime || item.createTime ? "UpdateTime" : "DateType"}
     @TableField("\`${toLine(item.name)}\`")
     private String ${item.name};\n\n`
             }else{
                 str += `    /**
      * ${item.remark}
      */
-    @TableField("\`${toLine(item.name)}\`")
+    @TableField("\`${toLine(item.name)}\`")${item.createBy ? "\n    @CreateBy" : ""}${item.like ? "\n    @Like" : ""}
     private ${item.type} ${item.name};\n\n`
             }
         })
@@ -216,7 +265,7 @@ ${columnCode()}}
 /**
  * 控制层代码生成
  */
-export function controllerCode(tableName, httpUrl) {
+export function controllerCode({tableName, httpUrl}) {
     if(httpUrl && httpUrl[0] === '/'){
         httpUrl = httpUrl.substring(1)
     }
@@ -300,7 +349,7 @@ public class ${className}Controller {
 /**
  * 业务层代码生成
  */
-export function serviceCode(data, tableName, primaryKey) {
+export function serviceCode({tableName}) {
     const className = firstUp(toHump(tableName))
     const objName = firstLow(toHump(tableName))
     return `
@@ -368,7 +417,7 @@ public class ${className}Service {
 /**
  * mapper层代码生成
  */
-export function mapperCode(tableName){
+export function mapperCode({tableName}){
     const className = firstUp(toHump(tableName))
     const objName = firstLow(toHump(tableName))
     return `
@@ -385,7 +434,8 @@ public interface ${className}Mapper extends BaseMapper<${className}> {
 }
 
 
-export function mybatisCode(data, tableName, primaryKey){
+export function mybatisCode({data, tableName, primaryKey, createByFlag, createTimeFlag, updateTimeFlag}){
+    data = dataConcat(data, createByFlag, createTimeFlag, updateTimeFlag)
     const className = firstUp(toHump(tableName))
     const objName = firstLow(toHump(tableName))
     function getResultMap(){
@@ -425,14 +475,15 @@ const mysqlMap = {
 /**
  * 生成mysql建表语句
  */
-export function mysqlCode(tableName,data,primaryKey){
+export function mysqlCode({tableName, data, primaryKey, createByFlag, createTimeFlag, updateTimeFlag}){
+    data = dataConcat(data, createByFlag, createTimeFlag, updateTimeFlag)
     function columnsCode(){
         let columns = []
         columns.push(`
     \`${toLine(primaryKey.name)}\` bigint(0) NOT NULL ${primaryKey.type === "autoIncrement" ? "AUTO_INCREMENT" : ""} COMMENT '主键'`)
         data.forEach(item => {
             columns.push(`
-    \`${toLine(item.name)}\` ${mysqlMap[item.type]}(${item.len}) ${["String","Character"].includes(primaryKey.type) ? "CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci" : ""} ${item.notNull ? "NOT NULL" : ""} COMMENT '${item.remark}'`)
+    \`${toLine(item.name)}\` ${mysqlMap[item.type]}(${item.len})${item.createTime || item.updateTime ? " DEFAULT CURRENT_TIMESTAMP(0)" : ""}${item.updateTime ? " ON UPDATE CURRENT_TIMESTAMP(0)" : ""}${["String","Character"].includes(primaryKey.type) ? " CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci" : ""}${item.notNull ? " NOT NULL" : ""} COMMENT '${item.remark}'`)
         })
         columns.push(`
     PRIMARY KEY (\`${toLine(primaryKey.name)}\`) USING BTREE`)

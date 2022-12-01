@@ -7,7 +7,6 @@ import './codeGenerator.scss'
 import * as codeCreate from './codeCreate.js'
 
 const { Option } = Select;
-const { TabPane } = Tabs;
 
 export default class CodeGenerator extends React.Component {
 
@@ -84,6 +83,16 @@ export default class CodeGenerator extends React.Component {
             }
         },
         {
+            title: "模糊查询",
+            dataIndex: 'like',
+            key: 'like',
+            render: (text, record, index) => {
+                return (
+                    <Switch name="like" checked={this.state.data[index].like} onChange={(value, e) => this.switchChange(value, e, index)} />
+                )
+            }
+        },
+        {
             title: "备注",
             dataIndex: 'remark',
             key: 'remark',
@@ -138,6 +147,7 @@ export default class CodeGenerator extends React.Component {
             len: 0,
             notNull: false,
             unique: false,
+            like: false,
             remark: ''
         })
         this.setState({
@@ -164,12 +174,16 @@ export default class CodeGenerator extends React.Component {
     }
 
 
-    generator = (data, tableName, primaryKey, httpUrl) => {
+    generator = (params) => {
         const record = {
-            columns: JSON.stringify(data),
-            tableName,
-            primaryKey: JSON.stringify(primaryKey),
-            httpUrl
+            columns: JSON.stringify(params.data),
+            tableName: params.tableName,
+            primaryKey: JSON.stringify(params.primaryKey),
+            httpUrl: params.httpUrl,
+            createByFlag: params.createByFlag ? "1" : "0",
+            createTimeFlag: params.createTimeFlag ? "1" : "0",
+            updateTimeFlag: params.updateTimeFlag ? "1" : "0",
+            remarkFlag: params.remarkFlag ? "1" : "0"
         }
         saveSysToolCode(record)
         const tabItems = [
@@ -178,7 +192,7 @@ export default class CodeGenerator extends React.Component {
                 key: "request",
                 children: (
                     <div onClick={this.copy}>
-                        {codeCreate.requestCode(tableName)}
+                        {codeCreate.requestCode(params)}
                     </div>
                 )
             },
@@ -187,8 +201,8 @@ export default class CodeGenerator extends React.Component {
                 key: "view",
                 children: (
                     <div onClick={this.copy}>
-                            {codeCreate.viewCode(data, tableName, primaryKey)}
-                        </div>
+                        {codeCreate.viewCode(params)}
+                    </div>
                 )
             },
             {
@@ -196,8 +210,8 @@ export default class CodeGenerator extends React.Component {
                 key: "entity",
                 children: (
                     <div onClick={this.copy}>
-                            {codeCreate.entityCode(data, tableName, primaryKey)}
-                        </div>
+                        {codeCreate.entityCode(params)}
+                    </div>
                 )
             },
             {
@@ -205,8 +219,8 @@ export default class CodeGenerator extends React.Component {
                 key: "controller",
                 children: (
                     <div onClick={this.copy}>
-                    {codeCreate.controllerCode(tableName, httpUrl)}
-                </div>
+                        {codeCreate.controllerCode(params)}
+                    </div>
                 )
             },
             {
@@ -214,8 +228,8 @@ export default class CodeGenerator extends React.Component {
                 key: "service",
                 children: (
                     <div onClick={this.copy}>
-                            {codeCreate.serviceCode(data, tableName, primaryKey)}
-                        </div>
+                        {codeCreate.serviceCode(params)}
+                    </div>
                 )
             },
             {
@@ -223,8 +237,8 @@ export default class CodeGenerator extends React.Component {
                 key: "mapper",
                 children: (
                     <div onClick={this.copy}>
-                            {codeCreate.mapperCode(tableName)}
-                        </div>
+                        {codeCreate.mapperCode(params)}
+                    </div>
                 )
             },
             {
@@ -232,8 +246,8 @@ export default class CodeGenerator extends React.Component {
                 key: "mybatis",
                 children: (
                     <div onClick={this.copy}>
-                            {codeCreate.mybatisCode(data, tableName, primaryKey)}
-                        </div>
+                        {codeCreate.mybatisCode(params)}
+                    </div>
                 )
             },
             {
@@ -241,27 +255,27 @@ export default class CodeGenerator extends React.Component {
                 key: "mysql",
                 children: (
                     <div onClick={this.copy}>
-                            {codeCreate.mysqlCode(tableName, data, primaryKey)}
-                        </div>
+                        {codeCreate.mysqlCode(params)}
+                    </div>
                 )
             }
         ]
         Modal.success({
-            width: 800,
+            width: 1000,
             okText: '确定',
             centered: true,
             className: 'code-generator-modal',
             destroyOnClose: true,
             title: '生成代码',
             content: (
-                <Tabs defaultActiveKey="request" items={tabItems}/>
+                <Tabs defaultActiveKey="request" items={tabItems} />
             )
         })
     }
 
 
     onFinish = (values) => {
-        let { tableName, httpUrl, primaryKeyType } = values
+        let { tableName, httpUrl, primaryKeyType, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag } = values
         tableName = tableName.replace(/ /g, '')
         httpUrl = httpUrl?.replace(/ /g, '')
         if (!/^[A-Za-z_]+$/.test(tableName[0]) || !/^[A-Za-z0-9_]+$/.test(tableName)) {
@@ -290,7 +304,26 @@ export default class CodeGenerator extends React.Component {
             name: codeCreate.firstLow(codeCreate.toHump(tableName.replace(/ /g, ''))) + "Id",
             type: primaryKeyType
         }
-        this.generator(data, tableName, primaryKey, httpUrl)
+        const params = {
+            data, 
+            tableName, 
+            primaryKey, 
+            httpUrl, 
+            createByFlag, 
+            createTimeFlag,
+            updateTimeFlag, 
+            remarkFlag
+        }
+        this.generator(params)
+    }
+
+
+    defaultFormValues = {
+        primaryKeyType: "autoIncrement",
+        createByFlag: true,
+        createTimeFlag: true,
+        updateTimeFlag: true,
+        remarkFlag: true
     }
 
 
@@ -300,7 +333,7 @@ export default class CodeGenerator extends React.Component {
      */
     createBtns = () => {
         return (
-            <Form onFinish={this.onFinish} initialValues={{ primaryKeyType: "autoIncrement" }} fields={this.state.heads}>
+            <Form onFinish={this.onFinish} initialValues={this.defaultFormValues} fields={this.state.heads}>
                 <Row gutter={24}>
                     <Col span={8}>
                         <Form.Item
@@ -339,6 +372,42 @@ export default class CodeGenerator extends React.Component {
                             label="接口地址"
                         >
                             <Input placeholder="请输入接口地址" />
+                        </Form.Item>
+                    </Col>
+                    <Col span={4}>
+                        <Form.Item
+                            valuePropName="checked"
+                            name="createByFlag"
+                            label="添加创建人字段"
+                        >
+                            <Switch defaultChecked />
+                        </Form.Item>
+                    </Col>
+                    <Col span={4}>
+                        <Form.Item
+                            valuePropName="checked"
+                            name="createTimeFlag"
+                            label="添加创建时间字段"
+                        >
+                            <Switch defaultChecked />
+                        </Form.Item>
+                    </Col>
+                    <Col span={4}>
+                        <Form.Item
+                            valuePropName="checked"
+                            name="updateTimeFlag"
+                            label="添加更新时间字段"
+                        >
+                            <Switch defaultChecked />
+                        </Form.Item>
+                    </Col>
+                    <Col span={4}>
+                        <Form.Item
+                            valuePropName="checked"
+                            name="remarkFlag"
+                            label="添加备注字段"
+                        >
+                            <Switch defaultChecked />
                         </Form.Item>
                     </Col>
                 </Row>

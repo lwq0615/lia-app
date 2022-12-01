@@ -30,6 +30,30 @@ export default function Code(props) {
                     "httpUrl"
                 ],
                 "value": record.httpUrl
+            },
+            {
+                "name": [
+                    "createByFlag"
+                ],
+                "value": record.createByFlag === '1'
+            },
+            {
+                "name": [
+                    "createTimeFlag"
+                ],
+                "value": record.createTimeFlag === '1'
+            },
+            {
+                "name": [
+                    "updateTimeFlag"
+                ],
+                "value": record.updateTimeFlag === '1'
+            },
+            {
+                "name": [
+                    "remarkFlag"
+                ],
+                "value": record.remarkFlag === '1'
             }
         ])
     }
