@@ -3,7 +3,7 @@ import React from 'react';
 import { SearchOutlined, PlusOutlined, DownloadOutlined } from '@ant-design/icons';
 import CrudModal from './CrudModal'
 import CrudConfirm from './CrudConfirm';
-import excel from './excel'
+import excel from '@/utils/excel'
 
 
 class CrudMenu extends React.Component {
