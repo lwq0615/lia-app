@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button, Form, Input, InputNumber, Row, Col, TreeSelect, Select, message, Divider } from 'antd';
-import CrudConfirm from '@/package/components/crud/CrudConfirm.js'
+import Confirm from '@/package/components/confirm/Confirm.jsx'
 import { saveSysRouter, deleteRouters } from '@/package/request/system/router'
-import Icons from '@/package/components/crud/Icons.js'
+import Icons from '@/package/components/crud/Icons.jsx'
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -61,8 +61,8 @@ const RouterForm = ({ routerDict, formValue, formTitle, routerId, reloadTree, se
                     message.success("保存成功")
                     setForm()
                     reloadTree()
-                } 
-                else if(res === 'error'){
+                }
+                else if (res === 'error') {
                     message.error("未知错误")
                 }
                 else {
@@ -72,7 +72,7 @@ const RouterForm = ({ routerDict, formValue, formTitle, routerId, reloadTree, se
         })
     }
 
-    function deleteRouter(){
+    function deleteRouter() {
         deleteRouters([routerId]).then(res => {
             if (res > 0) {
                 message.success("删除成功")
@@ -163,7 +163,7 @@ const RouterForm = ({ routerDict, formValue, formTitle, routerId, reloadTree, se
             <div className='btns'>
                 <Button type="primary" onClick={submit}>保存</Button>
                 {
-                    routerId ? <CrudConfirm msg="子路由和该路由下的权限也会被清空，确认删除？" deleteSubmit={deleteRouter} size="default"/> : null
+                    routerId ? <Confirm msg="子路由和该路由下的权限也会被清空，确认删除？" deleteSubmit={deleteRouter} size="default" /> : null
                 }
             </div>
         </div>

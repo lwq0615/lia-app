@@ -5,7 +5,7 @@ import { message } from "antd"
 import { getSysAuthPage, saveSysAuth, deleteAuths } from '@/package/request/system/auth'
 import { getCreateByDict } from '@/package/request/system/user'
 import { getSysRouterTree } from '@/package/request/system/router'
-import RouterTree from "../router/RouterTree.js"
+import RouterTree from "../router/RouterTree"
 import './auth.scss'
 
 

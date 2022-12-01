@@ -1,7 +1,7 @@
 
 import React from "react"
-import RouterTree from "./RouterTree.js"
-import RouterForm from "./RouterForm.js"
+import RouterTree from "./RouterTree"
+import RouterForm from "./RouterForm"
 import moment from 'moment';
 import { getSysRouterTree, getRouterById } from '@/package/request/system/router'
 import { getCreateByDict } from '@/package/request/system/user'
@@ -11,11 +11,17 @@ import { getCreateByDict } from '@/package/request/system/user'
 class Router extends React.Component {
 
     state = {
+        // 左侧路由树数据
         routerTreeData: [],
+        // 父路由字段数据
         routerDict: [],
+        // 创建人字段数据
         userDict: [],
+        // 表单值
         form: null,
+        // 表单标题
         formTitle: '新增',
+        // 当前选中的路由
         routerId: null
     }
 
@@ -42,6 +48,7 @@ class Router extends React.Component {
     }
 
     setForm = (form, title, id) => {
+        // 各个字段
         const keys = ['label', 'path', 'element', 'parent', 'index', 'icon', 'createBy', 'createTime', 'remark']
         let formValue = []
         if (form) {
@@ -67,7 +74,7 @@ class Router extends React.Component {
                 if (key === 'parent') {
                     return {
                         name: [key],
-                        value: 0
+                        value: this.state.routerId || 0
                     }
                 }
                 return {
