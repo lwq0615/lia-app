@@ -11,8 +11,7 @@ export default function SysDictData(props) {
         showIndex: true,
         // 是否展示右侧操作栏，默认["edit", "delete"]
         rightAction: true,
-        // 配置按钮组，默认["add", "delete", "search"]
-        menuBtns: true,
+        menuBtns: ["add", "delete", "search"],
         // 表格行是否可选择(默认false)
         selection: true,
         // 触发删除钩子 records => {}
@@ -29,7 +28,7 @@ export default function SysDictData(props) {
             })
         },
         // 需要加载数据时触发 params => {}
-        getPage: (params, page) => {
+        getPage: (params = {}, page = {}) => {
             params.typeId = props.typeId
             params.createTime = params.createTime?.join(",")
             return getSysDictDataPage(params, page.current, page.size)

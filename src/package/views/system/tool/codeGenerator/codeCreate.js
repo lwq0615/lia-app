@@ -147,11 +147,13 @@ export default class ${firstUp(toHump(tableName))} extends React.Component{
 
     state = {
         option: {
+            // 表格名称
+            tabelName: "${tableName}",
             // 是否显示行索引，默认true
             showIndex: true,
             // 是否展示右侧操作栏，默认["edit", "delete"]
             rightAction: true,
-            // 配置按钮组，默认["add", "delete", "search"]
+            // 配置按钮组，默认["add", "delete", "search", "excel"]
             menuBtns: true,
             // 表格行是否可选择(默认false)
             selection: true,
@@ -169,7 +171,7 @@ export default class ${firstUp(toHump(tableName))} extends React.Component{
                 })
             },
             // 需要加载数据时触发 params => {}
-            getPage: (params, page) => {
+            getPage: (params = {}, page = {}) => {
                 params.createTime = params.createTime?.join(",")
                 return get${firstUp(toHump(tableName))}Page(params, page.current, page.size)
             },

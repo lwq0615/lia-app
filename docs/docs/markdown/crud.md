@@ -8,6 +8,7 @@ lia-app提供了Crud组件，组件提供了很多个性化接口，只需要使
 #### Crud组件相关配置
 | 参数 | 说明 | 类型 | 是否必填 | 默认值 |
 | ---  | --- | ---  | ---      | ---   |
+| tableName | 表格名称 | String | 否 | -- |
 | getPage | 根据条件查询与分页参数return一个PageHelper封装的结果集 | function(params, page) | 是 | -- |
 | onSave | 新增或编辑数据方法，return true刷新页面 | function(record) | 否 | -- |
 | onDelete | 删除数据方法，return true刷新页面 | function(records) | 否 | -- |
@@ -15,7 +16,7 @@ lia-app提供了Crud组件，组件提供了很多个性化接口，只需要使
 | selection | 是否允许选中行数据 | bool | 否 | false |
 | showIndex | 展示行索引 | bool | 否 | true |
 | rightAction | 是否展示右侧操作栏，可以在数组中添加自定义方法return一个可渲染节点 | bool | 否 | ["edit", "delete"] |
-| menuBtns | 配置显示的按钮，可以在数组中添加自定义方法return一个可渲染节点 | Array | 否 | ["add", "delete", "search"] |
+| menuBtns | 配置显示的按钮，可以在数组中添加自定义方法return一个可渲染节点 | Array | 否 | ["add", "delete", "search", "excel"] |
 | onSelection | 表格选中项改变 | function(selectedRowKeys<br/>,selectedRows) | 否 | -- |
 | onRowClick | 点击表格行 | function(record, event) | 否 | -- |
 | editClick | 点击编辑按钮，return false时取消默认编辑弹窗 | function(record) | 否 | -- |

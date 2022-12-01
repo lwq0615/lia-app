@@ -9,6 +9,7 @@ import './crud.scss'
 class Crud extends React.Component {
 
     static propTypes = {
+        tableName: propTypes.string,
         getPage: propTypes.func.isRequired,
         onSave: propTypes.func,
         onDelete: propTypes.func,
@@ -31,7 +32,7 @@ class Crud extends React.Component {
         showIndex: true,
         rightAction: ["edit", "delete"],
         showSearch: true,
-        menuBtns: ["add", "delete", "search"]
+        menuBtns: ["add", "delete", "search", "excel"]
     }
 
     state = {

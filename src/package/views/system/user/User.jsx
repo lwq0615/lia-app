@@ -8,6 +8,7 @@ import { getRoleDict } from '@/package/request/system/role'
 import { getCompanyDict } from '@/package/request/system/company'
 
 const option = {
+    tableName: "系统用户",
     // 是否显示行索引，默认true
     showIndex: true,
     // 是否展示右侧操作栏，默认false
@@ -28,7 +29,7 @@ const option = {
         })
     },
     // 需要加载数据时触发 params => {}
-    getPage: (params, page) => {
+    getPage: (params = {}, page = {}) => {
         params.createTime = params.createTime?.join(",")
         return getSysUserPage(params, page.current, page.size)
     },

@@ -103,7 +103,7 @@ class Role extends React.Component {
                     })
                 },
                 // 需要加载数据时触发 params => {}
-                getPage: (params, page) => {
+                getPage: (params = {}, page = {}) => {
                     params.companyId = this.props.companyId
                     params.createTime = params.createTime?.join(",")
                     return getSysRolePage(params, page.current, page.size)

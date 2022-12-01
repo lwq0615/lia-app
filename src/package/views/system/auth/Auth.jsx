@@ -19,6 +19,7 @@ class Auth extends React.Component {
             rightAction: true,
             // 表格行是否可选择(默认false)
             selection: true,
+            menuBtns: ["add", "delete", "search"],
             addClick: () => {
                 if (!this.state.routerId && this.state.routerId !== 0) {
                     return false
@@ -115,7 +116,7 @@ class Auth extends React.Component {
             return
         }
         const option = this.state.option
-        option.getPage = (params, page) => {
+        option.getPage = (params = {}, page = {}) => {
             params.createTime = params.createTime?.join(",")
             params.routerId = key
             return getSysAuthPage(params, page.current, page.size)

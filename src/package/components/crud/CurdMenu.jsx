@@ -1,8 +1,9 @@
 import { Space, Button, } from 'antd';
 import React from 'react';
-import { SearchOutlined, PlusOutlined } from '@ant-design/icons';
+import { SearchOutlined, PlusOutlined, DownloadOutlined } from '@ant-design/icons';
 import CrudModal from './CrudModal'
 import CrudConfirm from './CrudConfirm';
+import excel from './excel'
 
 
 class CrudMenu extends React.Component {
@@ -39,6 +40,41 @@ class CrudMenu extends React.Component {
         }
     }
 
+    /**
+     * 将数据导出excel文件
+     */
+    toExcel = () => {
+        // 字典数据预处理
+        const dict = {}
+        for(let dictKey in this.props.dict){
+            const dictMap = {}
+            function columnDictMap(columnDict){
+                if(!Array.isArray(columnDict)){
+                    return
+                }
+                columnDict.forEach(item => {
+                    dictMap[item.value] = item.label
+                    columnDictMap(item.children)
+                })
+            }
+            columnDictMap(this.props.dict[dictKey])
+            dict[dictKey] = dictMap
+        }
+        const heads = {}
+        this.props.columns.forEach(item => heads[item.dataIndex] = item.title)
+        this.props.getPage().then(({list}) => {
+            list.forEach(item => {
+                for(let key in item){
+                    // 需要进行字典映射
+                    if(dict[key]){
+                        item[key] = dict[key][item[key]]
+                    }
+                }
+            })
+            excel(heads, list, this.props.tableName)
+        })
+    }
+
     setVisible = (visible) => {
         this.setState({
             visible: visible
@@ -50,7 +86,8 @@ class CrudMenu extends React.Component {
         const btns = {
             "add": (<Button key="add" type="primary" icon={<PlusOutlined />} onClick={this.addClick}>新增</Button>),
             "delete": (<CrudConfirm nodes={this.props.nodes} deleteClick={this.props.deleteClick}  msg={this.props.deleteMsg} key="delete" deleteSubmit={this.deleteSubmit} type='default' />),
-            "search": (<Button key="search" type="primary" icon={<SearchOutlined />} onClick={this.search}>搜索</Button>)
+            "search": (<Button key="search" type="primary" icon={<SearchOutlined />} onClick={this.search}>搜索</Button>),
+            "excel": (<Button key="excel" type="primary" icon={<DownloadOutlined />} onClick={this.toExcel}>导出Excel</Button>)
         }
         if(this.props.menuBtns === true){
             config = Object.keys(btns)

@@ -27,8 +27,8 @@ export default class SysDictType extends React.Component {
                 rightAction: ["edit", (record) => {
                     return (<Button key="roleSet" type="primary" size='small' onClick={(e) => { this.showModal(e, record) }}>配置</Button>)
                 }, "delete"],
-                // 配置按钮组，默认["add", "delete", "search"]
-                menuBtns: true,
+                // 配置按钮组，默认["add", "delete", "search", "excel"]
+                menuBtns: ["add", "delete", "search"],
                 // 表格行是否可选择(默认false)
                 selection: true,
                 // 触发删除钩子 records => {}
@@ -45,7 +45,7 @@ export default class SysDictType extends React.Component {
                     })
                 },
                 // 需要加载数据时触发 params => {}
-                getPage: (params, page) => {
+                getPage: (params = {}, page = {}) => {
                     params.createTime = params.createTime?.join(",")
                     return getSysDictTypePage(params, page.current, page.size)
                 },

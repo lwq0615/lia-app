@@ -18,6 +18,7 @@ export default class Company extends React.Component {
 
     state = {
         option: {
+            tableName: "企业信息",
             // 是否显示行索引，默认true
             showIndex: true,
             // 是否展示右侧操作栏，默认false
@@ -42,7 +43,7 @@ export default class Company extends React.Component {
                 })
             },
             // 需要加载数据时触发 params => {}
-            getPage: (params, page) => {
+            getPage: (params = {}, page = {}) => {
                 params.createTime = params.createTime?.join(",")
                 return getSysCompanyPage(params, page.current, page.size)
             },
