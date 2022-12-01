@@ -197,6 +197,10 @@ class Home extends React.Component {
                 })
             })
         })
+        this.getUserHeadImg()
+    }
+
+    getUserHeadImg = () => {
         getHeadImg().then(fileId => {
             this.setState({
                 headImg: fileId
@@ -290,7 +294,7 @@ class Home extends React.Component {
                                     <Route exact index path="*" element={<Index
                                         userInfo={this.state.userInfo}
                                         headImg={this.state.headImg}
-                                        reloadUser={this.loadUserAndRouter}
+                                        reloadHeadImg={this.getUserHeadImg}
                                     />} />
                                     {this.state.routes}
                                 </Routes>

@@ -172,6 +172,80 @@ export default class CodeGenerator extends React.Component {
             httpUrl
         }
         saveSysToolCode(record)
+        const tabItems = [
+            {
+                label: "request",
+                key: "request",
+                children: (
+                    <div onClick={this.copy}>
+                        {codeCreate.requestCode(tableName)}
+                    </div>
+                )
+            },
+            {
+                label: "view",
+                key: "view",
+                children: (
+                    <div onClick={this.copy}>
+                            {codeCreate.viewCode(data, tableName, primaryKey)}
+                        </div>
+                )
+            },
+            {
+                label: "entity",
+                key: "entity",
+                children: (
+                    <div onClick={this.copy}>
+                            {codeCreate.entityCode(data, tableName, primaryKey)}
+                        </div>
+                )
+            },
+            {
+                label: "controller",
+                key: "controller",
+                children: (
+                    <div onClick={this.copy}>
+                    {codeCreate.controllerCode(tableName, httpUrl)}
+                </div>
+                )
+            },
+            {
+                label: "service",
+                key: "service",
+                children: (
+                    <div onClick={this.copy}>
+                            {codeCreate.serviceCode(data, tableName, primaryKey)}
+                        </div>
+                )
+            },
+            {
+                label: "mapper",
+                key: "mapper",
+                children: (
+                    <div onClick={this.copy}>
+                            {codeCreate.mapperCode(tableName)}
+                        </div>
+                )
+            },
+            {
+                label: "mybatis",
+                key: "mybatis",
+                children: (
+                    <div onClick={this.copy}>
+                            {codeCreate.mybatisCode(data, tableName, primaryKey)}
+                        </div>
+                )
+            },
+            {
+                label: "mysql",
+                key: "mysql",
+                children: (
+                    <div onClick={this.copy}>
+                            {codeCreate.mysqlCode(tableName, data, primaryKey)}
+                        </div>
+                )
+            }
+        ]
         Modal.success({
             width: 800,
             okText: '确定',
@@ -180,48 +254,7 @@ export default class CodeGenerator extends React.Component {
             destroyOnClose: true,
             title: '生成代码',
             content: (
-                <Tabs defaultActiveKey="1">
-                    <TabPane tab="request" key="request">
-                        <div onClick={this.copy}>
-                            {codeCreate.requestCode(tableName)}
-                        </div>
-                    </TabPane>
-                    <TabPane tab="view" key="view">
-                        <div onClick={this.copy}>
-                            {codeCreate.viewCode(data, tableName, primaryKey)}
-                        </div>
-                    </TabPane>
-                    <TabPane tab="entity" key="entity">
-                        <div onClick={this.copy}>
-                            {codeCreate.entityCode(data, tableName, primaryKey)}
-                        </div>
-                    </TabPane>
-                    <TabPane tab="controller" key="controller">
-                        <div onClick={this.copy}>
-                            {codeCreate.controllerCode(tableName, httpUrl)}
-                        </div>
-                    </TabPane>
-                    <TabPane tab="service" key="service">
-                        <div onClick={this.copy}>
-                            {codeCreate.serviceCode(data, tableName, primaryKey)}
-                        </div>
-                    </TabPane>
-                    <TabPane tab="mapper" key="mapper">
-                        <div onClick={this.copy}>
-                            {codeCreate.mapperCode(tableName)}
-                        </div>
-                    </TabPane>
-                    <TabPane tab="mybatis" key="mybatis">
-                        <div onClick={this.copy}>
-                            {codeCreate.mybatisCode(data, tableName, primaryKey)}
-                        </div>
-                    </TabPane>
-                    <TabPane tab="mysql" key="mysql">
-                        <div onClick={this.copy}>
-                            {codeCreate.mysqlCode(tableName, data, primaryKey)}
-                        </div>
-                    </TabPane>
-                </Tabs>
+                <Tabs defaultActiveKey="request" items={tabItems}/>
             )
         })
     }
@@ -340,12 +373,12 @@ export default class CodeGenerator extends React.Component {
                     title="历史记录"
                     open={this.state.visible}
                     footer={null}
-                    onCancel={() => this.setState({visible: false})}
+                    onCancel={() => this.setState({ visible: false })}
                 >
-                    <HistoryCode 
-                        close={() => this.setState({visible: false})}
-                        setData={(data) => this.setState({data: data})}
-                        setHeads={(heads) => this.setState({heads: heads})}
+                    <HistoryCode
+                        close={() => this.setState({ visible: false })}
+                        setData={(data) => this.setState({ data: data })}
+                        setHeads={(heads) => this.setState({ heads: heads })}
                     />
                 </Modal>
             </section>

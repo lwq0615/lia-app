@@ -164,12 +164,26 @@ ${getColumnsCode()}
  */
 export function entityCode(data, tableName, primaryKey) {
     const columnCode = () => {
-        let str = `    private Long ${primaryKey.name};\n`
+        let str = `    /**
+     * 主键
+     */
+    @TableId(type = ${primaryKey.type === "autoIncrement" ? "IdType.AUTO" : "IdType.ASSIGN_ID"})
+    @TableField("${toLine(primaryKey.name)}")
+    private Long ${primaryKey.name};\n\n`
         data.forEach(item => {
             if(item.type === "date" || item.type === "datetime"){
-                str += `    private String ${item.name};\n`
+                str += `    /**
+     * ${item.remark}
+     */
+    @DateType
+    @TableField("${toLine(item.name)}")
+    private String ${item.name};\n\n`
             }else{
-                str += `    private ${item.type} ${item.name};\n`
+                str += `    /**
+     * ${item.remark}
+     */
+    @TableField("${toLine(item.name)}")
+    private ${item.type} ${item.name};\n\n`
             }
         })
         return str
@@ -180,14 +194,18 @@ package com.lia.server.modules.${firstLow(toHump(tableName))};
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.lia.system.crud.DateType;
+import com.lia.system.crud.Like;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ${firstUp(toHump(tableName))} {
 
-${columnCode()}
-}                                   
+${columnCode()}}                                   
     `
 }
 
@@ -283,46 +301,30 @@ public class ${className}Controller {
 export function serviceCode(data, tableName, primaryKey) {
     const className = firstUp(toHump(tableName))
     const objName = firstLow(toHump(tableName))
-    function setPrimaryKey(){
-        if(primaryKey.type === "autoIncrement"){
-            return ``
-        }else{
-            return `
-                ${objName}.set${firstUp(toHump(primaryKey.name))}(SnowflakeId.nextId());`
-        }
-    }
-    function requireCode(){
-        let str = ``
-        data.forEach(item => {
-            if(item.notNull){
-                let name = item.name
-                str += `if(${objName}.get${firstUp(name)}() == null${item.type === 'String' ? ` || ${objName}.get${firstUp(name)}().equals("")` : ''}){
-            throw new HttpException(400,"缺少参数${name}");
-        }
-        `
-            }
-        })
-        return str
-    }
     return `
 package com.lia.server.modules.${objName};
 
-import com.lia.system.security.LoginUser;
-import com.lia.system.utils.SnowflakeId;
+import com.lia.system.crud.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Service
 @Transactional
 public class ${className}Service {
 
+    private BaseService<SysParam> baseService;
 
     @Autowired
     private ${className}Mapper ${objName}Mapper;
+
+
+    @PostConstruct
+    public void init(){
+        this.baseService = new BaseService<>(sysParamMapper);
+    }
 
 
     /**
@@ -331,7 +333,7 @@ public class ${className}Service {
      * @return
      */
     public List<${className}> find${className}(${className} ${objName}) {
-        return ${objName}Mapper.find${className}(${objName});
+        return baseService.selectList(${objName});
     }
 
 
@@ -341,22 +343,7 @@ public class ${className}Service {
      * @return
      */
     public String save${className}(${className} ${objName}) {
-        ${requireCode()}int success = 0;
-        try {
-            if (${objName}.get${firstUp(primaryKey.name)}() == null) {
-                // 新增${setPrimaryKey()}
-                success = ${objName}Mapper.add${className}(${objName});
-            } else {
-                // 编辑
-                success = ${objName}Mapper.edit${className}(${objName});
-            }
-        } catch (DuplicateKeyException e) {
-            String[] split = e.getCause().getMessage().split(" ");
-            String replace = split[split.length - 1].replace("'", "");
-            String name = replace.split("\\\\.")[1].split("-")[1];
-            return name + "重复";
-        }
-        return success > 0 ? "success" : "error";
+        return baseService.save(${objName});
     }
 
 
@@ -365,11 +352,8 @@ public class ${className}Service {
      * @param ${objName}Ids id列表
      * @return 删除成功的数量
      */
-    public int delete${className}s(List<Integer> ${objName}Ids) {
-        if (${objName}Ids.size() == 0) {
-            return 0;
-        }
-        return ${objName}Mapper.delete${className}s(${objName}Ids);
+    public int delete${className}s(List<Long> ${objName}Ids) {
+        return baseService.deleteByIds(${objName}Ids);
     }
 
 }                                       
@@ -388,43 +372,11 @@ export function mapperCode(tableName){
     return `
 package com.lia.server.modules.${objName};
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
-import java.util.List;
 
 @Mapper
-public interface ${className}Mapper {
-
-
-    /**
-     * 条件查询
-     * @param ${objName} 查询参数
-     * @return 查询结果列表
-     */
-    List<${className}> find${className}(${className} ${objName});
-
-
-    /**
-     * 新增
-     * @param ${objName}
-     * @return
-     */
-    int add${className}(${className} ${objName});
-
-
-    /**
-     * 编辑
-     * @param ${objName}
-     * @return
-     */
-    int edit${className}(${className} ${objName});
-
-
-    /**
-     * 批量删除
-     * @param ${objName}Ids
-     * @return
-     */
-    int delete${className}s(List<Integer> ${objName}Ids);
+public interface ${className}Mapper extends BaseMapper<${className}> {
 
 }                                   
     `
@@ -443,37 +395,6 @@ export function mybatisCode(data, tableName, primaryKey){
         })
         return str
     }
-    function getWhereCode(){
-        let str = `
-            <if test="${primaryKey.name} != null">
-                AND \`${toLine(primaryKey.name)}\` = #{${primaryKey.name}}
-            </if>`
-        data.forEach(item => {
-            str += `
-            <if test="${item.name} != null">
-                AND \`${toLine(item.name)}\` = #{${item.name}}
-            </if>`
-        })
-        return str
-    }
-    function insertCode(){
-        let str = `(`
-        let columns = []
-        if(primaryKey.type === "snowflake"){
-            columns.push(toLine(primaryKey.name))
-        }
-        data.forEach(item => {
-            columns.push(toLine(item.name))
-        })
-        str += columns.map(item => "`"+item+"`").join(",")+`) values (`
-        str += columns.map(item => `
-            #{${toHump(item)}}`).join(",")
-        return str+")"
-    }
-    function updateCode(){
-        return data.map(item => `
-        \`${toLine(item.name)}\` = #{${toHump(item.name)}}`).join(",")
-    }
     return `<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
@@ -482,34 +403,6 @@ export function mybatisCode(data, tableName, primaryKey){
 
     <resultMap type="${className}" id="${className}Result">${getResultMap()}
     </resultMap>
-
-
-    <select id="find${className}" parameterType="${className}" resultMap="${className}Result">
-        select * from ${toLine(tableName)}
-        <where>${getWhereCode()}
-        </where>
-    </select>
-
-
-    <insert id="add${className}" parameterType="${className}">
-        insert  into ${toLine(tableName)}
-        ${insertCode()}
-    </insert>
-
-
-    <update id="edit${className}" parameterType="${className}">
-        update ${toLine(tableName)} set ${updateCode()}
-        where \`${toLine(primaryKey.name)}\` = #{${toHump(primaryKey.name)}}
-    </update>
-
-    <delete id="delete${className}s" parameterType="List">
-        delete from ${toLine(tableName)} where ${toLine(primaryKey.name)} in
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <foreach collection="${objName}Ids" index="index" item="item">
-                #{item},
-            </foreach>
-        </trim>
-    </delete>
 
 </mapper>`
 }

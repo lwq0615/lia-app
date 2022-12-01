@@ -65,8 +65,13 @@ export default class SysParam extends React.Component{
                     title: '参数值',
                     dataIndex: 'value',
                     align: 'center',
-                    key: 'value',
-                    required: false
+                    key: 'value'
+                },
+                {
+                    title: '说明',
+                    dataIndex: 'mean',
+                    align: 'center',
+                    key: 'mean'
                 },
                 {
                     title: '创建人',
@@ -96,7 +101,8 @@ export default class SysParam extends React.Component{
                     dataIndex: 'remark',
                     align: 'center',
                     key: 'remark',
-                    type: "textarea"
+                    type: "textarea",
+                    hideText: true
                 }
             ]
         }
