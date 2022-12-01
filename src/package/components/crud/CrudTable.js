@@ -245,14 +245,14 @@ class CrudTable extends React.Component {
             loading: false
         })
         if (this.state.selectedRowKeys && this.state.selectedRowKeys.length) {
-            this.rowSelectionChange([])
+            this.rowSelectionChange([], [])
         }
     }
 
     /**
      * 选中项改变
      */
-    rowSelectionChange = (selectedRowKeys, selectedRows) => {
+    rowSelectionChange = (selectedRowKeys, selectedRows = []) => {
         this.setState({
             selectedRowKeys: selectedRowKeys || [],
             selectedRows: selectedRows

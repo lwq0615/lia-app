@@ -168,7 +168,7 @@ export function entityCode(data, tableName, primaryKey) {
      * 主键
      */
     @TableId(type = ${primaryKey.type === "autoIncrement" ? "IdType.AUTO" : "IdType.ASSIGN_ID"})
-    @TableField("${toLine(primaryKey.name)}")
+    @TableField("\`${toLine(primaryKey.name)}\`")
     private Long ${primaryKey.name};\n\n`
         data.forEach(item => {
             if(item.type === "date" || item.type === "datetime"){
@@ -176,13 +176,13 @@ export function entityCode(data, tableName, primaryKey) {
      * ${item.remark}
      */
     @DateType
-    @TableField("${toLine(item.name)}")
+    @TableField("\`${toLine(item.name)}\`")
     private String ${item.name};\n\n`
             }else{
                 str += `    /**
      * ${item.remark}
      */
-    @TableField("${toLine(item.name)}")
+    @TableField("\`${toLine(item.name)}\`")
     private ${item.type} ${item.name};\n\n`
             }
         })
@@ -197,12 +197,14 @@ import lombok.NoArgsConstructor;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.lia.system.crud.DateType;
 import com.lia.system.crud.Like;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@TableName("${toLine(tableName)}")
 public class ${firstUp(toHump(tableName))} {
 
 ${columnCode()}}                                   
