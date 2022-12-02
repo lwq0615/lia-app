@@ -227,13 +227,13 @@ export function entityCode({data, tableName, primaryKey, createByFlag, createTim
      * ${item.remark}
      */
     @${item.updateTime || item.createTime ? "UpdateTime" : "DateType"}
-    @TableField("\`${toLine(item.name)}\`")
+    @TableField("\`${toLine(item.name)}\`")${item.notNull ? "\n    @Required" : ""}
     private String ${item.name};\n\n`
             }else{
                 str += `    /**
      * ${item.remark}
      */
-    @TableField("\`${toLine(item.name)}\`")${item.createBy ? "\n    @CreateBy" : ""}${item.like ? "\n    @Like" : ""}
+    @TableField("\`${toLine(item.name)}\`")${item.createBy ? "\n    @CreateBy" : ""}${item.like ? "\n    @Like" : ""}${item.notNull ? "\n    @Required" : ""}
     private ${item.type} ${item.name};\n\n`
             }
         })
@@ -361,23 +361,14 @@ import com.lia.system.crud.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Service
 @Transactional
-public class ${className}Service {
-
-    private BaseService<SysParam> baseService;
+public class ${className}Service extends BaseService<${className}> {
 
     @Autowired
     private ${className}Mapper ${objName}Mapper;
-
-
-    @PostConstruct
-    public void init(){
-        this.baseService = new BaseService<>(sysParamMapper);
-    }
 
 
     /**
@@ -386,7 +377,7 @@ public class ${className}Service {
      * @return
      */
     public List<${className}> find${className}(${className} ${objName}) {
-        return baseService.selectList(${objName});
+        return this.selectList(${objName});
     }
 
 
@@ -396,7 +387,7 @@ public class ${className}Service {
      * @return
      */
     public String save${className}(${className} ${objName}) {
-        return baseService.save(${objName});
+        return this.save(${objName});
     }
 
 
@@ -406,7 +397,7 @@ public class ${className}Service {
      * @return 删除成功的数量
      */
     public int delete${className}s(List<Long> ${objName}Ids) {
-        return baseService.deleteByIds(${objName}Ids);
+        return this.deleteByIds(${objName}Ids);
     }
 
 }                                       
