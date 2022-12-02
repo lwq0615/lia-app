@@ -75,10 +75,10 @@ class CrudMenu extends React.Component {
                     }
                 }
             })
+            excel(heads, list, this.props.tableName)
             this.setState({
                 excelLoading: false
             })
-            excel(heads, list, this.props.tableName)
         })
     }
 
