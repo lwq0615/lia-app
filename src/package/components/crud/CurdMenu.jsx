@@ -18,7 +18,8 @@ class CrudMenu extends React.Component {
         })
         this.state = {
             visible: false,
-            formDefaultValues
+            formDefaultValues,
+            excelLoading: false
         }
     }
 
@@ -44,6 +45,9 @@ class CrudMenu extends React.Component {
      * 将数据导出excel文件
      */
     toExcel = () => {
+        this.setState({
+            excelLoading: true
+        })
         // 字典数据预处理
         const dict = {}
         for(let dictKey in this.props.dict){
@@ -71,6 +75,9 @@ class CrudMenu extends React.Component {
                     }
                 }
             })
+            this.setState({
+                excelLoading: false
+            })
             excel(heads, list, this.props.tableName)
         })
     }
@@ -87,7 +94,7 @@ class CrudMenu extends React.Component {
             "add": (<Button key="add" type="primary" icon={<PlusOutlined />} onClick={this.addClick}>新增</Button>),
             "delete": (<CrudConfirm nodes={this.props.nodes} deleteClick={this.props.deleteClick}  msg={this.props.deleteMsg} key="delete" deleteSubmit={this.deleteSubmit} type='default' />),
             "search": (<Button key="search" type="primary" icon={<SearchOutlined />} onClick={this.search}>搜索</Button>),
-            "excel": (<Button key="excel" type="primary" icon={<DownloadOutlined />} onClick={this.toExcel}>导出Excel</Button>)
+            "excel": (<Button key="excel" type="primary" loading={this.state.excelLoading} icon={<DownloadOutlined />} onClick={this.toExcel}>导出Excel</Button>)
         }
         if(this.props.menuBtns === true){
             config = Object.keys(btns)
