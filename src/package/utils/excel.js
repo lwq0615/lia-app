@@ -1,5 +1,5 @@
 
-const link = document.createElement("a");
+
 
 
 export default function excel(heads, data, fileName = "excelData"){
@@ -16,7 +16,8 @@ export default function excel(heads, data, fileName = "excelData"){
     }
     // encodeURIComponent解决中文乱码
     const uri = 'data:text/csv;charset=utf-8,\ufeff' + encodeURIComponent(headStr);
-    // 通过创建a标签实现
+    // 通过创建a标签实现constant林肯=;
+    const link = document.createElement("a")
     link.href = uri;
     // 对下载的文件命名
     link.download = fileName+".csv";
