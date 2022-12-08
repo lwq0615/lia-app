@@ -4,6 +4,20 @@ import { http } from "@/config"
 import { message } from 'antd'
 
 
+/**
+ * 路由跳转的钩子函数
+ */
+let navigate = null
+
+
+/**
+ * 在应用初始化时注册路由跳转钩子函数
+ */
+export function initRouter(initNavigate){
+    navigate = initNavigate
+}
+
+
 const request = axios.create({
     baseURL: http.baseUrl,
     timeout: 60000,
@@ -54,7 +68,7 @@ function createMsg(errCode) {
     }
     if ([401, 402].includes(errCode)) {
         localStorage.removeItem(http.header)
-        window.navigate("/login")
+        navigate("/login")
     }
 }
 

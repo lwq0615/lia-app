@@ -11,15 +11,19 @@ import Message from './message/Message'
 import defaultImg from './image/default.jpg'
 import { http } from "@/config"
 import { SwitchTransition, CSSTransition } from 'react-transition-group'
+import { initRouter } from "@/package/utils/request"
 
 
 const { Header, Sider, Content } = Layout;
 
 class Home extends React.Component {
 
+    /**
+     * 在请求模块中注册路由跳转
+     */
     constructor(props) {
         super(props)
-        window.navigate = props.navigate
+        initRouter(props.navigate)
     }
 
     state = {
