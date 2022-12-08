@@ -27,7 +27,6 @@ const request = axios.create({
 })
 
 /**
- * 路由守卫
  * 在发送请求前携带token
  */
 request.interceptors.request.use(config => {
