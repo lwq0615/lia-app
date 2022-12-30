@@ -245,6 +245,7 @@ package com.lia.server.modules.${firstLow(toHump(tableName))};
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -255,6 +256,7 @@ import com.lia.system.crud.Like;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Accessors(chain = true)
 @TableName("${toLine(tableName)}")
 public class ${firstUp(toHump(tableName))} {
 
