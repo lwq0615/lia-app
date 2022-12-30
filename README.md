@@ -10,4 +10,4 @@
 
 lia是一个前后端分离的权限管理系统，前端使用React进行开发，后端运用SpringBoot，MySql，Redis，Security等技术，主要目的让开发者注重专注业务，降低技术难度，从而节省人力成本，缩短项目周期，提高软件安全质量。
 
-[开发文档](https://lwq0615.github.io/lia-app/) 
+[开发文档](https://lwq0615.github.io/lia-app/)
