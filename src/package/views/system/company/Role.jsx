@@ -1,11 +1,13 @@
 
 import React from "react"
 import Crud from "@/package/components/crud/Crud"
-import { message } from "antd"
+import { Button, message, Modal } from "antd"
 import { getSysRolePage, saveSysRole, deleteRoles, getRoleOfCompanyDict } from '@/package/request/system/role'
 import { getAuthDict } from '@/package/request/system/auth'
 import { getCreateByDict } from '@/package/request/system/user'
 import { getSysRouterTree } from '@/package/request/system/router'
+import { PartitionOutlined } from '@ant-design/icons';
+import Diagram from "./Diagram"
 import propTypes from 'prop-types'
 
 async function getRouterTree() {
@@ -88,7 +90,11 @@ class Role extends React.Component {
                 // 表格行是否可选择(默认false)
                 selection: true,
                 // 配置显示的按钮
-                menuBtns: ["add", "delete", "search"],
+                menuBtns: ["add", "delete", "search", () => {
+                    return (
+                        <Button key="diagram" type="primary" onClick={this.diagram} icon={<PartitionOutlined />}>角色关系图</Button>
+                    )
+                }],
                 // 触发删除钩子 records => {}
                 //return true刷新页面数据
                 onDelete: async records => {
@@ -213,9 +219,24 @@ class Role extends React.Component {
         }
     }
 
+    /**
+     * 查看企业角色关系图
+     */
+    diagram = () => {
+        Modal.info({
+            title: "角色关系图",
+            width: 1000,
+            centered: true,
+            destroyOnClose: true,
+            keyboard: true,
+            okText: "确定",
+            content: (<Diagram companyId={this.props.companyId}/>)
+        })
+    }
+
     render() {
         return (
-            <Crud {...this.state.option}/>
+            <Crud {...this.state.option} />
         )
     }
 }

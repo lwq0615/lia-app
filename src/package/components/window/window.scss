@@ -18,7 +18,7 @@
             display: flex;
             justify-content: flex-end;
             align-items: center;
-            height: 30px;
+            height: 26px;
             color: #555;
             user-select: none;
             z-index: 9999;
@@ -36,18 +36,25 @@
                 /* 告诉程序哪里可以拖拽 */
                 app-region: drag;
             }
-            .min,
-            .max,
-            .close {
-                padding: 7px 12px;
-                font-size: 16px;
-                cursor: pointer;
-                transition: all linear 0.1s;
+            .icons:hover{
+                opacity: 1;
             }
-            .min:hover,
-            .max:hover,
-            .close:hover {
-                background-color: #eeeeee;
+            .icons{
+                opacity: 0;
+                transition: opacity ease 0.3s;
+                .min,
+                .max,
+                .close {
+                    padding: 5px 10px;
+                    font-size: 16px;
+                    cursor: pointer;
+                    transition: all linear 0.1s;
+                }
+                .min:hover,
+                .max:hover,
+                .close:hover {
+                    background-color: #eeeeee;
+                }
             }
         }
     }
