@@ -154,7 +154,7 @@ export default class Company extends React.Component {
                     onCancel={() => this.setState({visible: false})}
                 >
                     {
-                        this.state.companyId && <Role companyId={this.state.companyId}/>
+                        this.state.companyId && <Role companyId={this.state.companyId} companyName={this.state.companyName}/>
                     }
                 </Modal>
             </>

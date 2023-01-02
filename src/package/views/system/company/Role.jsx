@@ -224,7 +224,7 @@ class Role extends React.Component {
      */
     diagram = () => {
         Modal.info({
-            title: "角色关系图",
+            title: this.props.companyName + "角色关系图",
             width: 1000,
             centered: true,
             destroyOnClose: true,
