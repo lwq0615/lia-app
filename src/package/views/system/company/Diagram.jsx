@@ -74,7 +74,7 @@ export default function Diagram(props) {
               top: '5%',
               left: '7%',
               bottom: '2%',
-              right: '10%',
+              right: '12%',
               symbolSize: 15,
               label: {
                 position: 'left',
@@ -102,7 +102,6 @@ export default function Diagram(props) {
           })
         })
       );
-      console.log(option);
       option && myChart.setOption(option);
       myChart.hideLoading();
     })
