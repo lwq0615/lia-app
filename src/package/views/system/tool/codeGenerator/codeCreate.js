@@ -317,7 +317,7 @@ public class ${className}Controller {
         if(current != null && size != null){
             PageHelper.startPage(current,size);
         }
-        return new PageInfo<>(${objName}Service.find${className}(${objName}));
+        return new PageInfo<>(${objName}Service.selectList(${objName}));
     }
 
     /**
@@ -328,7 +328,7 @@ public class ${className}Controller {
      */
     @PostMapping("/save")${getPreAuthorize('save')}
     public String save${className}(@RequestBody ${className} ${objName}){
-        return ${objName}Service.save${className}(${objName});
+        return ${objName}Service.save(${objName});
     }
 
 
@@ -340,7 +340,7 @@ public class ${className}Controller {
      */
     @PostMapping("/delete")${getPreAuthorize('delete')}
     public int delete(@RequestBody List<Integer> ${objName}Ids){
-        return ${objName}Service.delete${className}s(${objName}Ids);
+        return ${objName}Service.deleteByIds(${objName}Ids);
     }
 
 
@@ -372,35 +372,6 @@ public class ${className}Service extends BaseService<${className}> {
     @Autowired
     private ${className}Mapper ${objName}Mapper;
 
-
-    /**
-     * 分页查询
-     * @param ${objName}
-     * @return
-     */
-    public List<${className}> find${className}(${className} ${objName}) {
-        return this.selectList(${objName});
-    }
-
-
-    /**
-     * 新增或编辑
-     * @param ${objName}
-     * @return
-     */
-    public String save${className}(${className} ${objName}) {
-        return this.save(${objName});
-    }
-
-
-    /**
-     * 批量删除
-     * @param ${objName}Ids id列表
-     * @return 删除成功的数量
-     */
-    public int delete${className}s(List<Long> ${objName}Ids) {
-        return this.deleteByIds(${objName}Ids);
-    }
 
 }                                       
 
