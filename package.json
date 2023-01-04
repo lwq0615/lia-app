@@ -2,7 +2,7 @@
   "name": "app",
   "version": "1.0.0",
   "main": "main.js",
-  "homepage": "./",
+  "homepage": "/",
   "private": true,
   "dependencies": {
     "@babel/core": "^7.16.0",
