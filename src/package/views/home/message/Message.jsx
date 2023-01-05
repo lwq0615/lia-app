@@ -7,7 +7,6 @@ import PersonList from './PersonList'
 import MsgBox from './MsgBox'
 import './message.scss'
 import WithRouter from '@/package/components/hoc/WithRouter';
-import { http } from "@/config"
 
 class Message extends React.Component {
     state = {
@@ -42,7 +41,7 @@ class Message extends React.Component {
             // 收到消息时
             if(e.data === "账号在其他设备登录" || e.data === "账号状态发生改变"){
                 message.warning(e.data)
-                localStorage.removeItem(http.header)
+                localStorage.removeItem(process.env.REACT_APP_HTTP_HEADER)
                 this.props.navigate("/login")
                 return
             }

@@ -3,7 +3,6 @@ import React from "react"
 import './login.scss'
 import { Form, Input, Button, Checkbox, message } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
-import { http } from "@/config"
 import WithRouter from '@/package/components/hoc/WithRouter';
 import { sysUserLogin } from '@/package/request/system/user.js'
 import { getParamValue } from '@/package/request/system/param'
@@ -70,7 +69,7 @@ class Login extends React.Component {
                     break
                 }
                 default: {
-                    localStorage.setItem(http.header, res)
+                    localStorage.setItem(process.env.REACT_APP_HTTP_HEADER, res)
                     if (this.state.rememberMe) {
                         localStorage.setItem("username", values.username)
                         localStorage.setItem("password", values.password)

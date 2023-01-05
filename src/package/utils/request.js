@@ -1,6 +1,5 @@
 /* eslint-disable */
 import axios from "axios"
-import { http } from "@/config"
 import { message } from 'antd'
 
 
@@ -19,7 +18,7 @@ export function initRouter(initNavigate){
 
 
 const request = axios.create({
-    baseURL: http.baseUrl,
+    baseURL: process.env.REACT_APP_HTTP_URL,
     timeout: 60000,
     headers: {
         "Content-Type": "application/json"
@@ -30,9 +29,9 @@ const request = axios.create({
  * 在发送请求前携带token
  */
 request.interceptors.request.use(config => {
-    const token = localStorage.getItem(http.header)
+    const token = localStorage.getItem(process.env.REACT_APP_HTTP_HEADER)
     if (token) {
-        config.headers[http.header] = token
+        config.headers[process.env.REACT_APP_HTTP_HEADER] = token
     }
     return config
 })
@@ -66,7 +65,7 @@ function createMsg(errCode) {
         })
     }
     if ([401, 402].includes(errCode)) {
-        localStorage.removeItem(http.header)
+        localStorage.removeItem(process.env.REACT_APP_HTTP_HEADER)
         navigate("/login")
     }
 }

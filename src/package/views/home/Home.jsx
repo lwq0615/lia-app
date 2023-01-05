@@ -9,7 +9,6 @@ import WithRouter from '@/package/components/hoc/WithRouter';
 import Index from '@/package/views/system/index/Index'
 import Message from './message/Message'
 import defaultImg from './image/default.jpg'
-import { http } from "@/config"
 import { SwitchTransition, CSSTransition } from 'react-transition-group'
 import { initRouter } from "@/package/utils/request"
 
@@ -170,7 +169,7 @@ class Home extends React.Component {
      */
     logout = () => {
         logout().then(() => {
-            localStorage.removeItem(http.header)
+            localStorage.removeItem(process.env.REACT_APP_HTTP_HEADER)
             this.props.navigate("/login")
         })
     }
@@ -233,7 +232,7 @@ class Home extends React.Component {
                     <div className='userInfo'>
                         <img
                             src={this.state.headImg
-                                ? http.baseUrl + "/system/file/getPic?comp=true&fileId=" + this.state.headImg
+                                ? process.env.REACT_APP_HTTP_URL + "/system/file/getPic?comp=true&fileId=" + this.state.headImg
                                 : defaultImg}
                             className="headImg"
                             onClick={() => this.goRouter()}

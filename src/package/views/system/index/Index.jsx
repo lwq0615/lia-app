@@ -2,7 +2,6 @@
 import React from "react"
 import { Upload, message } from 'antd'
 import './index.scss'
-import { http } from "@/config"
 import { updateHeadImg } from '@/package/request/system/user'
 import defaultImg from '@/package/views/home/image/default.jpg'
 
@@ -35,7 +34,7 @@ class Index extends React.Component {
                     <img
                         className="headImg"
                         src={this.props.headImg
-                            ? http.baseUrl + "/system/file/getPic?comp=true&fileId=" + this.props.headImg
+                            ? process.env.REACT_APP_HTTP_URL + "/system/file/getPic?comp=true&fileId=" + this.props.headImg
                             : defaultImg}
                     />
                 </Upload>
