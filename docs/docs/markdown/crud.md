@@ -29,6 +29,7 @@ lia-app提供了Crud组件，组件提供了很多个性化接口，只需要使
 #### column配置
 | 参数 | 说明 | 类型 | 是否必填 | 默认值 |
 | ---  | --- | ---  | ---      | ---   |
+| defaultValue | 新增时的默认值 | any | 否 | -- |
 | addShow | 新增时是否展示该字段 | bool | 否 | true |
 | editShow | 编辑时是否展示该字段 | bool | 否 | true |
 | editEnable | 编辑时是否允许编辑字段 | bool | 否 | true |

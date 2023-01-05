@@ -25,19 +25,6 @@ function treeDataMap(treeData) {
     })
 }
 
-/**
-     * 生成Select组件的Option
-     * @param {*} dict 
-     * @returns 
-     */
-function createOptions(dict) {
-    return dict.map(item => {
-        return (
-            <Option value={parseInt(item.value)} key={item.value}>{item.label}</Option>
-        )
-    })
-}
-
 function findFormValue(name, values) {
     if (values) {
         for (let item of values) {

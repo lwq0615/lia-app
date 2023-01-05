@@ -74,7 +74,7 @@ class Router extends React.Component {
                 if (key === 'parent') {
                     return {
                         name: [key],
-                        value: this.state.routerId || 0
+                        value: this.state.routerId || 1
                     }
                 }
                 return {
