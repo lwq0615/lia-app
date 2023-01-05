@@ -1,0 +1,74 @@
+import KeepAlive, { AliveScope } from 'react-activation'
+import { SwitchTransition, CSSTransition } from 'react-transition-group'
+import Index from '@/package/views/system/index/Index'
+import { Routes, Route } from 'react-router-dom';
+import WithRouter from '@/package/components/hoc/WithRouter';
+import { useEffect, useState } from 'react'
+
+
+/**
+ * 动态生成路由组件
+ * @returns 
+ */
+async function createRoutes(routers, arr = [], parentPath = '') {
+    if (parentPath[0] === "/") {
+        parentPath = parentPath.substring(1)
+    }
+    for (let item of routers) {
+        if (item.element) {
+            let element = item.element
+            if (element[0] === '/') {
+                element = element.substring(1)
+            };
+            try {
+                await import('@/package/views/' + element).then(({ default: Element }) => {
+                    arr.push(
+                        <Route
+                            key={'route:' + item.path}
+                            exact
+                            path={parentPath + "/" + item.path}
+                            element={<KeepAlive name={item.element} cacheKey={item.element}><Element /></KeepAlive>} />
+                    )
+                })
+            } catch (e) {
+                console.error(e)
+            }
+        }
+        if (item.children) {
+            await createRoutes(item.children, arr, parentPath + "/" + item.path)
+        }
+    }
+    return arr
+}
+
+function RouterBody(props) {
+
+    const [routers, setRouters] = useState([])
+
+    useEffect(async () => {
+        setRouters(await createRoutes(props.routers))
+    }, [props.routers])
+
+    return (
+        <AliveScope>
+            <SwitchTransition mode="out-in">
+                <CSSTransition
+                    key={props.location.key}
+                    timeout={200}
+                    classNames="route"
+                >
+                    <Routes location={props.location}>
+                        <Route exact index path="*" element={<KeepAlive cacheKey='index' name='index'><Index
+                            userInfo={props.userInfo}
+                            headImg={props.headImg}
+                            reloadHeadImg={props.reloadHeadImg}
+                        /></KeepAlive>} />
+                        {routers}
+                    </Routes>
+                </CSSTransition>
+            </SwitchTransition>
+        </AliveScope>
+    )
+}
+
+export default WithRouter(RouterBody)

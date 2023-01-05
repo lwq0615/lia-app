@@ -1,21 +1,18 @@
-import { Layout, Menu, Breadcrumb, Space, Button, Tooltip } from 'antd';
+import { Layout, Menu, Breadcrumb } from 'antd';
 import * as icons from '@ant-design/icons'
 import React from 'react';
 import './home.scss'
-import { Routes, Route } from 'react-router-dom';
-import { getSysUserInfo, getHeadImg, logout } from '@/package/request/system/user'
+import { getSysUserInfo, getHeadImg } from '@/package/request/system/user'
 import { getRouterOfRole } from '@/package/request/system/router'
 import WithRouter from '@/package/components/hoc/WithRouter';
-import Index from '@/package/views/system/index/Index'
-import Message from './message/Message'
 import defaultImg from './image/default.jpg'
-import { SwitchTransition, CSSTransition } from 'react-transition-group'
 import { initRouter } from "@/package/utils/request"
-import KeepAlive, { AliveScope } from 'react-activation'
 import HistoryRouter from './HistoryRouter.tsx'
+import HomeHeader from './HomeHeader';
+import RouterBody from './RouterBody'
 
 
-const { Header, Sider, Content } = Layout;
+const { Sider, Content } = Layout;
 
 class Home extends React.Component {
 
@@ -33,7 +30,6 @@ class Home extends React.Component {
         headImg: null,
         routers: [],
         routePath: [],
-        routes: [],
         selectedKeys: null,
         historyRouterList: []
     }
@@ -48,8 +44,6 @@ class Home extends React.Component {
 
     /**
      * 路由数据映射为导航数据
-     * @param {*} router 
-     * @returns 
      */
     routerMap = (router) => {
         if (!router) {
@@ -86,6 +80,9 @@ class Home extends React.Component {
      * 根据keyPath跳转路由
      */
     goRouter = (keys = [], routers = this.state.routers) => {
+        if(keys?.join("") === this.state.selectedKeys?.join("")){
+            return
+        }
         this.setState({
             selectedKeys: keys
         })
@@ -136,41 +133,6 @@ class Home extends React.Component {
     }
 
     /**
-     * 动态生成路由组件
-     * @returns 
-     */
-    createRoutes = async (routers, arr = [], parentPath = '') => {
-        if (parentPath[0] === "/") {
-            parentPath = parentPath.substring(1)
-        }
-        for (let item of routers) {
-            if (item.element) {
-                let element = item.element
-                if (element[0] === '/') {
-                    element = element.substring(1)
-                };
-                try {
-                    await import('@/package/views/' + element).then(({ default: Element }) => {
-                        arr.push(
-                            <Route
-                                key={'route:' + item.path}
-                                exact
-                                path={parentPath + "/" + item.path}
-                                element={<KeepAlive name={item.element} cacheKey={item.element}><Element /></KeepAlive>} />
-                        )
-                    })
-                } catch (e) {
-                    console.error(e)
-                }
-            }
-            if (item.children) {
-                await this.createRoutes(item.children, arr, parentPath + "/" + item.path)
-            }
-        }
-        return arr
-    }
-
-    /**
      * 根据当前URI获取路由路径
      */
     getPathKeys = (path, list, keyPath = []) => {
@@ -186,16 +148,6 @@ class Home extends React.Component {
                 }
             }
         }
-    }
-
-    /**
-     * 退出登录
-     */
-    logout = () => {
-        logout().then(() => {
-            localStorage.removeItem(process.env.REACT_APP_HTTP_HEADER)
-            this.props.navigate("/login")
-        })
     }
 
 
@@ -219,8 +171,7 @@ class Home extends React.Component {
                     this.goRouter(keyPath, routers)
                 }
                 this.setState({
-                    routers: routers,
-                    routes: await this.createRoutes(routers)
+                    routers
                 })
             })
         })
@@ -240,14 +191,6 @@ class Home extends React.Component {
         this.loadUserAndRouter()
     }
 
-    openGitHub = () => {
-        window.open(process.env.REACT_APP_GITHUB_NEST_URL)
-        window.open(process.env.REACT_APP_GITHUB_APP_URL)
-    }
-
-    openDocs = () => {
-        window.open(process.env.REACT_APP_DOCS_URL)
-    }
 
     render() {
         return (
@@ -279,53 +222,24 @@ class Home extends React.Component {
                     }
                 </Sider>
                 <Layout className="site-layout">
-                    <Header className="site-layout-background">
-                        {React.createElement(this.state.collapsed ? icons.MenuUnfoldOutlined : icons.MenuFoldOutlined, {
-                            className: 'trigger',
-                            onClick: this.toggle,
-                        })}
-                        <Breadcrumb style={{ margin: '16px 0', display: 'inline-block' }}>
-                            {this.state.routePath}
-                        </Breadcrumb>
-                        <div className='action'>
-                            <Space size={"middle"}>
-                                <Tooltip title="源码地址">
-                                    <icons.GithubOutlined className='icon' onClick={this.openGitHub} />
-                                </Tooltip>
-                                <Tooltip title="开发文档">
-                                    <icons.QuestionCircleOutlined className='icon' onClick={this.openDocs} />
-                                </Tooltip>
-                                <Message userInfo={this.state.userInfo} userHeadImg={this.state.headImg} />
-                                <Tooltip title="退出登录">
-                                    <Button size='large' danger type="primary" shape="circle" icon={<icons.LogoutOutlined />} onClick={this.logout} />
-                                </Tooltip>
-                            </Space>
-                        </div>
-                    </Header>
+                    <HomeHeader
+                        toggle={this.toggle}
+                        userInfo={this.state.userInfo}
+                        headImg={this.state.headImg} 
+                        routePath={this.state.routePath}
+                    />
                     <HistoryRouter
                         historyRouterList={this.state.historyRouterList}
                         ref={ref => this.historyRouterRef = ref}
                         goRouter={this.goRouter}
                     />
                     <Content className="content-body">
-                        <AliveScope>
-                            <SwitchTransition mode="out-in">
-                                <CSSTransition
-                                    key={this.props.location.key}
-                                    timeout={200}
-                                    classNames="route"
-                                >
-                                    <Routes location={this.props.location}>
-                                        <Route exact index path="*" element={<KeepAlive cacheKey='index' name='index'><Index
-                                            userInfo={this.state.userInfo}
-                                            headImg={this.state.headImg}
-                                            reloadHeadImg={this.getUserHeadImg}
-                                        /></KeepAlive>} />
-                                        {this.state.routes}
-                                    </Routes>
-                                </CSSTransition>
-                            </SwitchTransition>
-                        </AliveScope>
+                        <RouterBody
+                            userInfo={this.state.userInfo}
+                            headImg={this.state.headImg}
+                            reloadHeadImg={this.getUserHeadImg}
+                            routers={this.state.routers}
+                        />
                     </Content>
                 </Layout>
             </Layout>
