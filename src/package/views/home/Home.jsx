@@ -105,11 +105,13 @@ class Home extends React.Component {
             this.setState({
                 routePath: keys.map(key => {
                     parent = this.findTarget(key, list)
-                    list = parent.children
-                    path += "/" + parent.path
-                    label = parent.label
-                    element = parent.element
-                    return (<Breadcrumb.Item key={key}>{parent.label}</Breadcrumb.Item>)
+                    if (parent) {
+                        list = parent.children
+                        path += "/" + parent.path
+                        label = parent.label
+                        element = parent.element
+                        return (<Breadcrumb.Item key={key}>{parent.label}</Breadcrumb.Item>)
+                    }
                 })
             })
             //跳转路由展示页面
@@ -300,8 +302,8 @@ class Home extends React.Component {
                             </Space>
                         </div>
                     </Header>
-                    <HistoryRouter 
-                        historyRouterList={this.state.historyRouterList} 
+                    <HistoryRouter
+                        historyRouterList={this.state.historyRouterList}
                         ref={ref => this.historyRouterRef = ref}
                         goRouter={this.goRouter}
                     />
