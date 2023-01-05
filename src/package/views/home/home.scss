@@ -51,7 +51,16 @@
                 }
             }
         }
+        .history-router{
+            padding: 5px 20px;
+            .ant-tag{
+                cursor: pointer;
+            }
+        }
         .content-body {
+            padding: 24px;
+            margin: 0 16px 24px 16px;
+            overflow: auto;
             background-color: #fff;
             // 路由切换过渡动画
             .route-exit {

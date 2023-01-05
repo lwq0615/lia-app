@@ -11,6 +11,8 @@ import Message from './message/Message'
 import defaultImg from './image/default.jpg'
 import { SwitchTransition, CSSTransition } from 'react-transition-group'
 import { initRouter } from "@/package/utils/request"
+import KeepAlive, { AliveScope } from 'react-activation'
+import HistoryRouter from './HistoryRouter.tsx'
 
 
 const { Header, Sider, Content } = Layout;
@@ -32,8 +34,11 @@ class Home extends React.Component {
         routers: [],
         routePath: [],
         routes: [],
-        selectedKeys: null
+        selectedKeys: null,
+        historyRouterList: []
     }
+
+    historyRouterRef = null
 
     toggle = () => {
         this.setState({
@@ -80,15 +85,19 @@ class Home extends React.Component {
     /**
      * 根据keyPath跳转路由
      */
-    goRouter = (keys = [], routers) => {
+    goRouter = (keys = [], routers = this.state.routers) => {
         this.setState({
             selectedKeys: keys
         })
+        let label = ''
+        let element = ''
         if (!keys || keys.length === 0) {
             this.setState({
-                routePath: [<Breadcrumb.Item key='*'>首页</Breadcrumb.Item>],
+                routePath: [<Breadcrumb.Item key='*'>首页</Breadcrumb.Item>]
             })
             this.props.navigate("/")
+            label = '首页'
+            element = 'index'
         } else {
             let list = routers
             let parent = null
@@ -98,6 +107,8 @@ class Home extends React.Component {
                     parent = this.findTarget(key, list)
                     list = parent.children
                     path += "/" + parent.path
+                    label = parent.label
+                    element = parent.element
                     return (<Breadcrumb.Item key={key}>{parent.label}</Breadcrumb.Item>)
                 })
             })
@@ -107,6 +118,11 @@ class Home extends React.Component {
             }
             this.props.navigate(path)
         }
+        this.historyRouterRef.addHistory({
+            keyPath: keys.join(","),
+            label,
+            element
+        })
     }
 
     findTarget(key, parent = this.state.routers) {
@@ -133,7 +149,13 @@ class Home extends React.Component {
                 };
                 try {
                     await import('@/package/views/' + element).then(({ default: Element }) => {
-                        arr.push(<Route key={'route:' + item.path} exact path={parentPath + "/" + item.path} element={<Element />}></Route>)
+                        arr.push(
+                            <Route
+                                key={'route:' + item.path}
+                                exact
+                                path={parentPath + "/" + item.path}
+                                element={<KeepAlive name={item.element} cacheKey={item.element}><Element /></KeepAlive>} />
+                        )
                     })
                 } catch (e) {
                     console.error(e)
@@ -217,12 +239,12 @@ class Home extends React.Component {
     }
 
     openGitHub = () => {
-        window.open("https://github.com/lwq0615/lia-nest")
-        window.open("https://github.com/lwq0615/lia-app")
+        window.open(process.env.REACT_APP_GITHUB_NEST_URL)
+        window.open(process.env.REACT_APP_GITHUB_APP_URL)
     }
 
     openDocs = () => {
-        window.open("https://lwq0615.github.io/lia-app/")
+        window.open(process.env.REACT_APP_DOCS_URL)
     }
 
     render() {
@@ -248,12 +270,11 @@ class Home extends React.Component {
                                 theme="dark"
                                 mode="inline"
                                 defaultOpenKeys={this.state.selectedKeys.slice(0, this.state.selectedKeys.length - 1)}
-                                defaultSelectedKeys={this.state.selectedKeys}
+                                selectedKeys={this.state.selectedKeys}
                                 items={this.state.routers}
                             />
                             : null
                     }
-
                 </Sider>
                 <Layout className="site-layout">
                     <Header className="site-layout-background">
@@ -267,10 +288,10 @@ class Home extends React.Component {
                         <div className='action'>
                             <Space size={"middle"}>
                                 <Tooltip title="源码地址">
-                                    <icons.GithubOutlined className='icon' onClick={this.openGitHub}/>
+                                    <icons.GithubOutlined className='icon' onClick={this.openGitHub} />
                                 </Tooltip>
                                 <Tooltip title="开发文档">
-                                    <icons.QuestionCircleOutlined className='icon' onClick={this.openDocs}/>
+                                    <icons.QuestionCircleOutlined className='icon' onClick={this.openDocs} />
                                 </Tooltip>
                                 <Message userInfo={this.state.userInfo} userHeadImg={this.state.headImg} />
                                 <Tooltip title="退出登录">
@@ -279,30 +300,30 @@ class Home extends React.Component {
                             </Space>
                         </div>
                     </Header>
-                    <Content
-                        className="content-body"
-                        style={{
-                            margin: '24px 16px',
-                            padding: 24,
-                            overflow: 'auto'
-                        }}
-                    >
-                        <SwitchTransition mode="out-in">
-                            <CSSTransition
-                                key={this.props.location.key}
-                                timeout={200}
-                                classNames="route"
-                            >
-                                <Routes location={this.props.location}>
-                                    <Route exact index path="*" element={<Index
-                                        userInfo={this.state.userInfo}
-                                        headImg={this.state.headImg}
-                                        reloadHeadImg={this.getUserHeadImg}
-                                    />} />
-                                    {this.state.routes}
-                                </Routes>
-                            </CSSTransition>
-                        </SwitchTransition>
+                    <HistoryRouter 
+                        historyRouterList={this.state.historyRouterList} 
+                        ref={ref => this.historyRouterRef = ref}
+                        goRouter={this.goRouter}
+                    />
+                    <Content className="content-body">
+                        <AliveScope>
+                            <SwitchTransition mode="out-in">
+                                <CSSTransition
+                                    key={this.props.location.key}
+                                    timeout={200}
+                                    classNames="route"
+                                >
+                                    <Routes location={this.props.location}>
+                                        <Route exact index path="*" element={<KeepAlive cacheKey='index' name='index'><Index
+                                            userInfo={this.state.userInfo}
+                                            headImg={this.state.headImg}
+                                            reloadHeadImg={this.getUserHeadImg}
+                                        /></KeepAlive>} />
+                                        {this.state.routes}
+                                    </Routes>
+                                </CSSTransition>
+                            </SwitchTransition>
+                        </AliveScope>
                     </Content>
                 </Layout>
             </Layout>
