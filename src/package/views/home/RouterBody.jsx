@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react'
  * 动态生成路由组件
  * @returns 
  */
-async function createRoutes(routers, arr = [], parentPath = '') {
+function createRoutes(routers, arr = [], parentPath = '') {
     if (parentPath[0] === "/") {
         parentPath = parentPath.substring(1)
     }
@@ -20,22 +20,18 @@ async function createRoutes(routers, arr = [], parentPath = '') {
             if (element[0] === '/') {
                 element = element.substring(1)
             };
-            try {
-                await import('@/package/views/' + element).then(({ default: Element }) => {
-                    arr.push(
-                        <Route
-                            key={'route:' + item.path}
-                            exact
-                            path={parentPath + "/" + item.path}
-                            element={<KeepAlive name={item.element} cacheKey={item.element}><Element /></KeepAlive>} />
-                    )
-                })
-            } catch (e) {
-                console.error(e)
-            }
+            arr.push(import('@/package/views/' + element).then(({ default: Element }) => {
+                return (
+                    <Route
+                        key={'route:' + item.path}
+                        exact
+                        path={parentPath + "/" + item.path}
+                        element={<KeepAlive name={item.element} cacheKey={item.element}><Element /></KeepAlive>} />
+                )
+            }))
         }
         if (item.children) {
-            await createRoutes(item.children, arr, parentPath + "/" + item.path)
+            createRoutes(item.children, arr, parentPath + "/" + item.path)
         }
     }
     return arr
@@ -45,8 +41,10 @@ function RouterBody(props) {
 
     const [routers, setRouters] = useState([])
 
-    useEffect(async () => {
-        setRouters(await createRoutes(props.routers))
+    useEffect(() => {
+        Promise.all(createRoutes(props.routers)).then(list => {
+            setRouters(list)
+        })
     }, [props.routers])
 
     return (
