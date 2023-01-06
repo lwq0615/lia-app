@@ -1,7 +1,11 @@
 # 介绍
 
 <h1 style="text-align: center; color: #42b983">lia</h1>
-<p style="text-align: center">基于React、SpringBoot、MySql的权限管理系统</p>
+<p style="text-align: center">
+基于React、SpringBoot、MySql的权限管理系统 &nbsp;&nbsp;&nbsp;
+<a href="http://120.79.163.32">项目体验</a>
+</p>
+
 
 :::tip 提示
 此项目是一个权限管理系统，本着让开发者更专注于业务的原则开发的一个项目模板，是自己在空余时间凭兴趣开发，如果对该项目有一些好的建议，请联系开发者：1072864729@qq.com
