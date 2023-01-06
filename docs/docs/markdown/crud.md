@@ -39,9 +39,13 @@ lia-app提供了Crud组件，组件提供了很多个性化接口，只需要使
 | html | return一个可渲染的元素自定义展示的内容 | function(text) | 否 | -- |
 | span | 该列在搜索框所占宽度，最大24 | number | 否 | 6 |
 | hideText | 是否隐藏文本，通过点击按钮展开 | bool | 否 | false |
-| type | 字段类型，默认为文本类型 | date,datetime,select,<br/>textarea,icon,number,<br/>multipleTree,tree,checkbox | 否 | -- |
-| dict | 与type配合使用，type为select,multipleTree,tree,checkbox时需要配置dict，return一个后端SysDictData类型的列表 | array,function,Promise | 否 | -- |
+| type | 字段类型，默认为文本类型 | date,datetime,select,<br/>textarea,icon,number,<br/>multipleTree,tree,checkbox,switch | 否 | -- |
+| dict | 与type配合使用，type为select,multipleTree,tree,checkbox时需要配置dict | array,function,Promise | 否 | -- |
 
+
+:::tip 提示
+dict可以直接定义一个数组，或者给定一个function，return一个列表（允许是Promise），type为switch时dict应该是长度为二的列表，元素1为开关打开的状态，元素2为开关关闭的状态，不给定dict时默认为true和false，列表内数据类型为后端SysDictData类型
+:::
 
 :::tip 提示
 CrudTable组件依赖于antd组件库Table组件，antd组件库Table组件中Column的配置均可使用

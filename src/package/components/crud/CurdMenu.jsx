@@ -12,7 +12,7 @@ class CrudMenu extends React.Component {
         super(props)
         const formDefaultValues = {}
         props.columns.forEach(item => {
-            if(item.defaultValue !== undefined){
+            if(item.defaultValue !== void 0){
                 formDefaultValues[item.dataIndex] = item.defaultValue
             }
         })

@@ -4,6 +4,7 @@ import CrudMenu from './CurdMenu'
 import React from 'react'
 import propTypes from 'prop-types'
 import './crud.scss'
+import { Spin } from 'antd'
 
 
 class Crud extends React.Component {
@@ -36,7 +37,9 @@ class Crud extends React.Component {
     }
 
     state = {
-        dict: {}
+        dict: {},
+        // 数据字典是否加载完成
+        dictLoadEd: false
     }
 
     nodes = {}
@@ -64,43 +67,49 @@ class Crud extends React.Component {
             }
         }
         this.setState({
-            dict: newDict
+            dict: newDict,
+            dictLoadEd: true
         })
     }
 
     render() {
         return (
-            <section className={this.props.className ? this.props.className + " lia-crud" : "lia-crud"} style={this.props.style}>
+            <Spin spinning={!this.state.dictLoadEd}>
                 {
-                    !this.props.showSearch
-                        ? null
-                        : (
-                            <CrudSearch
-                                {...this.props}
-                                ref={ref => this.nodes.crudSearchRef = ref}
-                                nodes={this.nodes}
-                                dict={this.state.dict}
-                            />
-                        )
+                    this.state.dictLoadEd &&
+                    <section className={this.props.className ? this.props.className + " lia-crud" : "lia-crud"} style={this.props.style}>
+                        {
+                            !this.props.showSearch
+                                ? null
+                                : (
+                                    <CrudSearch
+                                        {...this.props}
+                                        ref={ref => this.nodes.crudSearchRef = ref}
+                                        nodes={this.nodes}
+                                        dict={this.state.dict}
+                                    />
+                                )
+                        }
+                        {
+                            !this.props.menuBtns
+                                ? null
+                                : (
+                                    <CrudMenu
+                                        {...this.props}
+                                        nodes={this.nodes}
+                                        dict={this.state.dict}
+                                    />
+                                )
+                        }
+                        <CrudTable
+                            {...this.props}
+                            ref={ref => this.nodes.crudTableRef = ref}
+                            nodes={this.nodes}
+                            dict={this.state.dict}
+                        />
+                    </section>
                 }
-                {
-                    !this.props.menuBtns
-                        ? null
-                        : (
-                            <CrudMenu
-                                {...this.props}
-                                nodes={this.nodes}
-                                dict={this.state.dict}
-                            />
-                        )
-                }
-                <CrudTable
-                    {...this.props}
-                    ref={ref => this.nodes.crudTableRef = ref}
-                    nodes={this.nodes}
-                    dict={this.state.dict}
-                />
-            </section>
+            </Spin>
         )
     }
 

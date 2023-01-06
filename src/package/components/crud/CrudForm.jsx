@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Row, Col, Input, Select, DatePicker, InputNumber, TreeSelect } from 'antd';
+import { Form, Row, Col, Input, Select, DatePicker, InputNumber, TreeSelect, Switch } from 'antd';
 import CrudCheckbox from './CrudCheckbox';
 import CrudMultipleTree from './CrudMultipleTree';
 import Icons from './Icons';
@@ -16,21 +16,22 @@ class CrudForm extends React.Component {
         // 如果表单有默认值，先将日期格式转换为moment
         if (props.formDefaultValues) {
             for (let column of props.columns) {
+                if(column.type === 'switch'){
+                    const columnDict = props.dict[column.dataIndex]
+                    props.formDefaultValues[column.dataIndex] = columnDict && columnDict[0].value === props.formDefaultValues[column.dataIndex]
+                    continue
+                }
+                // 没有默认值
+                if (props.formDefaultValues[column.dataIndex] === void 0) {
+                    continue
+                }
                 if (column.type === "date") {
-                    for (let key of Object.keys(props.formDefaultValues)) {
-                        if (key === column.dataIndex && props.formDefaultValues[key]) {
-                            props.formDefaultValues[key] = moment(props.formDefaultValues[key])
-                            break
-                        }
-                    }
+                    props.formDefaultValues[column.dataIndex] = moment(props.formDefaultValues[column.dataIndex])
+                    continue
                 }
                 else if (column.type === 'datetime') {
-                    for (let key of Object.keys(props.formDefaultValues)) {
-                        if (key === column.dataIndex && props.formDefaultValues[key]) {
-                            props.formDefaultValues[key] = moment(props.formDefaultValues[key]).format("YYYY-MM-DDTHH:mm")
-                            break
-                        }
-                    }
+                    props.formDefaultValues[column.dataIndex] = moment(props.formDefaultValues[column.dataIndex]).format("YYYY-MM-DDTHH:mm")
+                    continue
                 }
             }
         }
@@ -55,11 +56,11 @@ class CrudForm extends React.Component {
      * @param {*} treeData 
      */
     treeDataMap = (treeData) => {
-        if(!treeData){
+        if (!treeData) {
             return null
         }
         return treeData.map(item => {
-            return Object.assign({...item},{
+            return Object.assign({ ...item }, {
                 title: item.label,
                 value: item.value,
                 children: this.treeDataMap(item.children)
@@ -143,11 +144,11 @@ class CrudForm extends React.Component {
                 />
             )
         }
-        else if(column.type === 'multipleTree'){
+        else if (column.type === 'multipleTree') {
             const treeData = this.props.dict && this.props.dict[column.dataIndex]
             const values = this.props.formDefaultValues?.[column.dataIndex]
             return (
-                <CrudMultipleTree values={values} treeData={treeData} column={column}/>
+                <CrudMultipleTree values={values} treeData={treeData} column={column} />
             )
         }
         else if (column.type === 'tree') {
@@ -159,15 +160,20 @@ class CrudForm extends React.Component {
                     }}
                     allowClear
                     treeData={this.treeDataMap(this.props.dict[column.dataIndex])}
-                    placeholder={"请选择"+column.title}
+                    placeholder={"请选择" + column.title}
                 />
             )
         }
-        else if(column.type === 'checkbox'){
+        else if (column.type === 'checkbox') {
             const options = this.props.dict && this.props.dict[column.dataIndex]
             const values = this.props.formDefaultValues?.[column.dataIndex]
             return (
-                <CrudCheckbox options={options} values={values} column={column}/>
+                <CrudCheckbox options={options} values={values} column={column} />
+            )
+        }
+        else if (column.type === 'switch') {
+            return (
+                <Switch disabled={column.editEnable === false && this.props.title === '编辑'} />
             )
         }
         else {
@@ -191,7 +197,7 @@ class CrudForm extends React.Component {
                 continue
             }
             if (this.props.title === '搜索') {
-                if (column.search === false 
+                if (column.search === false
                     || column.type === 'icon'
                     || column.type === 'multipleTree'
                     || column.type === 'checkbox') {
@@ -204,6 +210,7 @@ class CrudForm extends React.Component {
             children.push(
                 <Col span={this.props.title === '搜索' ? column.span || 8 : 12} key={i}>
                     <Form.Item
+                        valuePropName={column.type === 'switch' ? "checked" : void 0}
                         label={column.title}
                         name={column.dataIndex}
                         rules={this.props.title !== '搜索' && [
@@ -224,7 +231,7 @@ class CrudForm extends React.Component {
     getFormValue = async () => {
         let formValue = await this.formRef.validateFields()
         for (let column of this.props.columns) {
-            if(!formValue[column.dataIndex]){
+            if (formValue[column.dataIndex] === void 0) {
                 continue
             }
             if ((column.type === 'date' || column.type === 'datetime') && column.range && this.props.title === '搜索') {
@@ -235,6 +242,12 @@ class CrudForm extends React.Component {
             }
             else if (column.type === 'datetime') {
                 formValue[column.dataIndex] = moment(formValue[column.dataIndex]).format("YYYY-MM-DD HH:mm:ss")
+            }
+            else if (column.type === 'switch') {
+                const columnDict = this.props.dict && this.props.dict[column.dataIndex]
+                if (columnDict) {
+                    formValue[column.dataIndex] = formValue[column.dataIndex] ? columnDict[0].value : columnDict[1].value
+                }
             }
         }
         // 编辑时，有些字段虽然不被编辑，但是仍需要返回其初始值

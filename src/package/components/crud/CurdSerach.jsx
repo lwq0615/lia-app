@@ -11,7 +11,19 @@ class CrudSearch extends React.Component {
     }
 
     getParams = async () => {
-        return await this.searchFormRef.getFormValue() || {}
+        const params = await this.searchFormRef.getFormValue() || {}
+        // 开关默认有一个关闭值
+        for (let column of this.props.columns) {
+            if(column.type === 'switch' && params[column.dataIndex] === void 0){
+                const columnDict = this.props.dict[column.dataIndex]
+                if(columnDict && columnDict[1]){
+                    params[column.dataIndex] = columnDict && columnDict[1].value
+                }else{
+                    params[column.dataIndex] = false
+                }
+            }
+        }
+        return params
     }
 
     render() {
