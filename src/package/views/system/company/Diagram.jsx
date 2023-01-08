@@ -21,8 +21,8 @@ export default function Diagram(props) {
     getSysRolePage({ companyId: props.companyId }).then(res => {
       const roleList = []
       res.list.forEach(child => {
-        // 如果该角色的上级是自己，说明这是最上层角色
-        if (child.superior === child.roleId) {
+        // 如果该角色的上级是自己或者为空，说明这是最上层角色
+        if (child.superior === child.roleId || child.superior === null || child.superior === void 0) {
           roleList.push(child)
           return
         }
@@ -33,8 +33,6 @@ export default function Diagram(props) {
             return
           }
         }
-        // 找不到上级角色，说明这是最上层角色
-        roleList.push(child)
       })
       const selected = {}
       roleList.forEach(item => {
