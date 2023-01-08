@@ -55,7 +55,6 @@ const option = {
             title: '用户名',
             dataIndex: 'username',
             align: 'center',
-            key: 'username',
             required: true,
             // 不允许编辑该列的值
             // editEnable: false
@@ -64,7 +63,6 @@ const option = {
             title: '密码',
             dataIndex: 'password',
             align: 'center',
-            key: 'password',
             editShow: false,
             required: true,
             // 在表格内不显示该列，不影响新增和编辑
@@ -76,14 +74,12 @@ const option = {
             title: '昵称',
             dataIndex: 'nick',
             align: 'center',
-            key: 'nick',
             required: true
         },
         {
             title: '企业',
             dataIndex: 'companyId',
             align: 'center',
-            key: 'companyId',
             addShow: false,
             editShow: false,
             // type为select时必须提供dict
@@ -95,7 +91,6 @@ const option = {
             title: '角色',
             dataIndex: 'roleId',
             align: 'center',
-            key: 'roleId',
             required: true,
             // type为select时必须提供dict
             type: "tree",
@@ -126,7 +121,6 @@ const option = {
             title: '性别',
             dataIndex: 'sex',
             align: 'center',
-            key: 'sex',
             type: "select",
             // 新增时的默认值
             // defaultValue: '2',
@@ -141,19 +135,16 @@ const option = {
             title: '电话',
             dataIndex: 'phone',
             align: 'center',
-            key: 'phone'
         },
         {
             title: '邮箱',
             dataIndex: 'email',
             align: 'center',
-            key: 'email'
         },
         {
             title: '账号状态',
             dataIndex: 'status',
             align: 'center',
-            key: 'status',
             type: "select",
             dict: getUserStatusDict
         },
@@ -161,7 +152,6 @@ const option = {
             title: '创建人',
             dataIndex: 'createBy',
             align: 'center',
-            key: 'createBy',
             addShow: false,
             editShow: false,
             type: "select",
@@ -171,7 +161,6 @@ const option = {
             title: '创建时间',
             dataIndex: 'createTime',
             align: 'center',
-            key: 'createTime',
             addShow: false,
             editShow: false,
             type: 'datetime',
@@ -184,7 +173,6 @@ const option = {
             title: '备注',
             dataIndex: 'remark',
             align: 'center',
-            key: 'remark',
             type: "textarea",
             // 是否隐藏文本，通过点击按钮展开（默认false）
             hideText: true

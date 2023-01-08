@@ -63,7 +63,7 @@ class CrudTable extends React.Component {
                 return null
             }
             return tree.map(item => {
-                return Object.assign({...item},{
+                return Object.assign({ ...item }, {
                     title: item.label,
                     key: item.value,
                     children: treeMap(item.children)
@@ -162,9 +162,9 @@ class CrudTable extends React.Component {
                     "edit": (<Button key="edit" type="primary" size='small' onClick={(e) => { this.editClick(record, e) }}>编辑</Button>),
                     "delete": (<CrudConfirm nodes={props.nodes} deleteClick={props.deleteClick} msg={props.deleteMsg} key="delete" deleteSubmit={() => this.deleteSubmit([record])} />)
                 }
-                if(props.rightAction === true){
+                if (props.rightAction === true) {
                     config = Object.keys(btns)
-                }else if(Array.isArray(props.rightAction)){
+                } else if (Array.isArray(props.rightAction)) {
                     config = props.rightAction
                 }
                 return config.map(item => btns[item] || item(record))
@@ -175,7 +175,7 @@ class CrudTable extends React.Component {
                 align: 'center',
                 fixed: 'right',
                 html: (record) => (
-                    <Space size="middle" style={{justifyContent: 'center'}}>
+                    <Space size="middle" style={{ justifyContent: 'center' }}>
                         {
                             getBtns(record)
                         }
@@ -239,6 +239,7 @@ class CrudTable extends React.Component {
         const params = this.props.nodes.crudSearchRef ? { ...await this.props.nodes.crudSearchRef.getParams() } : {}
         const pageInfo = await this.props.getPage(params, { ...newPage })
         newPage.list = pageInfo?.list
+        this.setNullValue(newPage.list)
         newPage.total = pageInfo?.total
         this.setState({
             page: newPage,
@@ -248,6 +249,33 @@ class CrudTable extends React.Component {
             this.rowSelectionChange([], [])
         }
     }
+
+
+    /**
+     * 填充表格数据空值
+     */
+    setNullValue = (list) => {
+        if (!Array.isArray(list)) {
+            return
+        }
+        const needSet = new Set()
+        this.state.columns.forEach(column => {
+            if (column.nullValue) {
+                needSet.add({ 
+                    key: column.dataIndex,
+                    nullValue: column.nullValue
+                })
+            }
+        })
+        list.forEach(item => {
+            for (let column of needSet) {
+                if (item[column.key] === void 0 || item[column.key] === null) {
+                    item[column.key] = column.nullValue
+                }
+            }
+        })
+    }
+
 
     /**
      * 选中项改变
