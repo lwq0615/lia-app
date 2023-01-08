@@ -41,7 +41,7 @@ lia-app提供了Crud组件，组件提供了很多个性化接口，只需要使
 | html | return一个可渲染的元素自定义表格中该字段展示的内容 | function(text) | 否 | -- |
 | span | 该列在搜索框所占宽度，最大24 | number | 否 | 6 |
 | hideText | 是否隐藏文本，通过点击按钮展开 | bool | 否 | false |
-| type | 字段类型，默认为文本类型 | date,datetime,select,<br/>textarea,icon,number,<br/>multipleTree,tree,checkbox,switch | 否 | -- |
+| type | 字段类型，默认为文本类型 | date,datetime,select,<br/>textarea,icon,number,<br/>multipleTree,tree,<br/>checkbox,switch | 否 | -- |
 | dict | 与type配合使用，type为select,multipleTree,tree,checkbox时需要配置dict | array,function,Promise | 否 | -- |
 
 
