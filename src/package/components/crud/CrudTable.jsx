@@ -239,7 +239,6 @@ class CrudTable extends React.Component {
         const params = this.props.nodes.crudSearchRef ? { ...await this.props.nodes.crudSearchRef.getParams() } : {}
         const pageInfo = await this.props.getPage(params, { ...newPage })
         newPage.list = pageInfo?.list
-        this.setNullValue(newPage.list)
         newPage.total = pageInfo?.total
         this.setState({
             page: newPage,
@@ -248,32 +247,6 @@ class CrudTable extends React.Component {
         if (this.state.selectedRowKeys && this.state.selectedRowKeys.length) {
             this.rowSelectionChange([], [])
         }
-    }
-
-
-    /**
-     * 填充表格数据空值
-     */
-    setNullValue = (list) => {
-        if (!Array.isArray(list)) {
-            return
-        }
-        const needSet = new Set()
-        this.state.columns.forEach(column => {
-            if (column.nullValue) {
-                needSet.add({ 
-                    key: column.dataIndex,
-                    nullValue: column.nullValue
-                })
-            }
-        })
-        list.forEach(item => {
-            for (let column of needSet) {
-                if (item[column.key] === void 0 || item[column.key] === null) {
-                    item[column.key] = column.nullValue
-                }
-            }
-        })
     }
 
 
@@ -315,6 +288,7 @@ class CrudTable extends React.Component {
 
     render() {
         for (let column of this.state.columns) {
+            let render = text => text
             /**
              * 如果column配置了dict，则加载字典表并进行映射
              */
@@ -325,18 +299,25 @@ class CrudTable extends React.Component {
                 }
                 //配置了html，则回调参数变化为映射后的值
                 if (column.html) {
-                    column.render = (text, record) => {
+                    render = (text, record) => {
                         return column.html(this.getDictLabel(dict, text), record)
                     }
                 }
                 //没有配置html，直接输出映射后的值
                 else {
-                    column.render = (text) => {
+                    render = (text) => {
                         return this.getDictLabel(dict, text)
                     }
                 }
             } else {
-                column.render = column.html
+                render = column.html || (text => text)
+            }
+            column.render = (text, record, index) => {
+                if(column.nullValue !== void 0 && (text === void 0 || text === null)){
+                    return column.nullValue
+                }else{
+                    return render(text, record, index)
+                }
             }
         }
         return (

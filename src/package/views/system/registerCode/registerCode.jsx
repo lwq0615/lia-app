@@ -1,7 +1,7 @@
 
 import React from 'react'
 import Crud from '@/package/components/crud/Crud'
-import { getSysRegisterCodePage, saveSysRegisterCode, deleteSysRegisterCodes } from '@/package/request/system/registerCode'
+import { getSysRegisterCodePage, editSysRegisterCode, deleteSysRegisterCodes } from '@/package/request/system/registerCode'
 import { getRoleDict } from '@/package/request/system/role'
 import { Button, message } from "antd"
 import { PlusOutlined } from '@ant-design/icons';
@@ -20,7 +20,7 @@ export default class SysRegisterCode extends React.Component {
             // 配置按钮组，默认["add", "delete", "search", "excel"]
             menuBtns: [() => {
                 return (
-                    <Button type='primary' icon={<PlusOutlined />}>生成注册码</Button>
+                    <Button type='primary' icon={<PlusOutlined />} key="register">生成注册码</Button>
                 )
             }, "delete", "search", "excel"],
             // 表格行是否可选择(默认false)
@@ -47,7 +47,7 @@ export default class SysRegisterCode extends React.Component {
             // 如果需要获取返回值再关闭弹窗，请使用await
             // return true刷新页面
             onSave: async (form, type) => {
-                return await saveSysRegisterCode(form).then(res => {
+                return await editSysRegisterCode(form).then(res => {
                     if(res === 'code重复'){
                         message.warning("注册码重复")
                     }else if (res === 'error') {

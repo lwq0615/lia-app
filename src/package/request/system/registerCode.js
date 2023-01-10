@@ -15,10 +15,10 @@ export function getSysRegisterCodePage(sysRegisterCode,current,size){
 
 
 /**
- * 新增和编辑
+ * 编辑
  */
-export function saveSysRegisterCode(sysRegisterCode){
-    return request.post(`${baseUrl}/save`,sysRegisterCode)
+export function editSysRegisterCode(sysRegisterCode){
+    return request.post(`${baseUrl}/edit`,sysRegisterCode)
 }
 
 
