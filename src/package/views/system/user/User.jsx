@@ -37,6 +37,10 @@ const option = {
     // 如果需要获取返回值再关闭弹窗，请使用await
     // return true刷新页面
     onSave: async (form, type) => {
+        if(form.phone && !/^[1]([3-9])[0-9]{9}/.test(form.phone)){
+            message.warning("请输入正确的手机号")
+            return
+        }
         return await saveSysUser(form).then(res => {
             if(res === "用户名已存在"){
                 message.warning(res)
