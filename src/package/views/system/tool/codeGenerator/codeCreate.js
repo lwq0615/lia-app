@@ -36,11 +36,17 @@ export function firstLow(str){
 /**
  * 接口调用代码生成
  */
-export function requestCode({tableName}){
+export function requestCode({tableName, httpUrl}){
+    if(httpUrl && httpUrl[0] === '/'){
+        httpUrl = httpUrl.substring(1)
+    }
+    if(httpUrl && httpUrl[httpUrl.length-1] === '/'){
+        httpUrl = httpUrl.substring(0,httpUrl.length-1)
+    }
     return `
 import request from "@/package/utils/request"
 
-const baseUrl = '/server/${firstLow(toHump(tableName))}'
+const baseUrl = '/${httpUrl}'
 
 /**
  * 分页查询列表
@@ -72,7 +78,7 @@ export function delete${firstUp(toHump(tableName))}s(${firstLow(toHump(tableName
 `
 }
 
-function dataConcat(data, createByFlag, createTimeFlag, updateTimeFlag){
+function dataConcat(data, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag){
     if(createByFlag){
         data = data.concat({
             len: 0,
@@ -123,16 +129,17 @@ function dataConcat(data, createByFlag, createTimeFlag, updateTimeFlag){
 /**
  * 前端文件代码生成
  */
-export function viewCode({data, tableName, primaryKey, createByFlag, createTimeFlag, updateTimeFlag}){
-    data = dataConcat(data, createByFlag, createTimeFlag, updateTimeFlag)
+export function viewCode({data, tableName, primaryKey, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag}){
+    data = dataConcat(data, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag)
     function getColumnsCode(){
         return data.map(item => {
             return `                {
                     title: '${item.remark}',
                     dataIndex: '${item.name}',
                     align: 'center',
-                    key: '${item.name}',
-                    required: ${item.notNull}
+                    required: ${item.notNull},
+                    addShow: ${item.createBy || item.createTime || item.updateTime ? 'false' : "true"},
+                    editShow: ${item.createBy || item.createTime || item.updateTime ? 'false' : "true"}${item.type.includes("date") ? ',\n                    type: "'+item.type+'",\n                    range: true' : ""}
                 }`
         }).join(",\n")
     }
@@ -212,8 +219,8 @@ ${getColumnsCode()}
 /**
  * 实体类代码生成
  */
-export function entityCode({data, tableName, primaryKey, createByFlag, createTimeFlag, updateTimeFlag}) {
-    data = dataConcat(data, createByFlag, createTimeFlag, updateTimeFlag)
+export function entityCode({data, tableName, primaryKey, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag}) {
+    data = dataConcat(data, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag)
     const columnCode = () => {
         let str = `    /**
      * 主键
@@ -226,7 +233,7 @@ export function entityCode({data, tableName, primaryKey, createByFlag, createTim
                 str += `    /**
      * ${item.remark}
      */
-    @${item.updateTime || item.createTime ? "UpdateTime" : "DateType"}
+    @${item.updateTime ? "UpdateTime" : item.createTime ? "CreateTime" : ""}
     @TableField("\`${toLine(item.name)}\`")${item.notNull ? "\n    @Required" : ""}
     private String ${item.name};\n\n`
             }else{
@@ -239,8 +246,7 @@ export function entityCode({data, tableName, primaryKey, createByFlag, createTim
         })
         return str
     }
-    return `
-package com.lia.server.modules.${firstLow(toHump(tableName))};
+    return `package com.lia.server.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -250,8 +256,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.lia.system.crud.DateType;
-import com.lia.system.crud.Like;
+import com.lia.system.crud.anno.*;
 
 @Data
 @AllArgsConstructor
@@ -282,8 +287,7 @@ export function controllerCode({tableName, httpUrl}) {
         return httpUrl ? `
     @PreAuthorize("hasAuthority('${httpUrl.split("/").join(':')+":"+method}')")` : ''
     }
-    return `
-package com.lia.server.modules.${objName};
+    return `package com.lia.server.modules.${objName};
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -294,6 +298,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.lia.server.entity.SysRegisterCode;
 import java.util.List;
 
 @RestController
@@ -356,11 +361,11 @@ public class ${className}Controller {
 export function serviceCode({tableName}) {
     const className = firstUp(toHump(tableName))
     const objName = firstLow(toHump(tableName))
-    return `
-package com.lia.server.modules.${objName};
+    return `package com.lia.server.modules.${objName};
 
 import com.lia.system.crud.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.lia.server.entity.SysRegisterCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -386,10 +391,10 @@ public class ${className}Service extends BaseService<${className}> {
 export function mapperCode({tableName}){
     const className = firstUp(toHump(tableName))
     const objName = firstLow(toHump(tableName))
-    return `
-package com.lia.server.modules.${objName};
+    return `package com.lia.server.modules.${objName};
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.lia.server.entity.SysRegisterCode;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
@@ -400,8 +405,8 @@ public interface ${className}Mapper extends BaseMapper<${className}> {
 }
 
 
-export function mybatisCode({data, tableName, primaryKey, createByFlag, createTimeFlag, updateTimeFlag}){
-    data = dataConcat(data, createByFlag, createTimeFlag, updateTimeFlag)
+export function mybatisCode({data, tableName, primaryKey, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag}){
+    data = dataConcat(data, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag)
     const className = firstUp(toHump(tableName))
     const objName = firstLow(toHump(tableName))
     function getResultMap(){
@@ -441,8 +446,8 @@ const mysqlMap = {
 /**
  * 生成mysql建表语句
  */
-export function mysqlCode({tableName, data, primaryKey, createByFlag, createTimeFlag, updateTimeFlag}){
-    data = dataConcat(data, createByFlag, createTimeFlag, updateTimeFlag)
+export function mysqlCode({tableName, data, primaryKey, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag}){
+    data = dataConcat(data, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag)
     function columnsCode(){
         let columns = []
         columns.push(`

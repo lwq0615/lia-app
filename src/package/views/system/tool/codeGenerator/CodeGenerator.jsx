@@ -107,7 +107,16 @@ export default class CodeGenerator extends React.Component {
     state = {
         data: [],
         visible: false,
-        heads: null
+        heads: null,
+        codeId: null
+    }
+
+
+    /**
+     * 设置当前编辑的记录
+     */
+    setCodeId = (codeId) => {
+        this.setState({codeId})
     }
 
     /**
@@ -176,6 +185,7 @@ export default class CodeGenerator extends React.Component {
 
     generator = (params) => {
         const record = {
+            codeId: this.state.codeId,
             columns: JSON.stringify(params.data),
             tableName: params.tableName,
             primaryKey: JSON.stringify(params.primaryKey),
@@ -448,6 +458,7 @@ export default class CodeGenerator extends React.Component {
                         close={() => this.setState({ visible: false })}
                         setData={(data) => this.setState({ data: data })}
                         setHeads={(heads) => this.setState({ heads: heads })}
+                        setCodeId={this.setCodeId}
                     />
                 </Modal>
             </section>

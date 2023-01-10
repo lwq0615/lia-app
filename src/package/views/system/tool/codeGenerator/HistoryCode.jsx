@@ -11,6 +11,7 @@ export default function Code(props) {
 
     function continueEdit(record) {
         props.close()
+        props.setCodeId(record.codeId)
         props.setData(JSON.parse(record.columns))
         props.setHeads([
             {

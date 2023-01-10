@@ -6,6 +6,7 @@ import { getSysAuthPage, saveSysAuth, deleteAuths, moveAuthToRouter } from '@/pa
 import { getCreateByDict } from '@/package/request/system/user'
 import { getSysRouterTree } from '@/package/request/system/router'
 import RouterTree from "../router/RouterTree"
+import { ArrowRightOutlined } from '@ant-design/icons';
 import './auth.scss'
 
 
@@ -35,7 +36,7 @@ class Auth extends React.Component {
                     this.setState({ visible: true })
                 }
                 return (
-                    <Button key="moveTo" onClick={move}>移动到</Button>
+                    <Button key="moveTo" onClick={move} icon={<ArrowRightOutlined />}>移动到</Button>
                 )
             }],
             addClick: () => {
