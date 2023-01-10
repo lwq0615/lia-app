@@ -37,3 +37,16 @@ export function deleteAuths(authIds){
 export function getAuthDict(){
     return request.get(`${baseUrl}/sysAuthDict`)
 }
+
+
+/**
+ * 批量移动权限到某路由
+ */
+export function moveAuthToRouter(authIds, routerId){
+    const formData = new FormData()
+    formData.append("authIds", authIds)
+    formData.append("routerId", routerId)
+    return request.post(`${baseUrl}/moveToRouter`, formData, {
+        "content-type": false
+    })
+}

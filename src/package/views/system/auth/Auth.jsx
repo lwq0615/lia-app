@@ -1,8 +1,8 @@
 
 import React from "react"
 import Crud from "@/package/components/crud/Crud"
-import { message } from "antd"
-import { getSysAuthPage, saveSysAuth, deleteAuths } from '@/package/request/system/auth'
+import { message, Button, Modal, Spin } from "antd"
+import { getSysAuthPage, saveSysAuth, deleteAuths, moveAuthToRouter } from '@/package/request/system/auth'
 import { getCreateByDict } from '@/package/request/system/user'
 import { getSysRouterTree } from '@/package/request/system/router'
 import RouterTree from "../router/RouterTree"
@@ -11,7 +11,14 @@ import './auth.scss'
 
 class Auth extends React.Component {
 
+    /**
+     * 当前选中的权限
+     */
+    selectData = []
+
     state = {
+        visible: false,
+        moveing: false,
         option: {
             // 是否显示行索引，默认true
             showIndex: true,
@@ -19,7 +26,18 @@ class Auth extends React.Component {
             rightAction: true,
             // 表格行是否可选择(默认false)
             selection: true,
-            menuBtns: ["add", "delete", "search"],
+            menuBtns: ["add", "delete", "search", (getSelect) => {
+                const move = () => {
+                    this.selectData = getSelect()
+                    if(!this.selectData?.length){
+                        return
+                    }
+                    this.setState({ visible: true })
+                }
+                return (
+                    <Button key="moveTo" onClick={move}>移动到</Button>
+                )
+            }],
             addClick: () => {
                 if (!this.state.routerId && this.state.routerId !== 0) {
                     return false
@@ -108,11 +126,11 @@ class Auth extends React.Component {
 
     crudRef = null
 
-    onTreeSelect = (a, [key]) => {
+    onTreeSelect = (key) => {
         this.setState({
             routerId: key
         })
-        if(!key){
+        if (!key) {
             return
         }
         const option = this.state.option
@@ -142,6 +160,44 @@ class Auth extends React.Component {
         this.crudRef?.refreshPage()
     }
 
+
+    moveTo = (routerId) => {
+        const success = () => {
+            this.setState({
+                moveing: false,
+                visible: false
+            })
+            message.success("操作成功")
+        }
+        const error = () => {
+            this.setState({
+                moveing: false
+            })
+            message.error("操作失败")
+        }
+        const authIds = this.selectData.map(auth => auth.authId)
+        if(!authIds.length){
+            return
+        }
+        if(this.selectData[0].routerId === routerId){
+            success()
+            return
+        }
+        this.setState({
+            moveing: true
+        })
+        moveAuthToRouter(authIds, routerId).then((res) => {
+            if (res > 0) {
+                success()
+                this.crudRef.refreshPage()
+            } else {
+                error()
+            }
+        }).catch(() => {
+            error()
+        })
+    }
+
     componentDidMount = async () => {
         this.setState({
             routerTreeData: (await getSysRouterTree())[0].children
@@ -160,6 +216,22 @@ class Auth extends React.Component {
                     ref={ref => this.crudRef = ref}
                     {...this.state.option}
                 />
+                <Modal
+                    centered
+                    destroyOnClose
+                    keyboard
+                    title="移动至"
+                    open={this.state.visible}
+                    footer={null}
+                    onCancel={() => this.setState({ visible: false })}
+                >
+                    <Spin spinning={this.state.moveing}>
+                        <RouterTree
+                            onSelect={this.moveTo}
+                            routerTree={this.state.routerTreeData}
+                        />
+                    </Spin>
+                </Modal>
             </section>
         )
     }
