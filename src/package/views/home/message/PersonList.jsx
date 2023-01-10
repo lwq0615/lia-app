@@ -98,7 +98,7 @@ export default class PersonList extends React.Component {
         const noReadList = []
         const readList = []
         this.allPersonList.forEach(item => {
-            if(!item.nick.includes(name)) {
+            if(!this.state.roleMap[item.roleId].includes(name) && !item.nick.includes(name)) {
                 return
             }
             if(item.noReadCount > 0){
