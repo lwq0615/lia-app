@@ -3,7 +3,7 @@ import React from 'react'
 import Crud from '@/package/components/crud/Crud'
 import { getSysRegisterCodePage, editSysRegisterCode, deleteSysRegisterCodes } from '@/package/request/system/registerCode'
 import { getRoleDict } from '@/package/request/system/role'
-import { Button, message } from "antd"
+import { Button, message, Modal } from "antd"
 import { PlusOutlined } from '@ant-design/icons';
 
 
@@ -19,8 +19,20 @@ export default class SysRegisterCode extends React.Component {
             rightAction: true,
             // 配置按钮组，默认["add", "delete", "search", "excel"]
             menuBtns: [() => {
+                const openModal = () => {
+                    Modal.info({
+                        title: "生成注册码",
+                        centered: true,
+                        destroyOnClose: true,
+                        keyboard: true,
+                        okText: "确定",
+                        content: (
+                            <></>
+                        )
+                    })
+                }
                 return (
-                    <Button type='primary' icon={<PlusOutlined />} key="register">生成注册码</Button>
+                    <Button type='primary' icon={<PlusOutlined />} key="register" onClick={openModal}>生成注册码</Button>
                 )
             }, "delete", "search", "excel"],
             // 表格行是否可选择(默认false)

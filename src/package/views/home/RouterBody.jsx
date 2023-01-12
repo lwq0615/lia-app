@@ -6,6 +6,7 @@ import WithRouter from '@/package/components/hoc/WithRouter';
 import { useEffect, useState } from 'react'
 
 
+
 /**
  * 动态生成路由组件
  * @returns 
@@ -28,6 +29,8 @@ function createRoutes(routers, arr = [], parentPath = '') {
                         path={parentPath + "/" + item.path}
                         element={<KeepAlive name={item.element} cacheKey={item.element}><Element /></KeepAlive>} />
                 )
+            }).catch(e => {
+                console.error(e)
             }))
         }
         if (item.children) {
@@ -36,13 +39,13 @@ function createRoutes(routers, arr = [], parentPath = '') {
     }
     return arr
 }
-
 function RouterBody(props) {
 
     const [routers, setRouters] = useState([])
 
     useEffect(() => {
-        Promise.all(createRoutes(props.routers)).then(list => {
+        const routers = createRoutes(props.routers)
+        Promise.all(routers).then(list => {
             setRouters(list)
         })
     }, [props.routers])

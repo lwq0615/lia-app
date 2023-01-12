@@ -241,7 +241,8 @@ class CrudForm extends React.Component {
                 formValue[column.dataIndex] = formValue[key].format("YYYY-MM-DD")
             }
             else if (column.type === 'datetime') {
-                formValue[column.dataIndex] = moment(formValue[column.dataIndex]).format("YYYY-MM-DD HH:mm:ss")
+                const datetime = moment(formValue[column.dataIndex]).format("YYYY-MM-DD HH:mm:ss")
+                formValue[column.dataIndex] = datetime === "Invalid date" ? null : datetime
             }
             else if (column.type === 'switch') {
                 const columnDict = this.props.dict && this.props.dict[column.dataIndex]

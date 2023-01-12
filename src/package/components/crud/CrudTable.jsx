@@ -99,19 +99,20 @@ class CrudTable extends React.Component {
         const newColumns = []
         for (let i in props.columns) {
             const column = { ...props.columns[i] }
+            let html = text => text
             // 隐藏不展示的字段
             if (column.show === false) {
                 continue
             }
             else if (column.type === 'checkbox') {
-                column.html = (list) => {
+                html = (list) => {
                     return (
                         <Button type="link" onClick={(e) => this.showCheckBox(list, column, e)}>查看</Button>
                     )
                 }
             }
             else if (column.type === 'multipleTree') {
-                column.html = (list) => {
+                html = (list) => {
                     return (
                         <Button type="link" onClick={(e) => this.showTree(list, column, e)}>查看</Button>
                     )
@@ -119,9 +120,8 @@ class CrudTable extends React.Component {
             }
             // 隐藏文本，通过按钮展开
             else if (column.hideText) {
-                const oldHtml = column.html
-                column.html = (text) => {
-                    return oldHtml ? (
+                html = (text) => {
+                    return column.html ? (
                         <Button type="link" onClick={(e) => this.showHideText(oldHtml(text), column.title, e)}>查看</Button>
                     ) : (
                         <Button type="link" onClick={(e) => this.showHideText(text, column.title, e)}>查看</Button>
@@ -129,15 +129,21 @@ class CrudTable extends React.Component {
                 }
             }
             else if (column.type === 'icon') {
-                const oldHtml = column.html
-                column.html = (text) => {
+                html = (text) => {
                     if (!text) {
                         return null
                     }
                     const Icon = icons[text]
-                    return oldHtml ? oldHtml(Icon) : (
+                    return column.html ? column.html(Icon) : (
                         <Icon style={{ fontSize: 20, color: '#40a9ff' }} />
                     )
+                }
+            }
+            column.html = (text) => {
+                if((text === void 0 || text === null) && column.nullValue !== void 0){
+                    return column.nullValue
+                }else{
+                    return html(text)
                 }
             }
             newColumns.push(column)
@@ -288,7 +294,6 @@ class CrudTable extends React.Component {
 
     render() {
         for (let column of this.state.columns) {
-            let render = text => text
             /**
              * 如果column配置了dict，则加载字典表并进行映射
              */
@@ -299,25 +304,18 @@ class CrudTable extends React.Component {
                 }
                 //配置了html，则回调参数变化为映射后的值
                 if (column.html) {
-                    render = (text, record) => {
+                    column.render = (text, record) => {
                         return column.html(this.getDictLabel(dict, text), record)
                     }
                 }
                 //没有配置html，直接输出映射后的值
                 else {
-                    render = (text) => {
+                    column.render = (text) => {
                         return this.getDictLabel(dict, text)
                     }
                 }
             } else {
-                render = column.html || (text => text)
-            }
-            column.render = (text, record, index) => {
-                if(column.nullValue !== void 0 && (text === void 0 || text === null)){
-                    return column.nullValue
-                }else{
-                    return render(text, record, index)
-                }
+                column.render = column.html
             }
         }
         return (
