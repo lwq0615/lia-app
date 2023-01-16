@@ -9,22 +9,26 @@ import { Route, Routes } from 'react-router-dom'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { ConfigProvider } from 'antd';
 import zhCN from 'antd/lib/locale/zh_CN';
+import { Provider } from 'react-redux';
+import store from './package/store';
 
 class App extends React.Component {
 
   render() {
     return (
-      <Router>
-        {/* 设置antd为中文主题 */}
+      <Provider store={store}>
+        {/* 设置中文主题 */}
         <ConfigProvider locale={zhCN}>
-          {/* <Window> */}
+          <Router>
+            {/* <Window> */}
             <Routes>
               <Route exact index path='*' element={<Home />} />
               <Route exact index path='/login' element={<Login />} />
             </Routes>
-          {/* </Window> */}
+            {/* </Window> */}
+          </Router>
         </ConfigProvider>
-      </Router>
+      </Provider>
     )
   }
 }

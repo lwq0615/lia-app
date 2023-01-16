@@ -3,6 +3,18 @@ import { Form, InputNumber, TreeSelect, Row, Col, Button, message } from 'antd';
 import { getRoleDict } from '@/package/request/system/role'
 import { create } from '@/package/request/system/registerCode'
 import excel from '@/package/utils/excel'
+import store from '@/package/store';
+import WithRedux from '@/package/components/hoc/WithRedux';
+
+interface DictData {
+    dataId: number,
+    value: any,
+    label: string,
+    typeId: number,
+    createBy: number,
+    createTime: string,
+    remark: string
+}
 
 interface TreeDataItem {
     title: string,
@@ -18,14 +30,15 @@ interface CodeData {
     createTime: string,
     roleId: number,
     useBy: number | null,
-    useTime: number | null
+    useTime: number | null,
+    [key:string]: any
 
 }
 
-const CodeForm: React.FC = () => {
+const CodeForm: React.FC = (props: any) => {
 
     const [roleId, setRoleId] = useState<number | null>(null)
-    const [roleDict, setRoleDict] = useState([])
+    const [roleDict, setRoleDict] = useState<DictData[]>([])
     const [treeData, setTreeData] = useState<TreeDataItem[]>([])
     const [codeData, setCodeData] = useState<CodeData[]>([])
 
@@ -33,7 +46,7 @@ const CodeForm: React.FC = () => {
      * 点击生成
      */
     const onFinish = (values: any) => {
-        create(values.roleId, values.count).then((res: CodeData[]) => {
+        create(values.roleId, values.count).then((res) => {
             if (Array.isArray(res) && res.length) {
                 showCode(res)
                 message.success("生成成功")
@@ -53,19 +66,20 @@ const CodeForm: React.FC = () => {
     /**
      * 导出excel
      */
-    function excelData(data) {
+    function excelData(data: CodeData[]) {
         const role:any = roleDict.find((item:any) => {
             return item.value = roleId
         })
         data.forEach(item => {
             item.roleName = role.label
             item.companyName = role.remark
+            item.createByName = props.getReduxState("loginUser.userInfo")?.nick
         })
         const heads = {
             code: '注册码',
             roleName: '可激活角色',
             companyName: '所属企业',
-            createBy: '创建人',
+            createByName: '创建人',
             createTime: '创建时间'
         }
         excel(heads, data, role.remark + role.label + '注册码')
@@ -73,10 +87,10 @@ const CodeForm: React.FC = () => {
 
     useEffect(() => {
         const roleTreeDict: TreeDataItem[] = []
-        getRoleDict().then(res => {
+        getRoleDict().then((res: any) => {
             setRoleDict(res)
-            const companyRoleTree = {}
-            res.forEach(item => {
+            const companyRoleTree:any = {}
+            res.forEach((item: DictData) => {
                 if (!Array.isArray(companyRoleTree[item.remark])) {
                     companyRoleTree[item.remark] = []
                 }
@@ -160,4 +174,4 @@ const CodeForm: React.FC = () => {
         )
 };
 
-export default CodeForm;
+export default WithRedux(CodeForm);

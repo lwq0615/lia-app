@@ -10,9 +10,11 @@ import { initRouter } from "@/package/utils/request"
 import HistoryRouter from './HistoryRouter.tsx'
 import HomeHeader from './HomeHeader';
 import RouterBody from './RouterBody'
-
+import WithRedux from '@/package/components/hoc/WithRedux'
+import { login } from '@/package/store/loginUserSlice';
 
 const { Sider, Content } = Layout;
+
 
 class Home extends React.Component {
 
@@ -26,7 +28,7 @@ class Home extends React.Component {
 
     state = {
         collapsed: false,
-        userInfo: null,
+        userInfo: this.props.userInfo,
         headImg: null,
         routers: [],
         routePath: [],
@@ -80,7 +82,7 @@ class Home extends React.Component {
      * 根据keyPath跳转路由
      */
     goRouter = (keys = [], routers = this.state.routers) => {
-        if(keys?.join("") === this.state.selectedKeys?.join("")){
+        if (keys?.join("") === this.state.selectedKeys?.join("")) {
             return
         }
         this.setState({
@@ -157,6 +159,7 @@ class Home extends React.Component {
     loadUserAndRouter = () => {
         // 获取用户信息
         getSysUserInfo().then(user => {
+            this.props.dispatch(login(user))
             this.setState({
                 userInfo: user
             })
@@ -225,7 +228,7 @@ class Home extends React.Component {
                     <HomeHeader
                         toggle={this.toggle}
                         userInfo={this.state.userInfo}
-                        headImg={this.state.headImg} 
+                        headImg={this.state.headImg}
                         routePath={this.state.routePath}
                     />
                     <HistoryRouter
@@ -247,4 +250,4 @@ class Home extends React.Component {
     }
 }
 
-export default WithRouter(Home);
+export default WithRedux(WithRouter(Home))

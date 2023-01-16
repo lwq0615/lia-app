@@ -36,7 +36,7 @@ lia-app提供了Crud组件，组件提供了很多个性化接口，只需要使
 | required | 该字段是否必填 | bool | 否 | false |
 | placeholder | 值为空时的提示信息 | String | 否 | -- |
 | nullValue | 值为空时该字段在表格内展示的数据 | Node | 否 | -- |
-| show | 在表格内是否显示该列，不影响新增和编辑 | bool | 否 | true |
+| show | 在表格内是否显示该列，导出excel时是否导出该字段，不影响新增和编辑 | bool | 否 | true |
 | search | 是否开启该字段条件查询 | bool | 否 | true |
 | html | return一个可渲染的元素自定义表格中该字段展示的内容 | function(text) | 否 | -- |
 | span | 该列在搜索框所占宽度，最大24 | number | 否 | 6 |

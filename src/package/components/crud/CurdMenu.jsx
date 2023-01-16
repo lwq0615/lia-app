@@ -65,7 +65,11 @@ class CrudMenu extends React.Component {
             dict[dictKey] = dictMap
         }
         const heads = {}
-        this.props.columns.forEach(item => heads[item.dataIndex] = item.title)
+        this.props.columns.forEach(item => {
+            if(item.show !== false){
+                heads[item.dataIndex] = item.title
+            }
+        })
         this.props.getPage().then(({list}) => {
             list.forEach(item => {
                 for(let key in item){

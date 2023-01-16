@@ -6,6 +6,7 @@ import { getRoleDict } from '@/package/request/system/role'
 import { Button, message, Modal } from "antd"
 import { PlusOutlined } from '@ant-design/icons';
 import CodeForm from './CodeForm.tsx'
+import { getCreateByDict } from '@/package/request/system/user'
 
 
 export default class SysRegisterCode extends React.Component {
@@ -14,7 +15,7 @@ export default class SysRegisterCode extends React.Component {
         open: false,
         option: {
             // 表格名称
-            tabelName: "sys_register_code",
+            tableName: "注册码",
             // 是否显示行索引，默认true
             showIndex: true,
             // 是否展示右侧操作栏，默认["edit", "delete"]
@@ -94,8 +95,8 @@ export default class SysRegisterCode extends React.Component {
                     required: false,
                     addShow: false,
                     editShow: false,
-                    nullValue: "未使用"
-
+                    nullValue: "未使用",
+                    show: false
                 },
                 {
                     title: '使用时间',
@@ -116,7 +117,9 @@ export default class SysRegisterCode extends React.Component {
                     key: 'createBy',
                     addShow: false,
                     editShow: false,
-                    required: false
+                    required: false,
+                    type: 'select',
+                    dict: getCreateByDict
                 },
                 {
                     title: '创建时间',
