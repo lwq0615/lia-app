@@ -4,7 +4,6 @@ import Confirm from '@/package/components/confirm/Confirm.jsx'
 import { saveSysRouter, deleteRouters } from '@/package/request/system/router'
 import Icons from '@/package/components/crud/Icons.jsx'
 
-const { Option } = Select;
 const { TextArea } = Input;
 
 

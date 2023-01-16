@@ -9,6 +9,9 @@ const Confirm = (props) => {
     const [confirmLoading, setConfirmLoading] = React.useState(false);
 
     const showPopconfirm = (e) => {
+        if(props.before && !props.before()){
+            return
+        }
         e.stopPropagation()
         setVisible(true);
     };
@@ -47,7 +50,8 @@ Confirm.propTypes = {
     deleteSubmit: propTypes.func,
     msg: propTypes.string,
     type: propTypes.string,
-    size: propTypes.string
+    size: propTypes.string,
+    before: propTypes.func
 }
 
 

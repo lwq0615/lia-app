@@ -30,3 +30,11 @@ export function editSysRegisterCode(sysRegisterCode){
 export function deleteSysRegisterCodes(sysRegisterCodeIds){
     return request.post(`${baseUrl}/delete`,sysRegisterCodeIds)
 }               
+
+
+/**
+ * 批量生成注册码
+ */
+export function create(roleId, count){
+    return request.get(`${baseUrl}/create?roleId=${roleId}&count=${count}`)
+}

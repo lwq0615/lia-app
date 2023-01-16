@@ -5,11 +5,13 @@ import { getSysRegisterCodePage, editSysRegisterCode, deleteSysRegisterCodes } f
 import { getRoleDict } from '@/package/request/system/role'
 import { Button, message, Modal } from "antd"
 import { PlusOutlined } from '@ant-design/icons';
+import CodeForm from './CodeForm.tsx'
 
 
 export default class SysRegisterCode extends React.Component {
 
     state = {
+        open: false,
         option: {
             // 表格名称
             tabelName: "sys_register_code",
@@ -20,16 +22,7 @@ export default class SysRegisterCode extends React.Component {
             // 配置按钮组，默认["add", "delete", "search", "excel"]
             menuBtns: [() => {
                 const openModal = () => {
-                    Modal.info({
-                        title: "生成注册码",
-                        centered: true,
-                        destroyOnClose: true,
-                        keyboard: true,
-                        okText: "确定",
-                        content: (
-                            <></>
-                        )
-                    })
+                    this.setState({ open: true })
                 }
                 return (
                     <Button type='primary' icon={<PlusOutlined />} key="register" onClick={openModal}>生成注册码</Button>
@@ -60,9 +53,9 @@ export default class SysRegisterCode extends React.Component {
             // return true刷新页面
             onSave: async (form, type) => {
                 return await editSysRegisterCode(form).then(res => {
-                    if(res === 'code重复'){
+                    if (res === 'code重复') {
                         message.warning("注册码重复")
-                    }else if (res === 'error') {
+                    } else if (res === 'error') {
                         message.warning("未知错误")
                         return false
                     } else if (res === 'success') {
@@ -142,7 +135,22 @@ export default class SysRegisterCode extends React.Component {
 
     render() {
         return (
-            <Crud {...this.state.option} />
+            <>
+                <Crud {...this.state.option} />
+                <Modal
+                    open={this.state.open}
+                    title="生成注册码"
+                    width={700}
+                    centered
+                    destroyOnClose
+                    keyboard
+                    okText="确定"
+                    footer={null}
+                    onCancel={() => this.setState({open: false})}
+                >
+                    <CodeForm></CodeForm>
+                </Modal>
+            </>
         )
     }
 

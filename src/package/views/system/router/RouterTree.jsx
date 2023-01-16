@@ -123,7 +123,7 @@ class RouterTree extends React.Component {
 
   render() {
     return (
-      <div className='system-router-tree'>
+      <div className='system-router-tree' style={this.props.style}>
         <div className='option'>
           {
             this.props.addButton

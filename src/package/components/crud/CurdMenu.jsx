@@ -92,7 +92,14 @@ class CrudMenu extends React.Component {
         let config = []
         const btns = {
             "add": (<Button key="add" type="primary" icon={<PlusOutlined />} onClick={this.addClick}>新增</Button>),
-            "delete": (<CrudConfirm nodes={this.props.nodes} deleteClick={this.props.deleteClick}  msg={this.props.deleteMsg} key="delete" deleteSubmit={this.deleteSubmit} type='default' />),
+            "delete": (<CrudConfirm 
+                nodes={this.props.nodes} 
+                deleteClick={this.props.deleteClick}  
+                msg={this.props.deleteMsg} 
+                key="delete" 
+                deleteSubmit={this.deleteSubmit} 
+                type='default' 
+                before={() => this.props.nodes.crudTableRef.state.selectedRows.length}/>),
             "search": (<Button key="search" type="primary" icon={<SearchOutlined />} onClick={this.search}>搜索</Button>),
             "excel": (<Button key="excel" type="primary" loading={this.state.excelLoading} icon={<DownloadOutlined />} onClick={this.toExcel}>导出Excel</Button>)
         }

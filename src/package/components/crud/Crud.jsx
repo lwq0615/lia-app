@@ -74,42 +74,44 @@ class Crud extends React.Component {
 
     render() {
         return (
-            <Spin spinning={!this.state.dictLoadEd}>
-                {
-                    this.state.dictLoadEd &&
-                    <section className={this.props.className ? this.props.className + " lia-crud" : "lia-crud"} style={this.props.style}>
-                        {
-                            !this.props.showSearch
-                                ? null
-                                : (
-                                    <CrudSearch
-                                        {...this.props}
-                                        ref={ref => this.nodes.crudSearchRef = ref}
-                                        nodes={this.nodes}
-                                        dict={this.state.dict}
-                                    />
-                                )
-                        }
-                        {
-                            !this.props.menuBtns
-                                ? null
-                                : (
-                                    <CrudMenu
-                                        {...this.props}
-                                        nodes={this.nodes}
-                                        dict={this.state.dict}
-                                    />
-                                )
-                        }
-                        <CrudTable
-                            {...this.props}
-                            ref={ref => this.nodes.crudTableRef = ref}
-                            nodes={this.nodes}
-                            dict={this.state.dict}
-                        />
-                    </section>
-                }
-            </Spin>
+            <section className={this.props.className ? this.props.className + " lia-crud" : "lia-crud"} style={this.props.style}>
+                <Spin spinning={!this.state.dictLoadEd}>
+                    {
+                        this.state.dictLoadEd &&
+                        <div>
+                            {
+                                !this.props.showSearch
+                                    ? null
+                                    : (
+                                        <CrudSearch
+                                            {...this.props}
+                                            ref={ref => this.nodes.crudSearchRef = ref}
+                                            nodes={this.nodes}
+                                            dict={this.state.dict}
+                                        />
+                                    )
+                            }
+                            {
+                                !this.props.menuBtns
+                                    ? null
+                                    : (
+                                        <CrudMenu
+                                            {...this.props}
+                                            nodes={this.nodes}
+                                            dict={this.state.dict}
+                                        />
+                                    )
+                            }
+                            <CrudTable
+                                {...this.props}
+                                ref={ref => this.nodes.crudTableRef = ref}
+                                nodes={this.nodes}
+                                dict={this.state.dict}
+                            />
+                        </div>
+                    }
+                </Spin>
+            </section>
         )
     }
 
