@@ -106,69 +106,72 @@ class Login extends React.Component {
             <section className="lia_login_container">
                 <div className="login_box">
                     <div className="login_img"></div>
-                    <Form
-                        name="normal_login"
-                        className="login-form"
-                        initialValues={this.state.form}
-                        onFinish={this.onFinish}
-                    >
-                        <Form.Item
-                            name="username"
-                            rules={[{ required: true, message: '请输入用户名' }]}
+                    <div>
+                        <h2 style={{textAlign: 'center', margin: 0}}>登&nbsp;录</h2>
+                        <Form
+                            name="normal_login"
+                            className="login-form"
+                            initialValues={this.state.form}
+                            onFinish={this.onFinish}
                         >
-                            <Input
-                                prefix={<UserOutlined className="site-form-item-icon" />}
-                                placeholder="用户名"
-                            />
-                        </Form.Item>
-                        <Form.Item
-                            name="password"
-                            rules={[{ required: true, message: '请输入密码' }]}
-                        >
-                            <Input
-                                prefix={<LockOutlined className="site-form-item-icon" />}
-                                type="password"
-                                placeholder="密码"
-                            />
-                        </Form.Item>
+                            <Form.Item
+                                name="username"
+                                rules={[{ required: true, message: '请输入用户名' }]}
+                            >
+                                <Input
+                                    prefix={<UserOutlined className="site-form-item-icon" />}
+                                    placeholder="用户名"
+                                />
+                            </Form.Item>
+                            <Form.Item
+                                name="password"
+                                rules={[{ required: true, message: '请输入密码' }]}
+                            >
+                                <Input
+                                    prefix={<LockOutlined className="site-form-item-icon" />}
+                                    type="password"
+                                    placeholder="密码"
+                                />
+                            </Form.Item>
 
-                        {
-                            this.state.loginCheckCode &&
-                            <div style={{ display: "flex" }}>
-                                <Form.Item
-                                    style={{ flex: 1 }}
-                                    name="code"
-                                    rules={[{ required: true, message: '请输入验证码' }]}
-                                >
-                                    <Input
-                                        prefix={<LockOutlined className="site-form-item-icon" />}
-                                        type="text"
-                                        placeholder="验证码"
-                                    />
-                                </Form.Item>
-                                <CheckCode ref={ref => this.codeRef = ref} style={{ marginLeft: "5px", height: 32 }} />
-                            </div>
-                        }
-
-                        <div style={{ padding: '10px 0 20px 0' }}>
-                            <Checkbox onChange={this.rememberMeChange} checked={this.state.rememberMe}>记住我</Checkbox>
-                            <a className="login-form-forgot" href="#">
-                                忘记密码
-                            </a>
-                        </div>
-
-                        <Form.Item style={{ margin: 0 }}>
-                            <Button type="primary" htmlType="submit" className="login-form-button">
-                                登录
-                            </Button>
                             {
-                                this.state.enableRegister &&
-                                <Button type="primary" className="login-form-button" onClick={this.register}>
-                                    去注册
-                                </Button>
+                                this.state.loginCheckCode &&
+                                <div style={{ display: "flex" }}>
+                                    <Form.Item
+                                        style={{ flex: 1 }}
+                                        name="code"
+                                        rules={[{ required: true, message: '请输入验证码' }]}
+                                    >
+                                        <Input
+                                            prefix={<LockOutlined className="site-form-item-icon" />}
+                                            type="text"
+                                            placeholder="验证码"
+                                        />
+                                    </Form.Item>
+                                    <CheckCode ref={ref => this.codeRef = ref} style={{ marginLeft: "5px", height: 32 }} />
+                                </div>
                             }
-                        </Form.Item>
-                    </Form>
+
+                            <div style={{ padding: '10px 0 20px 0' }}>
+                                <Checkbox onChange={this.rememberMeChange} checked={this.state.rememberMe}>记住我</Checkbox>
+                                <a className="login-form-forgot" href="#">
+                                    忘记密码
+                                </a>
+                            </div>
+
+                            <Form.Item style={{ margin: 0 }}>
+                                <Button type="primary" htmlType="submit" className="login-form-button">
+                                    登录
+                                </Button>
+                                {
+                                    this.state.enableRegister &&
+                                    <Button type="primary" className="login-form-button" onClick={this.register}>
+                                        去注册
+                                    </Button>
+                                }
+                            </Form.Item>
+                        </Form>
+                    </div>
                 </div>
             </section>
         )

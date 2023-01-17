@@ -38,14 +38,15 @@ class Message extends React.Component {
 
     componentDidMount = () => {
         wsOpen((e) => {
+            const httpResult = JSON.parse(e.data)
             // 收到消息时
-            if(e.data === "账号在其他设备登录" || e.data === "账号状态发生改变"){
-                message.warning(e.data)
+            if(httpResult.code !== 200){
+                message.warning(httpResult.message)
                 localStorage.removeItem(process.env.REACT_APP_HTTP_HEADER)
                 this.props.navigate("/login")
                 return
             }
-            const msg = JSON.parse(e.data)
+            const msg = httpResult.data
             // 如果用户正处于聊天界面，则更新聊天记录列表
             if(this.state.visible && [msg.sendBy, msg.sendTo].includes(this.state.nowPerson?.userId)){
                 this.msgBoxNode?.onMessage(msg)

@@ -88,15 +88,14 @@ export default class SysRegisterCode extends React.Component {
                     dict: getRoleDict
                 },
                 {
-                    title: '使用用户',
+                    title: '使用用户ID',
                     dataIndex: 'useBy',
                     align: 'center',
                     key: 'useBy',
                     required: false,
                     addShow: false,
                     editShow: false,
-                    nullValue: "未使用",
-                    show: false
+                    nullValue: "未使用"
                 },
                 {
                     title: '使用时间',

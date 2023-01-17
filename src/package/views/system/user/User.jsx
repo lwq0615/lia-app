@@ -53,6 +53,13 @@ const option = {
     },
     columns: [
         {
+            title: '用户ID',
+            dataIndex: 'userId',
+            align: 'center',
+            addShow: false,
+            editShow: false
+        },
+        {
             title: '用户名',
             dataIndex: 'username',
             align: 'center',
