@@ -11,6 +11,7 @@ import { ConfigProvider } from 'antd';
 import zhCN from 'antd/lib/locale/zh_CN';
 import { Provider } from 'react-redux';
 import store from './package/store';
+import Register from '@/package/views/register/Register.tsx'
 
 class App extends React.Component {
 
@@ -24,6 +25,7 @@ class App extends React.Component {
             <Routes>
               <Route exact index path='*' element={<Home />} />
               <Route exact index path='/login' element={<Login />} />
+              <Route exact index path='/register' element={<Register />} />
             </Routes>
             {/* </Window> */}
           </Router>

@@ -33,15 +33,23 @@ class Login extends React.Component {
     componentDidMount = () => {
         // 判断是否开启注册功能
         getParamValue("enable_register").then(res => {
-            this.setState({
-                enableRegister: Boolean(res)
-            })
+            if (res.code === 200) {
+                this.setState({
+                    enableRegister: res.data === 'true'
+                })
+            } else {
+                message.warning(res.message)
+            }
         })
         // 判断是否开启验证码
         getParamValue("login_check_code").then(res => {
-            this.setState({
-                loginCheckCode: Boolean(res)
-            })
+            if (res.code === 200) {
+                this.setState({
+                    loginCheckCode: res.data === 'true'
+                })
+            } else {
+                message.warning(res.message)
+            }
         })
     }
 
@@ -87,6 +95,10 @@ class Login extends React.Component {
         this.setState({
             rememberMe: e.target.checked
         })
+    }
+
+    register = () => {
+        this.props.navigate("/register")
     }
 
     render() {
@@ -151,8 +163,8 @@ class Login extends React.Component {
                             </Button>
                             {
                                 this.state.enableRegister &&
-                                <Button type="primary" className="login-form-button">
-                                    注册
+                                <Button type="primary" className="login-form-button" onClick={this.register}>
+                                    去注册
                                 </Button>
                             }
                         </Form.Item>

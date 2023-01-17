@@ -322,7 +322,7 @@ public class ${className}Controller {
         if(current != null && size != null){
             PageHelper.startPage(current,size);
         }
-        return new PageInfo<>(${objName}Service.selectList(${objName}));
+        return new PageInfo<>(${objName}Service.selectList(${objName}, true));
     }
 
     /**

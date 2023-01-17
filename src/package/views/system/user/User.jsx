@@ -42,14 +42,11 @@ const option = {
             return
         }
         return await saveSysUser(form).then(res => {
-            if(res === "用户名已存在"){
-                message.warning(res)
-                return false
-            }else if(res === 'success'){
+            if(res.code === 200){
                 message.success(type+"成功")
                 return true
             }else{
-                message.error("未知错误")
+                message.warning(res.message)
                 return false
             }
         })
@@ -96,6 +93,7 @@ const option = {
             dataIndex: 'roleId',
             align: 'center',
             required: true,
+            addShow: false,
             // type为select时必须提供dict
             type: "tree",
             // 配置了select后dict才会生效

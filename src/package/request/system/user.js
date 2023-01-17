@@ -50,6 +50,16 @@ export function saveSysUser(user){
 
 
 /**
+ * 用户注册
+ * @param {*} user 用户参数
+ * @param {*} registerCode 注册码
+ */
+export function registerUser(user, registerCode){
+    return request.post(`${baseUrl}/register${registerCode ? '?registerCode='+registerCode : ''}`,user)
+}
+
+
+/**
  * 批量删除用户
  * @param {*} userIds 用户的id列表
  * @returns 删除成功的数量
