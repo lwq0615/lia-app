@@ -15,11 +15,7 @@ const Register: React.FC = function (props: any) {
     useEffect(() => {
         // 判断是否开启验证码
         getParamValue("register_check_code").then((res: any) => {
-            if (res.code === 200) {
-                setRegisterCheckCode(res.data === 'true')
-            } else {
-                message.warning(res.message)
-            }
+            setRegisterCheckCode(res === 'true')
         })
     }, [])
 

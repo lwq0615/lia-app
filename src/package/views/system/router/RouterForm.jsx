@@ -43,13 +43,9 @@ const RouterForm = ({ routerDict, formValue, formTitle, routerId, reloadTree, se
                 router.routerId = routerId
             }
             saveSysRouter(router).then(res => {
-                if(res.code === 200){
-                    message.success("保存成功")
-                    return true
-                }else{
-                    message.warning(res.message)
-                    return false
-                }
+                message.success("保存成功")
+                reloadTree()
+                return true
             })
         })
     }

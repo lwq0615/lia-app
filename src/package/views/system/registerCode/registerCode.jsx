@@ -54,13 +54,8 @@ export default class SysRegisterCode extends React.Component {
             // return true刷新页面
             onSave: async (form, type) => {
                 return await editSysRegisterCode(form).then(res => {
-                    if(res.code === 200){
-                        message.success(type + "成功")
-                        return true
-                    }else{
-                        message.warning(res.message)
-                        return false
-                    }
+                    message.success(type + "成功")
+                    return true
                 })
             },
             columns: [
@@ -143,7 +138,7 @@ export default class SysRegisterCode extends React.Component {
                     keyboard
                     okText="确定"
                     footer={null}
-                    onCancel={() => this.setState({open: false})}
+                    onCancel={() => this.setState({ open: false })}
                 >
                     <CodeForm></CodeForm>
                 </Modal>

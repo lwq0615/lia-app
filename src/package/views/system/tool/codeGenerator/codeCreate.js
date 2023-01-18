@@ -21,27 +21,27 @@ export function toLine(name) {
 /**
  * 首字母大写
  */
-export function firstUp(str){
-    return str.substring(0,1).toUpperCase()+str.substring(1)
+export function firstUp(str) {
+    return str.substring(0, 1).toUpperCase() + str.substring(1)
 }
 
 /**
  * 首字母小写
  */
-export function firstLow(str){
-    return str.substring(0,1).toLowerCase()+str.substring(1)
+export function firstLow(str) {
+    return str.substring(0, 1).toLowerCase() + str.substring(1)
 }
 
 
 /**
  * 接口调用代码生成
  */
-export function requestCode({tableName, httpUrl}){
-    if(httpUrl && httpUrl[0] === '/'){
+export function requestCode({ tableName, httpUrl }) {
+    if (httpUrl && httpUrl[0] === '/') {
         httpUrl = httpUrl.substring(1)
     }
-    if(httpUrl && httpUrl[httpUrl.length-1] === '/'){
-        httpUrl = httpUrl.substring(0,httpUrl.length-1)
+    if (httpUrl && httpUrl[httpUrl.length - 1] === '/') {
+        httpUrl = httpUrl.substring(0, httpUrl.length - 1)
     }
     return `
 import request from "@/package/utils/request"
@@ -78,8 +78,8 @@ export function delete${firstUp(toHump(tableName))}s(${firstLow(toHump(tableName
 `
 }
 
-function dataConcat(data, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag){
-    if(createByFlag){
+function dataConcat(data, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag) {
+    if (createByFlag) {
         data = data.concat({
             len: 0,
             name: "createBy",
@@ -90,7 +90,7 @@ function dataConcat(data, createByFlag, createTimeFlag, updateTimeFlag, remarkFl
             createBy: true
         })
     }
-    if(createTimeFlag){
+    if (createTimeFlag) {
         data = data.concat({
             len: 0,
             name: "createTime",
@@ -101,7 +101,7 @@ function dataConcat(data, createByFlag, createTimeFlag, updateTimeFlag, remarkFl
             createTime: true
         })
     }
-    if(updateTimeFlag){
+    if (updateTimeFlag) {
         data = data.concat({
             len: 0,
             name: "updateTime",
@@ -112,7 +112,7 @@ function dataConcat(data, createByFlag, createTimeFlag, updateTimeFlag, remarkFl
             updateTime: true
         })
     }
-    if(remarkFlag){
+    if (remarkFlag) {
         data = data.concat({
             len: 500,
             name: "remarkFlag",
@@ -129,9 +129,9 @@ function dataConcat(data, createByFlag, createTimeFlag, updateTimeFlag, remarkFl
 /**
  * 前端文件代码生成
  */
-export function viewCode({data, tableName, primaryKey, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag}){
+export function viewCode({ data, tableName, primaryKey, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag }) {
     data = dataConcat(data, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag)
-    function getColumnsCode(){
+    function getColumnsCode() {
         return data.map(item => {
             return `                {
                     title: '${item.remark}',
@@ -139,7 +139,7 @@ export function viewCode({data, tableName, primaryKey, createByFlag, createTimeF
                     align: 'center',
                     required: ${item.notNull},
                     addShow: ${item.createBy || item.createTime || item.updateTime ? 'false' : "true"},
-                    editShow: ${item.createBy || item.createTime || item.updateTime ? 'false' : "true"}${item.type.includes("date") ? ',\n                    type: "'+item.type+'",\n                    range: true' : ""}
+                    editShow: ${item.createBy || item.createTime || item.updateTime ? 'false' : "true"}${item.type.includes("date") ? ',\n                    type: "' + item.type + '",\n                    range: true' : ""}
                 }`
         }).join(",\n")
     }
@@ -187,13 +187,8 @@ export default class ${firstUp(toHump(tableName))} extends React.Component{
             // return true刷新页面
             onSave: async (form, type) => {
                 return await save${firstUp(toHump(tableName))}(form).then(res => {
-                    if(res.code === 200){
-                        message.success(type + "成功")
-                        return true
-                    }else{
-                        message.warning(res.message)
-                        return false
-                    }
+                    message.success(type + "成功")
+                    return true
                 })
             },
             columns: [
@@ -216,7 +211,7 @@ ${getColumnsCode()}
 /**
  * 实体类代码生成
  */
-export function entityCode({data, tableName, primaryKey, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag}) {
+export function entityCode({ data, tableName, primaryKey, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag }) {
     data = dataConcat(data, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag)
     const columnCode = () => {
         let str = `    /**
@@ -226,14 +221,14 @@ export function entityCode({data, tableName, primaryKey, createByFlag, createTim
     @TableField("\`${toLine(primaryKey.name)}\`")
     private Long ${primaryKey.name};\n\n`
         data.forEach(item => {
-            if(item.type === "date" || item.type === "datetime"){
+            if (item.type === "date" || item.type === "datetime") {
                 str += `    /**
      * ${item.remark}
      */
     @${item.updateTime ? "UpdateTime" : item.createTime ? "CreateTime" : ""}
     @TableField("\`${toLine(item.name)}\`")${item.notNull ? "\n    @Required" : ""}
     private String ${item.name};\n\n`
-            }else{
+            } else {
                 str += `    /**
      * ${item.remark}
      */
@@ -271,18 +266,18 @@ ${columnCode()}}
 /**
  * 控制层代码生成
  */
-export function controllerCode({tableName, httpUrl}) {
-    if(httpUrl && httpUrl[0] === '/'){
+export function controllerCode({ tableName, httpUrl }) {
+    if (httpUrl && httpUrl[0] === '/') {
         httpUrl = httpUrl.substring(1)
     }
-    if(httpUrl && httpUrl[httpUrl.length-1] === '/'){
-        httpUrl = httpUrl.substring(0,httpUrl.length-1)
+    if (httpUrl && httpUrl[httpUrl.length - 1] === '/') {
+        httpUrl = httpUrl.substring(0, httpUrl.length - 1)
     }
     const className = firstUp(toHump(tableName))
     const objName = firstLow(toHump(tableName))
     function getPreAuthorize(method) {
         return httpUrl ? `
-    @PreAuthorize("hasAuthority('${httpUrl.split("/").join(':')+":"+method}')")` : ''
+    @PreAuthorize("hasAuthority('${httpUrl.split("/").join(':') + ":" + method}')")` : ''
     }
     return `package com.lia.server.modules.${objName};
 
@@ -330,7 +325,7 @@ public class ${className}Controller {
      * @return 操作成功的数量
      */
     @PostMapping("/save")${getPreAuthorize('save')}
-    public HttpResult save${className}(@RequestBody ${className} ${objName}){
+    public int save${className}(@RequestBody ${className} ${objName}){
         return ${objName}Service.save(${objName});
     }
 
@@ -356,7 +351,7 @@ public class ${className}Controller {
 /**
  * 业务层代码生成
  */
-export function serviceCode({tableName}) {
+export function serviceCode({ tableName }) {
     const className = firstUp(toHump(tableName))
     const objName = firstLow(toHump(tableName))
     return `package com.lia.server.modules.${objName};
@@ -386,7 +381,7 @@ public class ${className}Service extends BaseService<${className}> {
 /**
  * mapper层代码生成
  */
-export function mapperCode({tableName}){
+export function mapperCode({ tableName }) {
     const className = firstUp(toHump(tableName))
     const objName = firstLow(toHump(tableName))
     return `package com.lia.server.modules.${objName};
@@ -403,11 +398,11 @@ public interface ${className}Mapper extends BaseMapper<${className}> {
 }
 
 
-export function mybatisCode({data, tableName, primaryKey, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag}){
+export function mybatisCode({ data, tableName, primaryKey, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag }) {
     data = dataConcat(data, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag)
     const className = firstUp(toHump(tableName))
     const objName = firstLow(toHump(tableName))
-    function getResultMap(){
+    function getResultMap() {
         let str = `
         <id     property="${primaryKey.name}"      column="${toLine(primaryKey.name)}"      />`
         data.forEach(item => {
@@ -444,20 +439,20 @@ const mysqlMap = {
 /**
  * 生成mysql建表语句
  */
-export function mysqlCode({tableName, data, primaryKey, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag}){
+export function mysqlCode({ tableName, data, primaryKey, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag }) {
     data = dataConcat(data, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag)
-    function columnsCode(){
+    function columnsCode() {
         let columns = []
         columns.push(`
     \`${toLine(primaryKey.name)}\` bigint(0) NOT NULL ${primaryKey.type === "autoIncrement" ? "AUTO_INCREMENT" : ""} COMMENT '主键'`)
         data.forEach(item => {
             columns.push(`
-    \`${toLine(item.name)}\` ${mysqlMap[item.type]}(${item.len})${item.createTime || item.updateTime ? " DEFAULT CURRENT_TIMESTAMP(0)" : ""}${item.updateTime ? " ON UPDATE CURRENT_TIMESTAMP(0)" : ""}${["String","Character"].includes(primaryKey.type) ? " CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci" : ""}${item.notNull ? " NOT NULL" : ""} COMMENT '${item.remark}'`)
+    \`${toLine(item.name)}\` ${mysqlMap[item.type]}(${item.len})${item.createTime || item.updateTime ? " DEFAULT CURRENT_TIMESTAMP(0)" : ""}${item.updateTime ? " ON UPDATE CURRENT_TIMESTAMP(0)" : ""}${["String", "Character"].includes(primaryKey.type) ? " CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci" : ""}${item.notNull ? " NOT NULL" : ""} COMMENT '${item.remark}'`)
         })
         columns.push(`
     PRIMARY KEY (\`${toLine(primaryKey.name)}\`) USING BTREE`)
         data.forEach(item => {
-            if(item.unique){
+            if (item.unique) {
                 columns.push(`
     UNIQUE INDEX \`${toLine(tableName)}-${toLine(item.name)}\`(\`${toLine(item.name)}\`) USING BTREE`)
             }

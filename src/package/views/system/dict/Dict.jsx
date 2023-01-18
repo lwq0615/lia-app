@@ -17,7 +17,7 @@ export default class SysDictType extends React.Component {
         })
     }
 
-    constructor(props){
+    constructor(props) {
         super(props)
         this.state = {
             option: {
@@ -54,13 +54,8 @@ export default class SysDictType extends React.Component {
                 // return true刷新页面
                 onSave: async (form, type) => {
                     return await saveSysDictType(form).then(res => {
-                        if(res.code === 200){
-                            message.success(type + "成功")
-                            return true
-                        }else{
-                            message.warning(res.message)
-                            return false
-                        }
+                        message.success(type + "成功")
+                        return true
                     })
                 },
                 columns: [

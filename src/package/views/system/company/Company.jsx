@@ -52,13 +52,8 @@ export default class Company extends React.Component {
             // return true刷新页面
             onSave: async (form, type) => {
                 return await saveSysCompany(form).then(res => {
-                    if(res.code === 200){
-                        message.success(type + "成功")
-                        return true
-                    }else{
-                        message.warning(res.message)
-                        return false
-                    }
+                    message.success(type + "成功")
+                    return true
                 })
             },
             columns: [
@@ -148,10 +143,10 @@ export default class Company extends React.Component {
                     title={this.state.companyName}
                     open={this.state.visible}
                     footer={null}
-                    onCancel={() => this.setState({visible: false})}
+                    onCancel={() => this.setState({ visible: false })}
                 >
                     {
-                        this.state.companyId && <Role companyId={this.state.companyId} companyName={this.state.companyName}/>
+                        this.state.companyId && <Role companyId={this.state.companyId} companyName={this.state.companyName} />
                     }
                 </Modal>
             </>

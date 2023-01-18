@@ -6,7 +6,7 @@ import { getCreateByDict } from '@/package/request/system/user'
 import { message } from "antd"
 
 
-export default class SysParam extends React.Component{
+export default class SysParam extends React.Component {
 
     state = {
         option: {
@@ -21,10 +21,10 @@ export default class SysParam extends React.Component{
             //return true刷新页面数据
             onDelete: async records => {
                 return await deleteSysParams(records.map(item => item.paramId)).then(res => {
-                    if(res > 0){
+                    if (res > 0) {
                         message.success("删除成功")
                         return true
-                    }else{
+                    } else {
                         message.error("删除失败")
                         return false
                     }
@@ -40,13 +40,8 @@ export default class SysParam extends React.Component{
             // return true刷新页面
             onSave: async (form, type) => {
                 return await saveSysParam(form).then(res => {
-                    if(res.code === 200){
-                        message.success(type + "成功")
-                        return true
-                    }else{
-                        message.warning(res.message)
-                        return false
-                    }
+                    message.success(type + "成功")
+                    return true
                 })
             },
             columns: [
@@ -104,10 +99,10 @@ export default class SysParam extends React.Component{
         }
     }
 
-    render(){
+    render() {
         return (
-            <Crud {...this.state.option}/>
+            <Crud {...this.state.option} />
         )
     }
-    
+
 }          

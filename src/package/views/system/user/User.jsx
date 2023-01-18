@@ -19,10 +19,10 @@ const option = {
     //return true刷新页面数据
     onDelete: async records => {
         return await deleteUsers(records.map(item => item.userId)).then(res => {
-            if(res > 0){
+            if (res > 0) {
                 message.success("删除成功")
                 return true
-            }else{
+            } else {
                 message.error("删除失败")
                 return false
             }
@@ -37,18 +37,13 @@ const option = {
     // 如果需要获取返回值再关闭弹窗，请使用await
     // return true刷新页面
     onSave: async (form, type) => {
-        if(form.phone && !/^[1]([3-9])[0-9]{9}/.test(form.phone)){
+        if (form.phone && !/^[1]([3-9])[0-9]{9}/.test(form.phone)) {
             message.warning("请输入正确的手机号")
             return
         }
         return await saveSysUser(form).then(res => {
-            if(res.code === 200){
-                message.success(type+"成功")
-                return true
-            }else{
-                message.warning(res.message)
-                return false
-            }
+            message.success(type + "成功")
+            return true
         })
     },
     columns: [
@@ -109,7 +104,7 @@ const option = {
                 return getRoleDict().then(res => {
                     const companyRoleTree = {}
                     res.forEach(item => {
-                        if(!Array.isArray(companyRoleTree[item.remark])){
+                        if (!Array.isArray(companyRoleTree[item.remark])) {
                             companyRoleTree[item.remark] = []
                         }
                         companyRoleTree[item.remark].push(item)
@@ -198,7 +193,7 @@ class User extends React.Component {
 
     render() {
         return (
-            <Crud {...this.state.option}/>
+            <Crud {...this.state.option} />
         )
     }
 }

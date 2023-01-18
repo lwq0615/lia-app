@@ -30,7 +30,7 @@ class Auth extends React.Component {
             menuBtns: ["add", "delete", "search", (getSelect) => {
                 const move = () => {
                     this.selectData = getSelect()
-                    if(!this.selectData?.length){
+                    if (!this.selectData?.length) {
                         return
                     }
                     this.setState({ visible: true })
@@ -143,13 +143,8 @@ class Auth extends React.Component {
         option.onSave = async (form, type) => {
             form.routerId = key
             return await saveSysAuth(form).then(res => {
-                if(res.code === 200){
-                    message.success(type + "成功")
-                    return true
-                }else{
-                    message.warning(res.message)
-                    return false
-                }
+                message.success(type + "成功")
+                return true
             })
         }
         this.forceUpdate()
@@ -172,10 +167,10 @@ class Auth extends React.Component {
             message.error("操作失败")
         }
         const authIds = this.selectData.map(auth => auth.authId)
-        if(!authIds.length){
+        if (!authIds.length) {
             return
         }
-        if(this.selectData[0].routerId === routerId){
+        if (this.selectData[0].routerId === routerId) {
             success()
             return
         }

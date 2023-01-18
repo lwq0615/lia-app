@@ -94,16 +94,8 @@ export default function Code(props) {
         // return true刷新页面
         onSave: async (form, type) => {
             return await saveSysToolCode(form).then(res => {
-                if (res === 'error') {
-                    message.warning("未知错误")
-                    return false
-                } else if (res === 'success') {
-                    message.success(type + "成功")
-                    return true
-                } else {
-                    message.warning(res)
-                    return false
-                }
+                message.success(type + "成功")
+                return true
             })
         },
         columns: [

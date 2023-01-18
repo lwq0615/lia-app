@@ -120,13 +120,8 @@ class Role extends React.Component {
                 onSave: async (form, type) => {
                     form.companyId = this.props.companyId
                     return await saveSysRole(form).then(res => {
-                        if (res.code === 200) {
-                            message.success(type+"成功")
-                            return true
-                        } else {
-                            message.warning(res.message)
-                            return false
-                        }
+                        message.success(type + "成功")
+                        return true
                     })
                 },
                 columns: [
@@ -227,7 +222,7 @@ class Role extends React.Component {
             destroyOnClose: true,
             keyboard: true,
             okText: "确定",
-            content: (<Diagram companyId={this.props.companyId}/>)
+            content: (<Diagram companyId={this.props.companyId} />)
         })
     }
 

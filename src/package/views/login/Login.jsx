@@ -33,23 +33,16 @@ class Login extends React.Component {
     componentDidMount = () => {
         // 判断是否开启注册功能
         getParamValue("enable_register").then(res => {
-            if (res.code === 200) {
-                this.setState({
-                    enableRegister: res.data === 'true'
-                })
-            } else {
-                message.warning(res.message)
-            }
+            console.log();
+            this.setState({
+                enableRegister: res === 'true'
+            })
         })
         // 判断是否开启验证码
         getParamValue("login_check_code").then(res => {
-            if (res.code === 200) {
-                this.setState({
-                    loginCheckCode: res.data === 'true'
-                })
-            } else {
-                message.warning(res.message)
-            }
+            this.setState({
+                loginCheckCode: res === 'true'
+            })
         })
     }
 
@@ -107,7 +100,7 @@ class Login extends React.Component {
                 <div className="login_box">
                     <div className="login_img"></div>
                     <div>
-                        <h2 style={{textAlign: 'center', margin: 0}}>登&nbsp;录</h2>
+                        <h2 style={{ textAlign: 'center', margin: 0 }}>登&nbsp;录</h2>
                         <Form
                             name="normal_login"
                             className="login-form"
