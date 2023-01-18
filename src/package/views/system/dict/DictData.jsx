@@ -39,14 +39,11 @@ export default function SysDictData(props) {
         onSave: async (form, type) => {
             form.typeId = props.typeId
             return await saveSysDictData(form).then(res => {
-                if (res === 'error') {
-                    message.warning("未知错误")
-                    return false
-                } else if (res === 'success') {
+                if(res.code === 200){
                     message.success(type + "成功")
                     return true
-                } else {
-                    message.warning(res)
+                }else{
+                    message.warning(res.message)
                     return false
                 }
             })

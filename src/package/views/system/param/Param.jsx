@@ -40,14 +40,11 @@ export default class SysParam extends React.Component{
             // return true刷新页面
             onSave: async (form, type) => {
                 return await saveSysParam(form).then(res => {
-                    if(res === 'error'){
-                        message.warning("未知错误")
-                        return false
-                    }else if(res === 'success'){
-                        message.success(type+"成功")
+                    if(res.code === 200){
+                        message.success(type + "成功")
                         return true
                     }else{
-                        message.warning(res)
+                        message.warning(res.message)
                         return false
                     }
                 })

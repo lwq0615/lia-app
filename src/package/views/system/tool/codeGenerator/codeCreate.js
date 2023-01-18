@@ -187,14 +187,11 @@ export default class ${firstUp(toHump(tableName))} extends React.Component{
             // return true刷新页面
             onSave: async (form, type) => {
                 return await save${firstUp(toHump(tableName))}(form).then(res => {
-                    if(res === 'error'){
-                        message.warning("未知错误")
-                        return false
-                    }else if(res === 'success'){
-                        message.success(type+"成功")
+                    if(res.code === 200){
+                        message.success(type + "成功")
                         return true
                     }else{
-                        message.warning(res)
+                        message.warning(res.message)
                         return false
                     }
                 })
@@ -292,6 +289,7 @@ export function controllerCode({tableName, httpUrl}) {
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lia.system.exception.HttpException;
+import com.lia.system.result.HttpResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -332,7 +330,7 @@ public class ${className}Controller {
      * @return 操作成功的数量
      */
     @PostMapping("/save")${getPreAuthorize('save')}
-    public String save${className}(@RequestBody ${className} ${objName}){
+    public HttpResult save${className}(@RequestBody ${className} ${objName}){
         return ${objName}Service.save(${objName});
     }
 

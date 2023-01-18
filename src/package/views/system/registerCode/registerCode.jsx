@@ -54,16 +54,11 @@ export default class SysRegisterCode extends React.Component {
             // return true刷新页面
             onSave: async (form, type) => {
                 return await editSysRegisterCode(form).then(res => {
-                    if (res === 'code重复') {
-                        message.warning("注册码重复")
-                    } else if (res === 'error') {
-                        message.warning("未知错误")
-                        return false
-                    } else if (res === 'success') {
+                    if(res.code === 200){
                         message.success(type + "成功")
                         return true
-                    } else {
-                        message.warning(res)
+                    }else{
+                        message.warning(res.message)
                         return false
                     }
                 })

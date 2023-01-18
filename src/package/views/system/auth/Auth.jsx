@@ -143,16 +143,11 @@ class Auth extends React.Component {
         option.onSave = async (form, type) => {
             form.routerId = key
             return await saveSysAuth(form).then(res => {
-                if (res === 'success') {
+                if(res.code === 200){
                     message.success(type + "成功")
                     return true
-                }
-                else if (res === 'error') {
-                    message.error("未知错误")
-                    return false
-                }
-                else {
-                    message.warning(res)
+                }else{
+                    message.warning(res.message)
                     return false
                 }
             })
