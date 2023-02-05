@@ -13,7 +13,7 @@ export function getRouterOfRole(roleId) {
 
 
 /**
- * 查询路由数
+ * 查询路由树
  */
  export function getSysRouterTree(){
     return request.get(`${baseUrl}/getRouterTree`)

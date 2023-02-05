@@ -3,7 +3,6 @@ import { Form, InputNumber, TreeSelect, Row, Col, Button, message } from 'antd';
 import { getRoleDict } from '@/package/request/system/role'
 import { create } from '@/package/request/system/registerCode'
 import excel from '@/package/utils/excel'
-import store from '@/package/store';
 import WithRedux from '@/package/components/hoc/WithRedux';
 
 interface DictData {

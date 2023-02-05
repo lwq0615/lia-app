@@ -33,7 +33,6 @@ class Login extends React.Component {
     componentDidMount = () => {
         // 判断是否开启注册功能
         getParamValue("enable_register").then(res => {
-            console.log();
             this.setState({
                 enableRegister: res === 'true'
             })
