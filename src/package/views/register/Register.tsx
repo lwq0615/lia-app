@@ -21,12 +21,8 @@ const Register: React.FC = function (props: any) {
 
     const onFinish = (values: { nick: string, username: string, password: string, registerCode: string }) => {
         registerUser(values, values.registerCode).then((res: any) => {
-            if (res.code === 200) {
-                message.success("注册成功")
-                props.navigate("/login")
-            } else {
-                message.warning(res.message)
-            }
+            message.success("注册成功")
+            props.navigate("/login")
         })
     }
 

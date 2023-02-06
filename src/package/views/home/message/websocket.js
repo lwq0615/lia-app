@@ -11,7 +11,9 @@ export function wsOpen(onmessage) {
         message.warning("该环境不支持websocket")
         return
     }
-
+    if(!onmessage && webSocket.onmessage){
+        onmessage = webSocket.onmessage
+    }
     let baseUrl = process.env.REACT_APP_HTTP_URL.replace("http://", "")
     baseUrl = baseUrl.replace("https://", "")
     //建立长链接，地址为你的服务端地址且以ws开头，以WebSocketConfig配置中的路径 .addHandler(myHandler(), "/ws")结尾
@@ -44,7 +46,8 @@ export function wsSend(msg){
         return
     }
     if(webSocket.readyState === 3){
-        message.warning("连接已断开")
+        message.warning("连接已断开，正在重连")
+        wsOpen()
         return
     }
     if(msg.sendBy && msg.sendTo && msg.type && msg.content){
