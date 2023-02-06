@@ -116,12 +116,12 @@ const RouterForm = ({ routerDict, formValue, formTitle, routerId, reloadTree, se
                             />
                         </Form.Item>
                     </Col>
-                    <Col span={12}>
+                    <Col span={9}>
                         <Form.Item name="index" label="排序">
                             <InputNumber style={{ width: '100%' }} placeholder="请选择排序" />
                         </Form.Item>
                     </Col>
-                    <Col span={12}>
+                    <Col span={3}>
                         <Form.Item name="icon" label="图标">
                             <Icons value={findFormValue('icon', formValue)} />
                         </Form.Item>
