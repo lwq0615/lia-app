@@ -90,6 +90,10 @@ const CodeForm: React.FC = (props: any) => {
             setRoleDict(res)
             const companyRoleTree:any = {}
             res.forEach((item: DictData) => {
+                // 普通用户不需要注册码
+                if(item.value === 3){
+                    return
+                }
                 if (!Array.isArray(companyRoleTree[item.remark])) {
                     companyRoleTree[item.remark] = []
                 }

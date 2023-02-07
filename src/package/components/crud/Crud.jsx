@@ -25,7 +25,8 @@ class Crud extends React.Component {
         addClick: propTypes.func,
         showSearch: propTypes.bool,
         menuBtns: propTypes.oneOfType([propTypes.array, propTypes.bool]),
-        deleteMsg: propTypes.string
+        deleteMsg: propTypes.string,
+        style: propTypes.object
     }
 
     static defaultProps = {

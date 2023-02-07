@@ -188,6 +188,7 @@ export default class CodeGenerator extends React.Component {
             codeId: this.state.codeId,
             columns: JSON.stringify(params.data),
             tableName: params.tableName,
+            module: params.module,
             primaryKey: JSON.stringify(params.primaryKey),
             httpUrl: params.httpUrl,
             createByFlag: params.createByFlag ? "1" : "0",
@@ -195,6 +196,7 @@ export default class CodeGenerator extends React.Component {
             updateTimeFlag: params.updateTimeFlag ? "1" : "0",
             remarkFlag: params.remarkFlag ? "1" : "0"
         }
+        // 将表格信息存入历史记录
         saveSysToolCode(record)
         const tabItems = [
             {
@@ -285,13 +287,24 @@ export default class CodeGenerator extends React.Component {
 
 
     onFinish = (values) => {
-        let { tableName, httpUrl, primaryKeyType, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag } = values
+        let { module, tableName, httpUrl, primaryKeyType, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag } = values
+        // 去除空格
         tableName = tableName.replace(/ /g, '')
         httpUrl = httpUrl?.replace(/ /g, '')
+        module = module?.replace(/ /g, '')
+        // 判断表名称是否合法
         if (!/^[A-Za-z_]+$/.test(tableName[0]) || !/^[A-Za-z0-9_]+$/.test(tableName)) {
             message.warning("表名不合法")
             return
         }
+        // 判断包路径是否合法
+        for (const item of module?.split(".")) {
+            if (!/^[A-Za-z_]+$/.test(item[0]) || !/^[A-Za-z0-9_]+$/.test(item)) {
+                message.warning("包路径不合法")
+                return
+            }
+        }
+        // 表格最少要有一条数据（一个字段）
         if (!this.state.data || this.state.data.length == 0) {
             message.warning("数据为空")
             return
@@ -299,22 +312,28 @@ export default class CodeGenerator extends React.Component {
         const data = [...this.state.data]
         for (let i in data) {
             let item = data[i]
+            // 字段名不可为空
             if (!item.name) {
                 message.warning("第" + (parseInt(i) + 1) + "条数据字段名为空")
                 return
             }
+            // 去除字段名中的空格
             item.name = item.name.replace(/ /g, '')
+            // 判断字段名是否合法
             if (!/^[A-Za-z_]+$/.test(item.name[0]) || !/^[A-Za-z0-9_]+$/.test(item.name)) {
                 message.warning("字段名" + item.name + "不合法")
                 return
             }
+            // 字段名转驼峰
             item.name = codeCreate.firstLow(codeCreate.toHump(item.name))
         }
+        // 生成主键信息
         const primaryKey = {
-            name: codeCreate.firstLow(codeCreate.toHump(tableName.replace(/ /g, ''))) + "Id",
+            name: "id",
             type: primaryKeyType
         }
         const params = {
+            module,
             data, 
             tableName, 
             primaryKey, 
@@ -345,7 +364,21 @@ export default class CodeGenerator extends React.Component {
         return (
             <Form onFinish={this.onFinish} initialValues={this.defaultFormValues} fields={this.state.heads}>
                 <Row gutter={24}>
-                    <Col span={8}>
+                    <Col span={6}>
+                        <Form.Item
+                            name="module"
+                            label="包路径"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: '请输入包路径',
+                                }
+                            ]}
+                        >
+                            <Input placeholder="请输入包路径" />
+                        </Form.Item>
+                    </Col>
+                    <Col span={6}>
                         <Form.Item
                             name="tableName"
                             label="表名"
@@ -359,7 +392,15 @@ export default class CodeGenerator extends React.Component {
                             <Input placeholder="请输入表名" />
                         </Form.Item>
                     </Col>
-                    <Col span={8}>
+                    <Col span={6}>
+                        <Form.Item
+                            name="httpUrl"
+                            label="接口地址"
+                        >
+                            <Input placeholder="请输入接口地址" />
+                        </Form.Item>
+                    </Col>
+                    <Col span={6}>
                         <Form.Item
                             name="primaryKeyType"
                             label="主键类型"
@@ -374,14 +415,6 @@ export default class CodeGenerator extends React.Component {
                                 <Option value="autoIncrement">自增</Option>
                                 <Option value="snowflake">雪花</Option>
                             </Select>
-                        </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                        <Form.Item
-                            name="httpUrl"
-                            label="接口地址"
-                        >
-                            <Input placeholder="请输入接口地址" />
                         </Form.Item>
                     </Col>
                     <Col span={4}>
@@ -447,6 +480,7 @@ export default class CodeGenerator extends React.Component {
                 <Modal
                     centered
                     width={1200}
+                    className="code-generator-modal"
                     destroyOnClose
                     keyboard
                     title="历史记录"

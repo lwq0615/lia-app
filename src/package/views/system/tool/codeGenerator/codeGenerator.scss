@@ -5,4 +5,8 @@
         white-space: pre-wrap;
         line-height: 20px;
     }
+    .ant-modal-body{
+        max-height: 630px;
+        overflow: auto;
+    }
 }

@@ -37,8 +37,8 @@ export function firstLow(str) {
  * 接口调用代码生成
  */
 export function requestCode({ tableName, httpUrl }) {
-    if (httpUrl && httpUrl[0] === '/') {
-        httpUrl = httpUrl.substring(1)
+    if (httpUrl && httpUrl[0] !== '/') {
+        httpUrl = '/'+httpUrl
     }
     if (httpUrl && httpUrl[httpUrl.length - 1] === '/') {
         httpUrl = httpUrl.substring(0, httpUrl.length - 1)
@@ -46,7 +46,7 @@ export function requestCode({ tableName, httpUrl }) {
     return `
 import request from "@/package/utils/request"
 
-const baseUrl = '/${httpUrl}'
+const baseUrl = '${httpUrl || ''}'
 
 /**
  * 分页查询列表
@@ -211,7 +211,7 @@ ${getColumnsCode()}
 /**
  * 实体类代码生成
  */
-export function entityCode({ data, tableName, primaryKey, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag }) {
+export function entityCode({ data, tableName, primaryKey, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag, module }) {
     data = dataConcat(data, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag)
     const columnCode = () => {
         let str = `    /**
@@ -220,25 +220,24 @@ export function entityCode({ data, tableName, primaryKey, createByFlag, createTi
     @TableId(type = ${primaryKey.type === "autoIncrement" ? "IdType.AUTO" : "IdType.ASSIGN_ID"})
     @TableField("\`${toLine(primaryKey.name)}\`")
     private Long ${primaryKey.name};\n\n`
+
         data.forEach(item => {
             if (item.type === "date" || item.type === "datetime") {
-                str += `    /**
-     * ${item.remark}
-     */
+                str += `${item.remark ? '    /**\n     * '+item.remark+'\n     */' : ''}
     @${item.updateTime ? "UpdateTime" : item.createTime ? "CreateTime" : ""}
     @TableField("\`${toLine(item.name)}\`")${item.notNull ? "\n    @Required" : ""}
     private String ${item.name};\n\n`
-            } else {
-                str += `    /**
-     * ${item.remark}
-     */
+            } 
+            else {
+                str += `${item.remark ? '    /**\n     * '+item.remark+'\n     */' : ''}
     @TableField("\`${toLine(item.name)}\`")${item.createBy ? "\n    @CreateBy" : ""}${item.like ? "\n    @Like" : ""}${item.notNull ? "\n    @Required" : ""}
     private ${item.type} ${item.name};\n\n`
             }
         })
+
         return str
     }
-    return `package com.lia.server.entity;
+    return `package ${module}.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -266,7 +265,7 @@ ${columnCode()}}
 /**
  * 控制层代码生成
  */
-export function controllerCode({ tableName, httpUrl }) {
+export function controllerCode({ tableName, httpUrl, module }) {
     if (httpUrl && httpUrl[0] === '/') {
         httpUrl = httpUrl.substring(1)
     }
@@ -279,7 +278,7 @@ export function controllerCode({ tableName, httpUrl }) {
         return httpUrl ? `
     @PreAuthorize("hasAuthority('${httpUrl.split("/").join(':') + ":" + method}')")` : ''
     }
-    return `package com.lia.server.modules.${objName};
+    return `package ${module}.modules.${objName};
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -351,10 +350,10 @@ public class ${className}Controller {
 /**
  * 业务层代码生成
  */
-export function serviceCode({ tableName }) {
+export function serviceCode({ tableName, module }) {
     const className = firstUp(toHump(tableName))
     const objName = firstLow(toHump(tableName))
-    return `package com.lia.server.modules.${objName};
+    return `package ${module}.modules.${objName};
 
 import com.lia.system.crud.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -381,10 +380,10 @@ public class ${className}Service extends BaseService<${className}> {
 /**
  * mapper层代码生成
  */
-export function mapperCode({ tableName }) {
+export function mapperCode({ tableName, module }) {
     const className = firstUp(toHump(tableName))
     const objName = firstLow(toHump(tableName))
-    return `package com.lia.server.modules.${objName};
+    return `package ${module}.modules.${objName};
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.lia.server.entity.SysRegisterCode;

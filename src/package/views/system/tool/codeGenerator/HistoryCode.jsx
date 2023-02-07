@@ -16,6 +16,12 @@ export default function Code(props) {
         props.setHeads([
             {
                 "name": [
+                    "module"
+                ],
+                "value": record.module
+            },
+            {
+                "name": [
                     "tableName"
                 ],
                 "value": record.tableName
@@ -159,6 +165,6 @@ export default function Code(props) {
 
 
     return (
-        <Crud {...option} />
+        <Crud {...option}/>
     )
 }          
