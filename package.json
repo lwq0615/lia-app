@@ -176,9 +176,18 @@
   "babel": {
     "presets": [
       "react-app"
+    ],
+    "plugins": [
+      [
+        "@babel/plugin-proposal-decorators",
+        {
+          "legacy": true
+        }
+      ]
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-decorators": "^7.20.13",
     "electron": "^19.0.4",
     "electron-builder": "^23.0.3",
     "webpack": "^5.64.4"

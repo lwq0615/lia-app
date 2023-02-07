@@ -15,8 +15,9 @@ import { login } from '@/package/store/loginUserSlice';
 
 const { Sider, Content } = Layout;
 
-
-class Home extends React.Component {
+@WithRedux
+@WithRouter
+export default class Home extends React.Component {
 
     /**
      * 在请求模块中注册路由跳转
@@ -250,4 +251,3 @@ class Home extends React.Component {
     }
 }
 
-export default WithRedux(WithRouter(Home))

@@ -8,7 +8,8 @@ interface Router {
     element: string | null
 }
 
-class HistoryRouter extends React.Component{
+@withAliveScope
+export default class HistoryRouter extends React.Component{
 
     state:{ 
         historyRouterList:Router[],
@@ -87,5 +88,3 @@ class HistoryRouter extends React.Component{
         )
     }
 }
-
-export default withAliveScope(HistoryRouter)
