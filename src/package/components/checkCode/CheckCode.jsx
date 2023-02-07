@@ -73,7 +73,7 @@ export default class CheckCode extends React.Component {
     canvas = null
 
     checkCode = (code) => {
-        return code.toLowerCase() === this.code.toLowerCase()
+        return code?.toLowerCase() === this.code.toLowerCase()
     }
 
     componentDidMount = () => {

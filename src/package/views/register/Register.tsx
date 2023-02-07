@@ -7,6 +7,7 @@ import { getParamValue } from '@/package/request/system/param'
 import CheckCode from "@/package/components/checkCode/CheckCode"
 import { registerUser } from '@/package/request/system/user'
 
+
 const Register: React.FC = function (props: any) {
 
     const [registerCheckCode, setRegisterCheckCode] = useState<boolean>(true)
@@ -19,7 +20,11 @@ const Register: React.FC = function (props: any) {
         })
     }, [])
 
-    const onFinish = (values: { nick: string, username: string, password: string, registerCode: string }) => {
+    const onFinish = (values: { nick: string, username: string, password: string, registerCode: string, code: string }) => {
+        if(!codeRef?.checkCode(values.code)){
+            message.warning("验证码错误")
+            return
+        }
         registerUser(values, values.registerCode).then((res: any) => {
             message.success("注册成功")
             props.navigate("/login")
