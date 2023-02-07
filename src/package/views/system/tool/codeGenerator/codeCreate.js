@@ -293,8 +293,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lia.server.entity.SysRegisterCode;
 import java.util.List;
 
-@RestController
-${httpUrl ? `@RequestMapping("/${httpUrl}")` : ''}
+@RestController${httpUrl ? `\n@RequestMapping("/${httpUrl}")` : ''}
 public class ${className}Controller {
 
 
