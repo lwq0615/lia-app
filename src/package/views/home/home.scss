@@ -57,6 +57,9 @@
                 cursor: pointer;
             }
         }
+        .content-body>div, .content-body>div>div{
+            height: 100%;
+        }
         .content-body {
             padding: 24px;
             margin: 0 16px 24px 16px;
