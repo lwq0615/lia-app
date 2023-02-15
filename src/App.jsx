@@ -1,9 +1,6 @@
 import './App.css';
-import React from "react"
-import Home from '@/package/views/home/Home'
-import Login from '@/package/views/login/Login'
+import React, { Suspense } from "react"
 // import Window from '@/package/components/window/Window'
-import { Route, Routes } from 'react-router-dom'
 // electron环境下无法使用BrowserRouter
 // import { HashRouter as Router } from 'react-router-dom'
 import { BrowserRouter as Router } from 'react-router-dom'
@@ -11,12 +8,16 @@ import { ConfigProvider } from 'antd';
 import zhCN from 'antd/lib/locale/zh_CN';
 import { Provider } from 'react-redux';
 import store from './package/store';
-import Register from '@/package/views/register/Register.tsx'
+import { Route, Routes } from 'react-router-dom'
+import Loading from './package/components/loading/Loading';
 
-class App extends React.Component {
 
-  render() {
-    return (
+async function getApp() {
+  const { default: Home } = await import("./package/views/home/Home")
+  const { default: Login } = await import("./package/views/login/Login")
+  const { default: Register } = await import("./package/views/register/Register")
+  return {
+    default: () => (
       <Provider store={store}>
         {/* 设置中文主题 */}
         <ConfigProvider locale={zhCN}>
@@ -31,6 +32,20 @@ class App extends React.Component {
           </Router>
         </ConfigProvider>
       </Provider>
+    )
+  }
+}
+
+const AppComponent = React.lazy(getApp)
+
+
+class App extends React.Component {
+
+  render() {
+    return (
+      <Suspense fallback={<Loading />}>
+        <AppComponent />
+      </Suspense>
     )
   }
 }

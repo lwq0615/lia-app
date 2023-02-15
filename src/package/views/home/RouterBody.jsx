@@ -39,6 +39,10 @@ function createRoutes(routers, arr = [], parentPath = '') {
     }
     return arr
 }
+
+
+
+
 function RouterBody(props) {
 
     const [routers, setRouters] = useState([])
@@ -51,7 +55,9 @@ function RouterBody(props) {
     }, [props.routers])
 
     return (
+        // 路由缓存
         <AliveScope>
+            {/* 路由切换过渡动画 */}
             <SwitchTransition mode="out-in">
                 <CSSTransition
                     key={props.location.key}
