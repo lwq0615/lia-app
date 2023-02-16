@@ -1,20 +1,9 @@
 import { createBrowserRouter, Route } from "react-router-dom";
 import KeepAlive from 'react-activation'
+import Home from "@/package/views/home/Home";
+import Login from "@/package/views/login/Login";
+import lazyLoad from "../utils/lazyLoad";
 import Loading from "../components/loading/Loading";
-import React, { Suspense } from "react"
-
-
-
-// 路由懒加载
-function lazyLoadRouter(imp, Loading) {
-  const LazyElement = React.lazy(imp);
-  return (
-    <Suspense fallback={<Loading />}>
-      <LazyElement />
-    </Suspense>
-  );
-}
-
 
 /**
  * 动态生成路由组件
@@ -52,18 +41,15 @@ export function createRoutes(routers, arr = [], parentPath = '') {
 const router = createBrowserRouter([
   {
     path: "*",
-    element: lazyLoadRouter(() => import("@/package/views/home/Home"), Loading),
-    mate: {
-      title: "首页"
-    }
+    element: <Home/>
   },
   {
     path: "/login",
-    element: lazyLoadRouter(() => import("@/package/views/login/Login"), Loading)
+    element: <Login/>
   },
   {
     path: "/register",
-    element: lazyLoadRouter(() => import("@/package/views/register/Register"), Loading)
+    element: lazyLoad(() => import("@/package/views/register/Register"), Loading)
   }
 ])
 

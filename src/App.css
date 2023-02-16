@@ -1,7 +1,1 @@
 @import '~antd/dist/antd.css';
-
-html, body, #root{
-    overflow: visible;
-    background-color: transparent;
-    height: 100%;
-}
