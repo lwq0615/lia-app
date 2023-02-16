@@ -120,7 +120,7 @@ export default class Home extends React.Component {
             }
             this.props.navigate(path)
         }
-        this.historyRouterRef.addHistory({
+        this.historyRouterRef?.addHistory({
             keyPath: keys.join(","),
             label,
             element

@@ -38,6 +38,10 @@ export function createRoutes(routers, arr = [], parentPath = '') {
   return arr
 }
 
+
+/**
+ * 基础组件
+ */
 const router = createBrowserRouter([
   {
     path: "*",
