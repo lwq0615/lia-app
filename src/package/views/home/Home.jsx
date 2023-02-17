@@ -2,8 +2,7 @@ import { Layout, Menu, Breadcrumb } from 'antd';
 import * as icons from '@ant-design/icons'
 import React from 'react';
 import './home.scss'
-import { getSysUserInfo, getHeadImg } from '@/package/request/system/user'
-import { getRouterOfRole } from '@/package/request/system/router'
+import { getHeadImg } from '@/package/request/system/user'
 import WithRouter from '@/package/components/hoc/WithRouter';
 import defaultImg from './image/default.jpg'
 import { initRouter } from "@/package/utils/request"
@@ -11,7 +10,6 @@ import HistoryRouter from './HistoryRouter.tsx'
 import HomeHeader from './HomeHeader';
 import RouterBody from './RouterBody'
 import WithRedux from '@/package/components/hoc/WithRedux'
-import { login } from '@/package/store/loginUserSlice';
 
 const { Sider, Content } = Layout;
 
@@ -179,11 +177,6 @@ export default class Home extends React.Component {
                 headImg: fileId
             })
         })
-    }
-
-
-    componentDidMount = () => {
-        this.loadUserAndRouter()
     }
 
 
