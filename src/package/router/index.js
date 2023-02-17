@@ -7,16 +7,13 @@ import store, { getState } from '@/package/store/index'
 import { changeMenus, login } from '@/package/store/loginUserSlice'
 import { getSysUserInfo } from '../request/system/user';
 import { getRouterOfRole } from '../request/system/router';
-import Index from '../views/system/index/Index';
+import { Route } from 'react-router-dom';
 
 /**
  * 动态生成路由组件
  * @returns 
  */
 export function createRoutes(routers, arr = [], parentPath = '') {
-  if (!Array.isArray(routers)) {
-    return
-  }
   if (parentPath[0] === "/") {
     parentPath = parentPath.substring(1)
   }
@@ -26,15 +23,18 @@ export function createRoutes(routers, arr = [], parentPath = '') {
       if (element[0] === '/') {
         element = element.substring(1)
       };
-
-      arr.push({
-        path: parentPath + "/" + item.path,
-        element: (
-          <KeepAlive name={item.element} cacheKey={item.element}>
-            {lazyLoad(() => import('@/package/views/' + element))}
-          </KeepAlive>
+      arr.push(import('@/package/views/' + element).then(({ default: Element }) => {
+        return (
+          <Route
+            key={'route:' + item.path}
+            exact
+            path={parentPath + "/" + item.path}
+            element={<KeepAlive name={item.element} cacheKey={item.element}><Element /></KeepAlive>} 
+          />
         )
-      })
+      }).catch(e => {
+        console.error(e)
+      }))
     }
     if (item.children) {
       createRoutes(item.children, arr, parentPath + "/" + item.path)
@@ -82,16 +82,3 @@ export const baseRoutes = [
     element: lazyLoad(() => import("@/package/views/register/Register"), Loading)
   }
 ]
-
-export default function createRouter(routes) {
-  const router = [...baseRoutes]
-  router.find(item => item.id === 'main').children = [{
-    path: "*",
-    element: (
-      <KeepAlive name="index" cacheKey="index">
-        <Index />
-      </KeepAlive>
-    )
-  }].concat(createRoutes(routes))
-  return router
-}
