@@ -55,31 +55,15 @@ class Login extends React.Component {
             return
         }
         sysUserLogin(values).then(res => {
-            switch (res) {
-                case "login failed": {
-                    message.warning("用户名或密码错误")
-                    break
-                }
-                case "less param": {
-                    message.warning("请填写完整")
-                    break
-                }
-                case "user deactivate": {
-                    message.warning("账号已停用")
-                    break
-                }
-                default: {
-                    localStorage.setItem(process.env.REACT_APP_HTTP_HEADER, res)
-                    if (this.state.rememberMe) {
-                        localStorage.setItem("username", values.username)
-                        localStorage.setItem("password", values.password)
-                    } else {
-                        localStorage.removeItem("username")
-                        localStorage.removeItem("password")
-                    }
-                    this.props.navigate("/")
-                }
+            localStorage.setItem(process.env.REACT_APP_HTTP_HEADER, res)
+            if (this.state.rememberMe) {
+                localStorage.setItem("username", values.username)
+                localStorage.setItem("password", values.password)
+            } else {
+                localStorage.removeItem("username")
+                localStorage.removeItem("password")
             }
+            this.props.navigate("/")
         })
     };
 

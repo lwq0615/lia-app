@@ -29,7 +29,7 @@ export default class Home extends React.Component {
 
     state = {
         collapsed: false,
-        userInfo: this.props.userInfo,
+        userInfo: this.props.getReduxState("loginUser.userInfo"),
         headImg: null,
         routers: [],
         routePath: [],
@@ -157,27 +157,18 @@ export default class Home extends React.Component {
     /**
      * 加载路由相关和用户信息
      */
-    loadUserAndRouter = () => {
-        // 获取用户信息
-        getSysUserInfo().then(user => {
-            this.props.dispatch(login(user))
-            this.setState({
-                userInfo: user
-            })
-            // 获取角色可访问的路由
-            getRouterOfRole(user.roleId).then(async routers => {
-                routers = this.routerMap(routers)
-                //根据进入时的URI重新渲染视图
-                if (location.pathname === "/") {
-                    this.goRouter()
-                } else {
-                    var keyPath = this.getPathKeys(location.pathname.substring(1).split("/"), routers)
-                    this.goRouter(keyPath, routers)
-                }
-                this.setState({
-                    routers
-                })
-            })
+    componentDidMount = () => {
+        // 获取角色可访问的路由
+        const routers = this.routerMap(this.props.getReduxState("loginUser.menus"))
+        //根据进入时的URI重新渲染视图
+        if (location.pathname === "/") {
+            this.goRouter()
+        } else {
+            var keyPath = this.getPathKeys(location.pathname.substring(1).split("/"), routers)
+            this.goRouter(keyPath, routers)
+        }
+        this.setState({
+            routers
         })
         this.getUserHeadImg()
     }
