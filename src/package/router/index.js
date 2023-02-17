@@ -7,6 +7,7 @@ import store, { getState } from '@/package/store/index'
 import { changeMenus, login } from '@/package/store/loginUserSlice'
 import { getSysUserInfo } from '../request/system/user';
 import { getRouterOfRole } from '../request/system/router';
+import Index from '../views/system/index/Index';
 
 /**
  * 动态生成路由组件
@@ -25,9 +26,14 @@ export function createRoutes(routers, arr = [], parentPath = '') {
       if (element[0] === '/') {
         element = element.substring(1)
       };
+
       arr.push({
         path: parentPath + "/" + item.path,
-        element: <KeepAlive name={item.element} cacheKey={item.element}>{lazyLoad(import('@/package/views/' + element))}</KeepAlive>
+        element: (
+          <KeepAlive name={item.element} cacheKey={item.element}>
+            {lazyLoad(() => import('@/package/views/' + element))}
+          </KeepAlive>
+        )
       })
     }
     if (item.children) {
@@ -52,12 +58,12 @@ export const baseRoutes = [
       // 如果redux没有数据，通过http获取
       if (!userInfo) {
         userInfo = await getSysUserInfo()
-        if(userInfo){
+        if (userInfo) {
           menus = await getRouterOfRole(userInfo.roleId)
           // 将数据存入redux
-          // store.dispatch(login(userInfo))
-          if(menus){
-            // store.dispatch(changeMenus(menus))
+          store.dispatch(login(userInfo))
+          if (menus) {
+            store.dispatch(changeMenus(menus))
           }
         }
       }
@@ -79,6 +85,13 @@ export const baseRoutes = [
 
 export default function createRouter(routes) {
   const router = [...baseRoutes]
-  router.find(item => item.id === 'main').children = createRoutes(routes)
+  router.find(item => item.id === 'main').children = [{
+    path: "*",
+    element: (
+      <KeepAlive name="index" cacheKey="index">
+        <Index />
+      </KeepAlive>
+    )
+  }].concat(createRoutes(routes))
   return router
 }

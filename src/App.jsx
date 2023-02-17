@@ -6,22 +6,18 @@ import { Provider } from 'react-redux';
 import { useSelector, shallowEqual } from "react-redux"
 import createRouter from "./package/router/index";
 import store from './package/store';
-import { useEffect, useState } from "react";
 
 
 function RouterComponent(){
 
-  const [routes, setRoutes] = useState(createRouter());
-
+  /**
+   * redux中的menus改变时重新渲染组件
+   */
   const menus = useSelector(state => {
     return state.loginUser.menus
   }, shallowEqual);
-    
-  // useEffect监听的是redux/loginUser里面的menus数据有没有改变
-  useEffect(() => {
-    const routes = createRouter(menus);
-    setRoutes(routes);
-  }, [menus]);
+
+  const routes = createRouter(menus)
   return <RouterProvider router={createBrowserRouter(routes)}/>
 }
 
