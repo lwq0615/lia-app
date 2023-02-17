@@ -75,10 +75,7 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js",
-    "electron-dev": "electron main.js debug",
-    "electron-build": "./node_modules/.bin/electron-builder",
-    "electron": "electron main.js"
+    "test": "node scripts/test.js"
   },
   "build": {
     "productName": "lia",
@@ -190,8 +187,6 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.20.13",
-    "electron": "^19.0.4",
-    "electron-builder": "^23.0.3",
     "webpack": "^5.64.4"
   }
 }

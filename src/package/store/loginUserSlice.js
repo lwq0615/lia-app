@@ -5,14 +5,14 @@ const userInfo = createSlice({
     name: "loginUser",
     initialState: {
         userInfo: null,
-        meuns: null
+        menus: null
     },
     reducers: {
         login(state, { payload }) {
             state.userInfo = payload
         },
         changeMenus(state, { payload }) {
-            state.meuns = payload
+            state.menus = payload
         }
     }
 })

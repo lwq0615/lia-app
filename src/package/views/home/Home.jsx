@@ -28,7 +28,7 @@ export default class Home extends React.Component {
 
     state = {
         collapsed: false,
-        userInfo: this.props.getReduxState("loginUser.userInfo"),
+        userInfo: this.props.loaderData.userInfo,
         headImg: null,
         routers: [],
         routePath: [],
@@ -158,7 +158,7 @@ export default class Home extends React.Component {
      */
     componentDidMount = () => {
         // 获取角色可访问的路由
-        const routers = this.routerMap(this.props.getReduxState("loginUser.menus"))
+        const routers = this.routerMap(this.props.loaderData.menus)
         //根据进入时的URI重新渲染视图
         if (location.pathname === "/") {
             this.goRouter()
