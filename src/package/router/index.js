@@ -27,10 +27,6 @@ export function createRoutes(routers, arr = [], parentPath = '') {
         return (
           <Route
             key={'route:' + item.path}
-            exact
-            loader={() => {
-              console.log(item.label);
-            }}
             path={parentPath + "/" + item.path}
             element={<KeepAlive name={item.element} cacheKey={item.element}><Element /></KeepAlive>} 
           />
