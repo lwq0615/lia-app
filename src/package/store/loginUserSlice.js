@@ -8,15 +8,15 @@ const userInfo = createSlice({
         meuns: null
     },
     reducers: {
-        login(state, userInfo) {
-            state.userInfo = userInfo
+        login(state, { payload }) {
+            state.userInfo = payload
         },
-        changeMenus(state, meuns) {
-            state.meuns = meuns
+        changeMenus(state, { payload }) {
+            state.meuns = payload
         }
     }
 })
 
-export const { login } = userInfo.actions
+export const { login, changeMenus } = userInfo.actions
 
 export default userInfo.reducer

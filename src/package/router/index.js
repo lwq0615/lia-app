@@ -14,6 +14,9 @@ import { getRouterOfRole } from '../request/system/router';
  * @returns 
  */
 export function createRoutes(routers, arr = [], parentPath = '') {
+  if(!Array.isArray(routers)){
+    return
+  }
   if (parentPath[0] === "/") {
       parentPath = parentPath.substring(1)
   }
@@ -87,7 +90,9 @@ export const baseRoutes = [
       // 将数据存入redux
       store.dispatch(login(userInfo))
       store.dispatch(changeMenus(meuns))
-      return null
+      console.log(userInfo);
+      console.log(menus);
+      return 1
     }
   },
   {

@@ -1,5 +1,4 @@
 import './App.css';
-import React from "react"
 // import Window from '@/package/components/window/Window'
 // electron环境下无法使用BrowserRouter
 // import { HashRouter as Router } from 'react-router-dom'
@@ -10,14 +9,20 @@ import { Provider } from 'react-redux';
 import { useLoadRouter } from "./package/hook/useLoadRouter";
 import store from './package/store';
 
-export default function App() {
+
+function AppRoutes(){
   const routes = useLoadRouter()
+  return useRoutes(routes) 
+}
+
+
+export default function App() {
   return (
     <Provider store={store}>
       {/* 设置中文主题 */}
       <ConfigProvider locale={zhCN}>
         <BrowserRouter>
-          {useRoutes(routes)}
+          <AppRoutes/>
         </BrowserRouter>
       </ConfigProvider>
     </Provider>

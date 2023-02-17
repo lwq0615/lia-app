@@ -1,16 +1,11 @@
 import { useEffect, useState } from "react";
-import { shallowEqual, useSelector } from "react-redux";
-import { baseRoutes, createRouter } from "../router/index";
+import createRouter from "../router/index";
+import { getState } from "../store";
 
 export function useLoadRouter() {
-  const [routes, setRoutes] = useState(baseRoutes);
+  const [routes, setRoutes] = useState(createRouter());
 
-  const { meuns } = useSelector(
-    (state) => ({
-      meuns: state.loginUser.meuns,
-    }),
-    shallowEqual
-  );
+  const meuns = getState("loginUser.menus")
     
   // useEffect监听的是redux/loginUser里面的meuns数据有没有改变
   useEffect(() => {

@@ -21,8 +21,11 @@ export function getState(keys){
       }else{
           value = value[reduxKeys[i]]
       }
+      if(value === void 0){
+        return void 0
+      }
   }
-  return value.payload
+  return value
 }
 
 export default store

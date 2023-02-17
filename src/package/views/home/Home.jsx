@@ -13,6 +13,7 @@ import WithRedux from '@/package/components/hoc/WithRedux'
 
 const { Sider, Content } = Layout;
 
+
 @WithRedux
 @WithRouter
 export default class Home extends React.Component {
