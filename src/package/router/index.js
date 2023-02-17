@@ -52,10 +52,14 @@ export const baseRoutes = [
       // 如果redux没有数据，通过http获取
       if (!userInfo) {
         userInfo = await getSysUserInfo()
-        menus = await getRouterOfRole()
-        // 将数据存入redux
-        store.dispatch(login(userInfo))
-        store.dispatch(changeMenus(menus))
+        if(userInfo){
+          menus = await getRouterOfRole(userInfo.roleId)
+          // 将数据存入redux
+          // store.dispatch(login(userInfo))
+          if(menus){
+            // store.dispatch(changeMenus(menus))
+          }
+        }
       }
       return {
         userInfo,
