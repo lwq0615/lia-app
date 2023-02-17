@@ -14,6 +14,33 @@ import WithRedux from '@/package/components/hoc/WithRedux'
 const { Sider, Content } = Layout;
 
 
+/**
+ * 路由数据映射为导航数据
+ */
+function routerMap(router) {
+    if (!router) {
+        return null
+    }
+    return router.map(item => {
+        const data = {
+            key: String(item.routerId),
+            label: item.label,
+            element: item.element,
+            path: item.path,
+            index: item.index
+        }
+        if (item.children) {
+            data.children = routerMap(item.children)
+        }
+        if (item.icon) {
+            const Icon = icons[item.icon]
+            data.icon = <Icon />
+        }
+        return data
+    })
+}
+
+
 @WithRedux
 @WithRouter
 export default class Home extends React.Component {
@@ -30,7 +57,7 @@ export default class Home extends React.Component {
         collapsed: false,
         userInfo: this.props.loaderData.userInfo,
         headImg: null,
-        routers: [],
+        routers: routerMap(this.props.loaderData.menus),
         routePath: [],
         selectedKeys: null,
         historyRouterList: []
@@ -43,32 +70,6 @@ export default class Home extends React.Component {
             collapsed: !this.state.collapsed,
         });
     };
-
-    /**
-     * 路由数据映射为导航数据
-     */
-    routerMap = (router) => {
-        if (!router) {
-            return null
-        }
-        return router.map(item => {
-            const data = {
-                key: String(item.routerId),
-                label: item.label,
-                element: item.element,
-                path: item.path,
-                index: item.index
-            }
-            if (item.children) {
-                data.children = this.routerMap(item.children)
-            }
-            if (item.icon) {
-                const Icon = icons[item.icon]
-                data.icon = <Icon />
-            }
-            return data
-        })
-    }
 
     /**
      * 点击路由时触发
@@ -94,7 +95,9 @@ export default class Home extends React.Component {
             this.setState({
                 routePath: [<Breadcrumb.Item key='*'>首页</Breadcrumb.Item>]
             })
-            this.props.navigate("/")
+            if(location.pathname !== "/"){
+                this.props.navigate("/")
+            }
             label = '首页'
             element = 'index'
         } else {
@@ -117,7 +120,9 @@ export default class Home extends React.Component {
             if (path[0] === '/') {
                 path = path.substring(1)
             }
-            this.props.navigate(path)
+            if(location.pathname !== '/'+path){
+                this.props.navigate(path)
+            }
         }
         this.historyRouterRef?.addHistory({
             keyPath: keys.join(","),
@@ -154,21 +159,16 @@ export default class Home extends React.Component {
 
 
     /**
-     * 加载路由相关和用户信息
+     * 加载路由相关
      */
     componentDidMount = () => {
-        // 获取角色可访问的路由
-        const routers = this.routerMap(this.props.loaderData.menus)
         //根据进入时的URI重新渲染视图
-        if (location.pathname === "/") {
+        if (location.pathname !== "/") {
+            let keyPath = this.getPathKeys(location.pathname.substring(1).split("/"), this.state.routers)
+            this.goRouter(keyPath, this.state.routers)
+        }else{
             this.goRouter()
-        } else {
-            var keyPath = this.getPathKeys(location.pathname.substring(1).split("/"), routers)
-            this.goRouter(keyPath, routers)
         }
-        this.setState({
-            routers
-        })
         this.getUserHeadImg()
     }
 
@@ -198,16 +198,14 @@ export default class Home extends React.Component {
                         </span>
                     </div>
                     {
-                        this.state.selectedKeys
-                            ? <Menu
-                                onClick={this.routerClick}
-                                theme="dark"
-                                mode="inline"
-                                defaultOpenKeys={this.state.selectedKeys.slice(0, this.state.selectedKeys.length - 1)}
-                                selectedKeys={this.state.selectedKeys}
-                                items={this.state.routers}
-                            />
-                            : null
+                        this.state.selectedKeys && <Menu
+                            onClick={this.routerClick}
+                            theme="dark"
+                            mode="inline"
+                            defaultOpenKeys={this.state.selectedKeys.slice(0, this.state.selectedKeys.length - 1)}
+                            selectedKeys={this.state.selectedKeys}
+                            items={this.state.routers}
+                        />
                     }
                 </Sider>
                 <Layout className="site-layout">

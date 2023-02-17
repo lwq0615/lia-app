@@ -28,6 +28,9 @@ export function createRoutes(routers, arr = [], parentPath = '') {
           <Route
             key={'route:' + item.path}
             exact
+            loader={() => {
+              console.log(item.label);
+            }}
             path={parentPath + "/" + item.path}
             element={<KeepAlive name={item.element} cacheKey={item.element}><Element /></KeepAlive>} 
           />
@@ -52,6 +55,7 @@ export const baseRoutes = [
     id: "main",
     element: <Home />,
     loader: async () => {
+      document.title = "首页"
       // 如果redux有数据，直接从redux获取
       let userInfo = getState("loginUser.userInfo")
       let menus = getState("loginUser.menus")
@@ -75,10 +79,18 @@ export const baseRoutes = [
   },
   {
     path: "/login",
-    element: <Login />
+    element: <Login />,
+    loader: () => {
+      document.title = "登录"
+      return null
+    }
   },
   {
     path: "/register",
-    element: lazyLoad(() => import("@/package/views/register/Register"), Loading)
+    element: lazyLoad(() => import("@/package/views/register/Register"), Loading),
+    loader: () => {
+      document.title = "注册"
+      return null
+    }
   }
 ]
