@@ -4,6 +4,8 @@ import * as icons from '@ant-design/icons'
 import React from 'react';
 import { logout } from '@/package/request/system/user'
 import WithRouter from '@/package/components/hoc/WithRouter';
+import { login, changeMenus } from '@/package/store/loginUserSlice';
+import WithRedux from '@/package/components/hoc/WithRedux';
 
 const { Header } = Layout
 
@@ -14,6 +16,8 @@ function HomeHeader(props) {
      */
     function logoutClick() {
         logout().then(() => {
+            props.dispatch(login(null))
+            props.dispatch(changeMenus(null))
             localStorage.removeItem(process.env.REACT_APP_HTTP_HEADER)
             props.navigate("/login")
         })
@@ -57,4 +61,4 @@ function HomeHeader(props) {
 }
 
 
-export default WithRouter(HomeHeader)
+export default WithRedux(WithRouter(HomeHeader))

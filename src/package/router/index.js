@@ -28,7 +28,11 @@ export function createRoutes(routers, arr = [], parentPath = '') {
           <Route
             key={'route:' + item.path}
             path={parentPath + "/" + item.path}
-            element={<KeepAlive name={item.element} cacheKey={item.element}><Element /></KeepAlive>} 
+            element={
+              <KeepAlive name={item.element} cacheKey={item.element}>
+                <Element/>
+              </KeepAlive>
+            }
           />
         )
       }).catch(e => {
