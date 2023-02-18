@@ -79,10 +79,11 @@ export default class Home extends React.Component {
         this.goRouter(e.keyPath.reverse(), this.state.routers)
     }
 
+
     /**
-     * 根据keyPath跳转路由
+     * 更新历史菜单，菜单路径，菜单选中项等信息
      */
-    goRouter = (keys = [], routers = this.state.routers) => {
+    updateRouterPath = (keys = [], routers = this.state.routers) => {
         if (keys?.join("") === this.state.selectedKeys?.join("")) {
             return
         }
@@ -95,40 +96,57 @@ export default class Home extends React.Component {
             this.setState({
                 routePath: [<Breadcrumb.Item key='*'>首页</Breadcrumb.Item>]
             })
-            if(location.pathname !== "/"){
-                this.props.navigate("/")
-            }
             label = '首页'
             element = 'index'
         } else {
             let list = routers
             let parent = null
-            let path = ''
             this.setState({
                 routePath: keys.map(key => {
                     parent = this.findTarget(key, list)
                     if (parent) {
                         list = parent.children
-                        path += "/" + parent.path
                         label = parent.label
                         element = parent.element
                         return (<Breadcrumb.Item key={key}>{parent.label}</Breadcrumb.Item>)
                     }
                 })
             })
-            //跳转路由展示页面
-            if (path[0] === '/') {
-                path = path.substring(1)
-            }
-            if(location.pathname !== '/'+path){
-                this.props.navigate(path)
-            }
         }
         this.historyRouterRef?.addHistory({
             keyPath: keys.join(","),
             label,
             element
         })
+    }
+
+    /**
+     * 根据keyPath跳转路由
+     */
+    goRouter = (keys = [], routers = this.state.routers) => {
+        if (keys?.join("") === this.state.selectedKeys?.join("")) {
+            return
+        }
+        if (!keys || keys.length === 0) {
+            this.props.navigate("/")
+        } else {
+            let list = routers
+            let parent = null
+            let path = ''
+            keys.forEach(key => {
+                parent = this.findTarget(key, list)
+                if (parent) {
+                    list = parent.children
+                    path += "/" + parent.path
+                }
+            })
+            //跳转路由展示页面
+            if (path[0] === '/') {
+                path = path.substring(1)
+            }
+            this.props.navigate(path)
+        }
+        this.updateRouterPath(keys)
     }
 
     findTarget(key, parent = this.state.routers) {
@@ -165,9 +183,9 @@ export default class Home extends React.Component {
         //根据进入时的URI重新渲染视图
         if (location.pathname !== "/") {
             let keyPath = this.getPathKeys(location.pathname.substring(1).split("/"), this.state.routers)
-            this.goRouter(keyPath, this.state.routers)
-        }else{
-            this.goRouter()
+            this.updateRouterPath(keyPath, this.state.routers)
+        } else {
+            this.updateRouterPath()
         }
         this.getUserHeadImg()
     }
