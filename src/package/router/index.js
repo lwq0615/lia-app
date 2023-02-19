@@ -8,12 +8,17 @@ import { changeMenus, login } from '@/package/store/loginUserSlice'
 import { getSysUserInfo } from '../request/system/user';
 import { getRouterOfRole } from '../request/system/router';
 import { Route } from 'react-router-dom';
+import Root from '@/package/views/Root'
+
 
 /**
- * 动态生成路由组件
+ * 
+ * @param {Array} routers 路由列表
+ * @param {Array} arr 最终返回的路由数组
+ * @param {string} parentPath 父路由路径
  * @returns 
  */
-export function createRoutes(routers, arr = [], parentPath = '') {
+export function createRoutes(routers, arr = [], parentPath = '', parentTitle = '') {
   if (parentPath[0] === "/") {
     parentPath = parentPath.substring(1)
   }
@@ -23,6 +28,7 @@ export function createRoutes(routers, arr = [], parentPath = '') {
       if (element[0] === '/') {
         element = element.substring(1)
       };
+      routeTitle["/" + parentPath + "/" + item.path] = parentTitle + '-' +item.label
       arr.push(import('@/package/views/' + element).then(({ default: Element }) => {
         return (
           <Route
@@ -30,7 +36,7 @@ export function createRoutes(routers, arr = [], parentPath = '') {
             path={parentPath + "/" + item.path}
             element={
               <KeepAlive name={item.element} cacheKey={item.element}>
-                <Element/>
+                <Element />
               </KeepAlive>
             }
           />
@@ -40,11 +46,15 @@ export function createRoutes(routers, arr = [], parentPath = '') {
       }))
     }
     if (item.children) {
-      createRoutes(item.children, arr, parentPath + "/" + item.path)
+      const path = parentPath + "/" + item.path
+      const title = parentTitle ? parentTitle + "-" + item.label : item.label
+      createRoutes(item.children, arr, path, title)
     }
   }
   return arr
 }
+
+
 
 /**
  * 基础组件
@@ -52,45 +62,49 @@ export function createRoutes(routers, arr = [], parentPath = '') {
 export const baseRoutes = [
   {
     path: "*",
-    id: "main",
-    element: <Home />,
-    loader: async () => {
-      document.title = "首页"
-      // 如果redux有数据，直接从redux获取
-      let userInfo = getState("loginUser.userInfo")
-      let menus = getState("loginUser.menus")
-      // 如果redux没有数据，通过http获取
-      if (!userInfo) {
-        userInfo = await getSysUserInfo()
-        if (userInfo) {
-          menus = await getRouterOfRole(userInfo.roleId)
-          // 将数据存入redux
-          store.dispatch(login(userInfo))
-          if (menus) {
-            store.dispatch(changeMenus(menus))
+    element: <Root />,
+    children: [
+      {
+        path: "*",
+        element: <Home />,
+        loader: async () => {
+          // 如果redux有数据，直接从redux获取
+          let userInfo = getState("loginUser.userInfo")
+          let menus = getState("loginUser.menus")
+          // 如果redux没有数据，通过http获取
+          if (!userInfo) {
+            userInfo = await getSysUserInfo()
+            if (userInfo) {
+              menus = await getRouterOfRole(userInfo.roleId)
+              // 将数据存入redux
+              store.dispatch(login(userInfo))
+              if (menus) {
+                store.dispatch(changeMenus(menus))
+              }
+            }
+          }
+          return {
+            userInfo,
+            menus
           }
         }
+      },
+      {
+        path: "login",
+        element: <Login />
+      },
+      {
+        path: "register",
+        element: lazyLoad(() => import("@/package/views/register/Register"), Loading)
       }
-      return {
-        userInfo,
-        menus
-      }
-    }
-  },
-  {
-    path: "/login",
-    element: <Login />,
-    loader: () => {
-      document.title = "登录"
-      return null
-    }
-  },
-  {
-    path: "/register",
-    element: lazyLoad(() => import("@/package/views/register/Register"), Loading),
-    loader: () => {
-      document.title = "注册"
-      return null
-    }
+    ]
   }
 ]
+
+
+
+export const routeTitle = {
+  "*": "首页",
+  "/login": "登录",
+  "/register": "注册"
+}
