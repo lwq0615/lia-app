@@ -101,6 +101,9 @@ export const baseRoutes = [
               }
             }
           }
+          if(!userInfo){
+            router.navigate("/login")
+          }
           return {
             userInfo,
             menus
