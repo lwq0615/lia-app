@@ -19,6 +19,9 @@ import Root from '@/package/views/Root'
  * @returns 
  */
 export function createRoutes(routers, arr = [], parentPath = '', parentTitle = '') {
+  if(!Array.isArray(routers) || !routers.length){
+    return []
+  }
   if (parentPath[0] === "/") {
     parentPath = parentPath.substring(1)
   }

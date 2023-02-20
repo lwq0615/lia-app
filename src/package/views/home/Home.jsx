@@ -5,7 +5,6 @@ import './home.scss'
 import { getHeadImg } from '@/package/request/system/user'
 import WithRouter from '@/package/components/hoc/WithRouter';
 import defaultImg from './image/default.jpg'
-import { initRouter } from "@/package/utils/request"
 import HistoryRouter from './HistoryRouter.tsx'
 import HomeHeader from './HomeHeader';
 import RouterBody from './RouterBody'
@@ -50,7 +49,6 @@ export default class Home extends React.Component {
      */
     constructor(props) {
         super(props)
-        initRouter(props.navigate)
     }
 
     state = {

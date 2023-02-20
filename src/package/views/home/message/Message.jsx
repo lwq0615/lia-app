@@ -60,7 +60,7 @@ class Message extends React.Component {
             }
         })
         getNoReadCount().then(res => {
-            this.setMsgCount(eval(Object.values(res).join("+")) || 0)
+            this.setMsgCount(eval(Object.values(res || {}).join("+")) || 0)
         })
     }
 
