@@ -63,7 +63,7 @@ request.interceptors.response.use(
         }
     },
     err => {
-        console.error(err)
+        throw err
     }
 )
 
