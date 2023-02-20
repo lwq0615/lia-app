@@ -1,8 +1,6 @@
 import { useRouterListen } from '@/package/hook/routerHooks';
 import { Outlet } from "react-router-dom";
 import { routeTitle } from '../router';
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 
 /**
