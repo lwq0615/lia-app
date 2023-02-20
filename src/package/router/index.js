@@ -21,7 +21,7 @@ export let router = null
 /**
  * 在应用初始化时注册路由
  */
-export function initRouter(appRouter) {
+export function initRouter(appRouter){
   router = appRouter
 }
 
@@ -34,7 +34,7 @@ export function initRouter(appRouter) {
  * @returns 
  */
 export function createRoutes(routers, arr = [], parentPath = '', parentTitle = '') {
-  if (!Array.isArray(routers) || !routers.length) {
+  if(!Array.isArray(routers) || !routers.length){
     return []
   }
   if (parentPath[0] === "/") {
@@ -46,7 +46,7 @@ export function createRoutes(routers, arr = [], parentPath = '', parentTitle = '
       if (element[0] === '/') {
         element = element.substring(1)
       };
-      routeTitle["/" + parentPath + "/" + item.path] = parentTitle + '-' + item.label
+      routeTitle["/" + parentPath + "/" + item.path] = parentTitle + '-' +item.label
       arr.push(import('@/package/views/' + element).then(({ default: Element }) => {
         return (
           <Route
@@ -80,36 +80,42 @@ export function createRoutes(routers, arr = [], parentPath = '', parentTitle = '
 export const baseRoutes = [
   {
     path: "*",
-    element: <Home />,
-    loader: async () => {
-      // 如果redux有数据，直接从redux获取
-      let userInfo = getState("loginUser.userInfo")
-      let menus = getState("loginUser.menus")
-      // 如果redux没有数据，通过http获取
-      if (!userInfo) {
-        userInfo = await getSysUserInfo()
-        if (userInfo) {
-          menus = await getRouterOfRole(userInfo.roleId)
-          // 将数据存入redux
-          store.dispatch(login(userInfo))
-          if (menus) {
-            store.dispatch(changeMenus(menus))
+    element: <Root />,
+    children: [
+      {
+        path: "*",
+        element: <Home />,
+        loader: async () => {
+          // 如果redux有数据，直接从redux获取
+          let userInfo = getState("loginUser.userInfo")
+          let menus = getState("loginUser.menus")
+          // 如果redux没有数据，通过http获取
+          if (!userInfo) {
+            userInfo = await getSysUserInfo()
+            if (userInfo) {
+              menus = await getRouterOfRole(userInfo.roleId)
+              // 将数据存入redux
+              store.dispatch(login(userInfo))
+              if (menus) {
+                store.dispatch(changeMenus(menus))
+              }
+            }
+          }
+          return {
+            userInfo,
+            menus
           }
         }
+      },
+      {
+        path: "login",
+        element: <Login />
+      },
+      {
+        path: "register",
+        element: lazyLoad(() => import("@/package/views/register/Register"), Loading)
       }
-      return {
-        userInfo,
-        menus
-      }
-    }
-  },
-  {
-    path: "login",
-    element: <Login />
-  },
-  {
-    path: "register",
-    element: lazyLoad(() => import("@/package/views/register/Register"), Loading)
+    ]
   }
 ]
 
