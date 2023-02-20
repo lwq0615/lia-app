@@ -1,20 +1,7 @@
 /* eslint-disable */
 import axios from "axios"
 import { message } from 'antd'
-
-
-/**
- * 路由跳转的钩子函数
- */
-let navigate = null
-
-
-/**
- * 在应用初始化时注册路由跳转钩子函数
- */
-export function initRouter(initNavigate){
-    navigate = initNavigate
-}
+import { router } from "../router"
 
 
 const request = axios.create({
@@ -58,7 +45,7 @@ function createMsg(errCode, msg) {
     }
     if ([401, 402].includes(errCode)) {
         localStorage.removeItem(process.env.REACT_APP_HTTP_HEADER)
-        navigate("/login")
+        router.navigate("/login")
     }
 }
 

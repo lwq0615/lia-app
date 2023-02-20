@@ -11,6 +11,21 @@ import { Route } from 'react-router-dom';
 import Root from '@/package/views/Root'
 
 
+
+/**
+ * 路由对象
+ */
+export let router = null
+
+
+/**
+ * 在应用初始化时注册路由
+ */
+export function initRouter(appRouter){
+  router = appRouter
+}
+
+
 /**
  * 
  * @param {Array} routers 路由列表
