@@ -45,3 +45,11 @@ export function deleteRouters(routerIds){
 export function getRouterById(routerId){
     return request.get(`${baseUrl}/getRouterById?routerId=${routerId}`)
 }
+
+
+/**
+ * 路由重新排序
+ */
+export function reloadIndex(list){
+    return request.post(`${baseUrl}/reloadIndex`, list)
+}

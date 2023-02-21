@@ -1,6 +1,7 @@
 import React from 'react';
-import { Button, Tree, Input } from 'antd';
+import { Button, Tree, Input, message } from 'antd';
 import './router.scss'
+import { reloadIndex } from '@/package/request/system/router';
 
 
 function routerMap(routers) {
@@ -107,10 +108,10 @@ class RouterTree extends React.Component {
           <span>
             {beforeStr}
             <span className="site-tree-search-value">{this.state.searchValue}</span>
-            {afterStr+item.key}
+            {afterStr}
           </span>
         ) : (
-          <span>{item.title+item.key}</span>
+          <span>{item.title}</span>
         );
 
       return {
@@ -121,8 +122,77 @@ class RouterTree extends React.Component {
     });
   }
 
-  onDragEnd = (e) => {
-    console.log(e);
+  onDrop = (e) => {
+    const findRouter = (routerId, routers = this.props.routerTree) => {
+      if (Array.isArray(routers)) {
+        for (const i in routers) {
+          const item = routers[i]
+          if (item.routerId === routerId) {
+            return routers.splice(i, 1)[0]
+          }
+          if (Array.isArray(item.children)) {
+            return findRouter(routerId, item.children)
+          }
+        }
+      }
+    }
+    // 被拖动元素
+    const dragRouter = findRouter(e.dragNode.key)
+    // 的移动目标位置元素
+    const toNodeKey = e.node.key
+    // 是否作为目标元素的下一级的第一个
+    const nextFlg = e.node.dragOver
+    // 是否在目标元素上方
+    const toNodeTop = e.node.dragOverGapTop
+    const insert = (router, routers = this.props.routerTree) => {
+      if (Array.isArray(routers)) {
+        for (const i in routers) {
+          const item = routers[i]
+          if (item.routerId === toNodeKey) {
+            if(nextFlg){
+              if(!Array.isArray(item.children)){
+                item.children = []
+              }
+              item.children.unshift(router)
+            }
+            else if(toNodeTop){
+              routers.splice(i, 0, router)
+            }
+            else{
+              routers.splice(+i + 1, 0, router)
+            }
+            return
+          }
+          if (Array.isArray(item.children)) {
+            insert(router, item.children)
+          }
+        }
+      }
+    }
+    insert(dragRouter)
+    const newIndex = []
+    const setIndex = (routers) => {
+      if(!Array.isArray(routers)){
+        return
+      }
+      for (const i in routers) {
+        routers[i].index = +i
+        if(!newIndex[i]){
+          newIndex[i] = []
+        }
+        newIndex[i].push(routers[i].routerId)
+        setIndex(routers[i].children)
+      }
+    }
+    setIndex(this.props.routerTree)
+    reloadIndex(newIndex).then(res => {
+      if(res > 0){
+        message.success("操作成功")
+        this.props.reloadTree()
+      }else{
+        message.warning("操作失败")
+      }
+    })
   }
 
   render() {
@@ -148,11 +218,12 @@ class RouterTree extends React.Component {
 
         </div>
         <Tree
+          style={{ paddingTop: 10 }}
           showLine={{
             showLeftIcon: true
           }}
-          draggable={{icon: false}}
-          onDragEnd={this.onDragEnd}
+          draggable={{ icon: false }}
+          onDrop={this.onDrop}
           onSelect={this.onSelect}
           onExpand={this.onExpand}
           expandedKeys={this.state.expandedKeys}
