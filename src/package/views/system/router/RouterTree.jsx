@@ -107,10 +107,10 @@ class RouterTree extends React.Component {
           <span>
             {beforeStr}
             <span className="site-tree-search-value">{this.state.searchValue}</span>
-            {afterStr}
+            {afterStr+item.key}
           </span>
         ) : (
-          <span>{item.title}</span>
+          <span>{item.title+item.key}</span>
         );
 
       return {
@@ -119,6 +119,10 @@ class RouterTree extends React.Component {
         children: this.loop(item.children),
       };
     });
+  }
+
+  onDragEnd = (e) => {
+    console.log(e);
   }
 
   render() {
@@ -147,6 +151,8 @@ class RouterTree extends React.Component {
           showLine={{
             showLeftIcon: true
           }}
+          draggable={{icon: false}}
+          onDragEnd={this.onDragEnd}
           onSelect={this.onSelect}
           onExpand={this.onExpand}
           expandedKeys={this.state.expandedKeys}

@@ -12,7 +12,7 @@ export function getHeadImg(item){
             return defaultImg
         }
     } else if(typeof item === "number"){
-        return item ? pgetPicUrl(item) : defaultImg
+        return item ? getPicUrl(item) : defaultImg
     } else {
         return defaultImg
     }

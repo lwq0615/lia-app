@@ -55,7 +55,7 @@ const RouterForm = ({ routerDict, formValue, formTitle, routerId, reloadTree, se
             if (res > 0) {
                 message.success("删除成功")
                 reloadTree()
-                setForm()
+                setForm({parent: 1}, "新增")
             } else {
                 message.warning("删除失败")
             }
