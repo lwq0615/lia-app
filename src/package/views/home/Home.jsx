@@ -9,6 +9,7 @@ import HistoryRouter from './HistoryRouter.tsx'
 import HomeHeader from './HomeHeader';
 import RouterBody from './RouterBody'
 import WithRedux from '@/package/components/hoc/WithRedux'
+import { getPicUrl } from '@/package/request/system/file';
 
 const { Sider, Content } = Layout;
 
@@ -204,7 +205,7 @@ export default class Home extends React.Component {
                     <div className='userInfo'>
                         <img
                             src={this.state.headImg
-                                ? process.env.REACT_APP_HTTP_URL + "/system/file/getPic?comp=true&fileId=" + this.state.headImg
+                                ? getPicUrl(this.state.headImg)
                                 : defaultImg}
                             className="headImg"
                             onClick={() => this.goRouter()}

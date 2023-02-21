@@ -2,16 +2,17 @@
 import propTypes from 'prop-types'
 import { Badge } from 'antd';
 import defaultImg from '../image/default.jpg'
+import { getPicUrl } from '@/package/request/system/file';
 
 export function getHeadImg(item){
     if(typeof item === "object"){
         if(item.remark){
-            return process.env.REACT_APP_HTTP_URL+"/system/file/getPic?comp=true&fileId="+item.remark
+            return getPicUrl(item.remark)
         }else{
             return defaultImg
         }
     } else if(typeof item === "number"){
-        return item ? process.env.REACT_APP_HTTP_URL+"/system/file/getPic?comp=true&fileId="+item : defaultImg
+        return item ? pgetPicUrl(item) : defaultImg
     } else {
         return defaultImg
     }
