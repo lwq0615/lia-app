@@ -2,7 +2,7 @@ import KeepAlive from 'react-activation'
 import Home from "@/package/views/home/Home";
 import Login from "@/package/views/login/Login";
 import lazyLoad from "../utils/lazyLoad";
-import Loading from "../components/loading/Loading";
+import RoundLoading from "../components/loading/RoundLoading";
 import store, { getState } from '@/package/store/index'
 import { changeMenus, login } from '@/package/store/loginUserSlice'
 import { getSysUserInfo } from '../request/system/user';
@@ -113,7 +113,7 @@ export const baseRoutes = [
       },
       {
         path: "register",
-        element: lazyLoad(() => import("@/package/views/register/Register"), Loading)
+        element: lazyLoad(() => import("@/package/views/register/Register"), RoundLoading)
       }
     ]
   }

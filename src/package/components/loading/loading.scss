@@ -5,7 +5,7 @@
   align-items: center;
   background-color: #edf1f4;
 
-  .loader {
+  .round-loading {
     width: 200px;
     height: 200px;
     /* 相对定位 */
@@ -18,7 +18,7 @@
   }
 
   /* 中圈 */
-  .loader::before {
+  .round-loading::before {
     content: "";
     /* 绝对定位 */
     position: absolute;
@@ -34,7 +34,7 @@
   }
 
   /* 内圈 */
-  .loader::after {
+  .round-loading::after {
     content: "";
     position: absolute;
     left: 15px;

@@ -1,5 +1,5 @@
 import * as echarts from 'echarts';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { getSysRolePage } from '@/package/request/system/role'
 
 //十六进制颜色随机
