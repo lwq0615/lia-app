@@ -55,7 +55,7 @@ const RouterForm = ({ routerDict, formValue, formTitle, routerId, reloadTree, se
             if (res > 0) {
                 message.success("删除成功")
                 reloadTree()
-                setForm({parent: 1}, "新增")
+                setForm({ parent: 1 }, "新增")
             } else {
                 message.warning("删除失败")
             }
@@ -105,7 +105,16 @@ const RouterForm = ({ routerDict, formValue, formTitle, routerId, reloadTree, se
                     </Col>
 
                     <Col span={12}>
-                        <Form.Item name="parent" label="父路由">
+                        <Form.Item
+                            name="parent"
+                            label="父路由"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: '请选择父路由',
+                                }
+                            ]}
+                        >
                             <TreeSelect
                                 dropdownStyle={{
                                     maxHeight: 400,
