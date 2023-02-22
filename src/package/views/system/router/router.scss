@@ -21,6 +21,12 @@
             .site-tree-search-value {
                 color: #f50;
             }
+            .ant-tree-treenode{
+                width: 100%;
+                .ant-tree-node-content-wrapper{
+                    flex: 1;
+                }
+            }
         }
     }
     .system-router-form {

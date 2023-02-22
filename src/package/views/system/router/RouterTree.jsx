@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Tree, Input, message } from 'antd';
 import './router.scss'
-import { reloadIndex } from '@/package/request/system/router';
+import { reloadIndex, saveSysRouter } from '@/package/request/system/router';
 
 
 function routerMap(routers) {
@@ -138,60 +138,66 @@ class RouterTree extends React.Component {
     }
     // 被拖动元素
     const dragRouter = findRouter(e.dragNode.key)
-    // 的移动目标位置元素
+    // 移动目标位置元素
     const toNodeKey = e.node.key
     // 是否作为目标元素的下一级的第一个
     const nextFlg = e.node.dragOver
     // 是否在目标元素上方
     const toNodeTop = e.node.dragOverGapTop
-    const insert = (router, routers = this.props.routerTree) => {
+    // 需要重新排序的路由数组
+    let reIndexArray = null
+    // 任务队列
+    const task = []
+    // 移动路由元素到目标数组
+    const insert = (routers = this.props.routerTree, parent) => {
       if (Array.isArray(routers)) {
         for (const i in routers) {
           const item = routers[i]
+          // 找到目标路由所在位置
           if (item.routerId === toNodeKey) {
-            if(nextFlg){
-              if(!Array.isArray(item.children)){
+            reIndexArray = routers
+            let parentId = parent?.routerId || 1
+            // 插入目标路由子路由的首位
+            if (nextFlg) {
+              parentId = item.routerId
+              if (!Array.isArray(item.children)) {
                 item.children = []
               }
-              item.children.unshift(router)
+              reIndexArray = item.children
+              item.children.unshift(dragRouter)
             }
-            else if(toNodeTop){
-              routers.splice(i, 0, router)
+            // 插入目标路由的前方
+            else if (toNodeTop) {
+              routers.splice(i, 0, dragRouter)
             }
-            else{
-              routers.splice(+i + 1, 0, router)
+            // 插入目标路由的后方
+            else {
+              routers.splice(+i + 1, 0, dragRouter)
+            }
+            if (dragRouter.parent !== parentId) {
+              dragRouter.parent = parentId
+              task.push(saveSysRouter(dragRouter))
             }
             return
           }
           if (Array.isArray(item.children)) {
-            insert(router, item.children)
+            insert(item.children, item)
           }
         }
       }
     }
-    insert(dragRouter)
+    insert()
+    // 重新排序
     const newIndex = []
-    const setIndex = (routers) => {
-      if(!Array.isArray(routers)){
-        return
-      }
-      for (const i in routers) {
-        routers[i].index = +i
-        if(!newIndex[i]){
-          newIndex[i] = []
-        }
-        newIndex[i].push(routers[i].routerId)
-        setIndex(routers[i].children)
+    if (Array.isArray(reIndexArray)) {
+      for (const i in reIndexArray) {
+        newIndex[i] = reIndexArray[i].routerId
       }
     }
-    setIndex(this.props.routerTree)
-    reloadIndex(newIndex).then(res => {
-      if(res > 0){
-        message.success("操作成功")
-        this.props.reloadTree()
-      }else{
-        message.warning("操作失败")
-      }
+    task.push(reloadIndex(newIndex))
+    Promise.all(task).then(res => {
+      message.success("操作成功")
+      this.props.reloadTree()
     })
   }
 
