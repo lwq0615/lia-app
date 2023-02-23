@@ -36,10 +36,31 @@
             font-weight: 500;
           }
         }
-        .markdown-body{
-          padding: 20px;
-        }
       }
+    }
+  }
+}
+
+.publish-notice{
+  .markdown{
+    display: flex;
+    .ant-form-item:first-child{
+      margin-right: 20px;
+    }
+    .ant-form-item{
+      flex: 1;
+      margin: 0;
+    }
+    .form-content{
+      flex: 1;
+      resize: none;
+      height: 500px;
+    }
+    .markdown-body{
+      padding: 20px;
+      height: 500px;
+      border: 1px solid #d9d9d9;
+      overflow: auto;
     }
   }
 }

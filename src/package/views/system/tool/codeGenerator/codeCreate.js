@@ -282,15 +282,14 @@ export function controllerCode({ tableName, httpUrl, module }) {
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.lia.system.exception.HttpException;
-import com.lia.system.result.HttpResult;
+import ${module}.entity.${className};
+import com.lia.system.result.exception.HttpException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.lia.server.entity.SysRegisterCode;
 import java.util.List;
 
 @RestController${httpUrl ? `\n@RequestMapping("/${httpUrl}")` : ''}
@@ -355,11 +354,10 @@ export function serviceCode({ tableName, module }) {
     return `package ${module}.modules.${objName};
 
 import com.lia.system.crud.BaseService;
+import ${module}.entity.${className};
 import org.springframework.beans.factory.annotation.Autowired;
-import com.lia.server.entity.SysRegisterCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
 
 @Service
 @Transactional
@@ -385,7 +383,7 @@ export function mapperCode({ tableName, module }) {
     return `package ${module}.modules.${objName};
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.lia.server.entity.SysRegisterCode;
+import ${module}.entity.${className};
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
@@ -396,7 +394,7 @@ public interface ${className}Mapper extends BaseMapper<${className}> {
 }
 
 
-export function mybatisCode({ data, tableName, primaryKey, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag }) {
+export function mybatisCode({ data, tableName, primaryKey, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag, module }) {
     data = dataConcat(data, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag)
     const className = firstUp(toHump(tableName))
     const objName = firstLow(toHump(tableName))
@@ -413,7 +411,7 @@ export function mybatisCode({ data, tableName, primaryKey, createByFlag, createT
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.lia.server.modules.${objName}.${className}Mapper">
+<mapper namespace="${module}.modules.${objName}.${className}Mapper">
 
     <resultMap type="${className}" id="${className}Result">${getResultMap()}
     </resultMap>

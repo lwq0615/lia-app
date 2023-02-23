@@ -14,6 +14,8 @@ export default class CodeGenerator extends React.Component {
         {
             title: "#",
             dataIndex: '#',
+            align: 'center',
+            width: 60,
             key: '#',
             render: (text, record, index) => {
                 return (

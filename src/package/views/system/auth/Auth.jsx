@@ -5,6 +5,7 @@ import { message, Button, Modal, Spin } from "antd"
 import { getSysAuthPage, saveSysAuth, deleteAuths, moveAuthToRouter } from '@/package/request/system/auth'
 import { getCreateByDict } from '@/package/request/system/user'
 import { getSysRouterTree } from '@/package/request/system/router'
+import { getDictByKey } from "@/package/request/system/dictData"
 import RouterTree from "../router/RouterTree"
 import { ArrowRightOutlined } from '@ant-design/icons';
 import './auth.scss'
@@ -74,6 +75,15 @@ class Auth extends React.Component {
                     align: 'center',
                     key: 'name',
                     required: true
+                },
+                {
+                    title: '权限类型',
+                    dataIndex: 'type',
+                    align: 'center',
+                    key: 'type',
+                    required: true,
+                    type: 'select',
+                    dict: () => getDictByKey('sys:auth:type')
                 },
                 {
                     title: '接口路径',

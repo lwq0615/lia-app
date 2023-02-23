@@ -47,3 +47,11 @@ export function getSexDict(){
 export function getUserStatusDict(){
     return request.get(`${baseUrl}/getUserStatusDict`)
 }
+
+
+/**
+ * 根据key获取字典
+ */
+export function getDictByKey(key){
+    return request.get(`${baseUrl}/getByKey?key=${key}`)
+}
