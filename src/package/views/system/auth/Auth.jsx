@@ -211,6 +211,7 @@ class Auth extends React.Component {
                 <RouterTree
                     onSelect={this.onTreeSelect}
                     routerTree={this.state.routerTreeData}
+                    reloadTree={() => this.componentDidMount()}
                 />
                 <Crud
                     className="system-auth-crud"
