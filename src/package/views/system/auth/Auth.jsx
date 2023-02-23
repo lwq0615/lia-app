@@ -92,7 +92,7 @@ class Auth extends React.Component {
                     dataIndex: 'url',
                     align: 'center',
                     key: 'url',
-                    required: true
+                    placeholder: "类型为接口时接口路径必填"
                 },
                 {
                     title: '标识符',
@@ -154,6 +154,10 @@ class Auth extends React.Component {
         }
         option.onSave = async (form, type) => {
             form.routerId = key
+            if(form.type === '0' && !form.url){
+                message.warning("类型为接口时接口路径必填")
+                return false
+            }
             return await saveSysAuth(form).then(res => {
                 message.success(type + "成功")
                 return true
