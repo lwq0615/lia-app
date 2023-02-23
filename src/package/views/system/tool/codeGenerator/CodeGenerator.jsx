@@ -467,7 +467,7 @@ export default class CodeGenerator extends React.Component {
 
     render() {
         return (
-            <section>
+            <section style={{padding: 24}}>
                 <Table
                     columns={this.columns}
                     bordered

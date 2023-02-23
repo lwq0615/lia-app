@@ -193,7 +193,7 @@ class User extends React.Component {
 
     render() {
         return (
-            <Crud {...this.state.option} />
+            <Crud style={{padding: 24}} {...this.state.option} />
         )
     }
 }

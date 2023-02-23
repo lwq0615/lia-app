@@ -128,7 +128,7 @@ export default class SysRegisterCode extends React.Component {
     render() {
         return (
             <>
-                <Crud {...this.state.option} />
+                <Crud {...this.state.option} style={{padding: 24}}/>
                 <Modal
                     open={this.state.open}
                     title="生成注册码"

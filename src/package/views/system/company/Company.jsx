@@ -134,7 +134,7 @@ export default class Company extends React.Component {
     render() {
         return (
             <>
-                <Crud {...this.state.option} />
+                <Crud {...this.state.option} style={{padding: 24}} />
                 <Modal
                     centered
                     width={1200}
