@@ -21,7 +21,7 @@ export default function UserInfo(props: any) {
   }
 
   return (
-    <div>
+    <div className='index-user-info'>
       <Upload
         accept='image/*'
         customRequest={uploadHeadImg}

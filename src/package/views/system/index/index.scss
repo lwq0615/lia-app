@@ -1,10 +1,45 @@
-.system-index{
+.system-index {
+  background-color: #f0f2f5;
+  height: 100%;
+
+  .index-user-info {
     background-color: #fff;
-    .headImg{
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        cursor: pointer;
-        object-fit: cover;
+    padding: 12px;
+
+    .headImg {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      cursor: pointer;
+      object-fit: cover;
     }
+  }
+
+  .index-body {
+    margin-top: 20px;
+    display: flex;
+    .index-left{
+      flex: 1;
+    }
+    .index-right {
+      width: 30%;
+      .index-notice {
+        background-color: #fff;
+        height: 600px;
+        .title{
+          padding: 10px 20px;
+          font-weight: 600;
+          margin: 0;
+          border-bottom: 1px solid #f0f0f0;
+          a{
+            float: right;
+            font-weight: 500;
+          }
+        }
+        .markdown-body{
+          padding: 20px;
+        }
+      }
+    }
+  }
 }
