@@ -1,12 +1,8 @@
 import ReactDOM from 'react-dom'
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import moment from "moment";
-import "moment/locale/zh-cn";
 import lazyLoad from './package/utils/lazyLoad';
 import RoundLoading from './package/components/loading/RoundLoading';
-
-moment.locale("zh-cn");
 
 ReactDOM.render(lazyLoad(() => import("./App"), RoundLoading), document.getElementById('root'));
 
