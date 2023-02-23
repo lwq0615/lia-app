@@ -42,6 +42,7 @@ class Auth extends React.Component {
             }],
             addClick: () => {
                 if (!this.state.routerId && this.state.routerId !== 0) {
+                    message.warning("请先选择一个路由菜单")
                     return false
                 }
             },
@@ -83,7 +84,8 @@ class Auth extends React.Component {
                     key: 'type',
                     required: true,
                     type: 'select',
-                    dict: () => getDictByKey('sys:auth:type')
+                    dict: () => getDictByKey('sys:auth:type'),
+                    defaultValue: '0'
                 },
                 {
                     title: '接口路径',
