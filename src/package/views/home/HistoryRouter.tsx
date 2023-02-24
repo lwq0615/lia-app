@@ -1,36 +1,36 @@
+import WithRouter from '@/package/components/hoc/WithRouter'
 import { Tag } from 'antd'
 import React from 'react'
 import { withAliveScope } from 'react-activation'
 
 interface Router {
     keyPath: string,
+    pathname: string,
     label: string | null,
     element: string | null
 }
 
 @withAliveScope
-export default class HistoryRouter extends React.Component<{
-    goRouter: Function
-}>{
+export default class HistoryRouter extends React.Component {
 
-    state:{ 
-        historyRouterList:Router[],
+    state: {
+        historyRouterList: Router[],
         activeRouter: string | null
     } = {
-        // 被缓存的路由
-        historyRouterList: [],
-        activeRouter: null
-    }
+            // 被缓存的路由
+            historyRouterList: [],
+            activeRouter: null
+        }
 
     /**
      * 添加历史路由
      */
-    addHistory = (router:Router) => {
+    addHistory = (router: Router) => {
         this.setState({
             activeRouter: router.keyPath
         })
-        for(let item of this.state.historyRouterList){
-            if(item.keyPath === router.keyPath){
+        for (let item of this.state.historyRouterList) {
+            if (item.keyPath === router.keyPath) {
                 return
             }
         }
@@ -40,16 +40,22 @@ export default class HistoryRouter extends React.Component<{
         })
     }
 
+    setActiveRouter = (keyPath: string) => {
+        this.setState({
+            activeRouter: keyPath
+        })
+    }
+
     /**
      * 删除历史路由
      */
     removeHistory = (router: Router) => {
-        const props:any = this.props
+        const props: any = this.props
         props.dropScope(router.element)
         const index = this.state.historyRouterList.indexOf(router)
         this.state.historyRouterList.splice(index, 1)
         // 关闭了当前页面，跳转历史路由列表的最后一个路由
-        if(router.keyPath === this.state.activeRouter){
+        if (router.keyPath === this.state.activeRouter) {
             props.goRouter(this.state.historyRouterList.slice(-1)[0]?.keyPath?.split(","))
         }
     }
@@ -59,24 +65,24 @@ export default class HistoryRouter extends React.Component<{
      * 路由跳转
      */
     goRouter = (router: Router) => {
-        if(this.state.activeRouter === router.keyPath){
+        if (this.state.activeRouter === router.keyPath) {
             return
         }
         this.setState({
             activeRouter: router.keyPath
         })
-        const props:any = this.props
+        const props: any = this.props
         props.goRouter(router.keyPath !== '' ? router.keyPath.split(",") : [])
     }
 
-    render(){
+    render() {
         return (
             <div className='history-router'>
                 {
-                    this.state.historyRouterList?.map((item:Router) => (
-                        <Tag 
+                    this.state.historyRouterList?.map((item: Router) => (
+                        <Tag
                             color={this.state.activeRouter === item.keyPath ? '#108ee9' : undefined}
-                            closable 
+                            closable
                             key={item.keyPath}
                             onClick={() => this.goRouter(item)}
                             onClose={() => this.removeHistory(item)}

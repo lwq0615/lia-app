@@ -1,4 +1,4 @@
-import KeepAlive, { AliveScope } from 'react-activation'
+import { AliveScope } from 'react-activation'
 import { SwitchTransition, CSSTransition } from 'react-transition-group'
 import { Route, Routes } from 'react-router-dom';
 import WithRouter from '@/package/components/hoc/WithRouter';
@@ -34,11 +34,7 @@ function RouterBody(props) {
             <Route
               key='welcome'
               path="*"
-              element={
-                <KeepAlive name='welcome' cacheKey='welcome'>
-                  <Welcome />
-                </KeepAlive>
-              }
+              element={<Welcome />}
             />
             {routers}
           </Routes>

@@ -73,14 +73,17 @@ export default function Home() {
     setSelectedKeys(keys || [])
     if (!keys) {
       setRoutePath([(<Breadcrumb.Item key='welcome'>欢迎</Breadcrumb.Item>)])
+      historyRouterRef?.current?.setActiveRouter(null)
       return
     }
     let label = ''
     let element = ''
     let list = routeList
     let parent = null
+    let path = ''
     setRoutePath(keys.map(key => {
       parent = findTarget(key, list)
+      path += "/" + parent.path
       if (parent) {
         list = parent.children
         label = parent.label
@@ -90,6 +93,7 @@ export default function Home() {
     }))
     historyRouterRef?.current?.addHistory({
       keyPath: keys.join(","),
+      pathname: path,
       label,
       element
     })
@@ -113,12 +117,14 @@ export default function Home() {
     if (path[0] === '/') {
       path = path.substring(1)
     }
-    navigate(path)
+    if (location.pathname !== '/' + path) {
+      navigate(path)
+    }
     updateRouterPath(keys)
   }
 
   function findTarget(key, parent = routers) {
-    if(!parent){
+    if (!parent) {
       return null
     }
     for (let item of parent) {
@@ -184,7 +190,7 @@ export default function Home() {
           goRouter={goRouter}
         />
         <Content className="content-body">
-          <RouterBody routers={routers}/>
+          <RouterBody routers={routers} />
         </Content>
       </Layout>
     </Layout>
