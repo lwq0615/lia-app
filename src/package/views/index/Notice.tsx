@@ -84,7 +84,7 @@ function PublishModal() {
               </Form.Item>
             </Col>
             <Col span={5}>
-              <Form.Item label="是否置顶" name="delFlag" valuePropName="checked">
+              <Form.Item label="是否置顶" name="topFlag" valuePropName="checked">
                 <Switch checkedChildren="是" unCheckedChildren="否" />
               </Form.Item>
             </Col>
