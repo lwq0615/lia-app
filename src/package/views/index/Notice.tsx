@@ -1,10 +1,11 @@
-import { useRef, useState, ChangeEvent } from "react"
+import { useRef, useState, ChangeEvent, useEffect } from "react"
 import { marked } from "marked"
-import { Modal, Input, Form } from "antd";
+import { Modal, Input, Form, message } from "antd";
+import { addSysNotice } from "@/package/request/index/notice";
 
 const { TextArea } = Input;
 
-function TextModal(props: any) {
+function TextModal() {
 
   const textRef = useRef<any>(null)
   const markdown = useRef<any>(null)
@@ -17,16 +18,18 @@ function TextModal(props: any) {
     setLoading(true)
     try {
       const values = await formRef.current.validateFields()
-      console.log(values);
-      // props.onOk(value)
+      const res: any = await addSysNotice(values)
+      if(res > 0){
+        message.success("发布成功")
+        setOpen(false)
+        formRef.current.resetFields()
+      }else{
+        message.warning("发布失败")
+      }
       setLoading(false)
-      setOpen(false)
     } catch (e) {
       setLoading(false)
     }
-  };
-  const handleCancel = () => {
-    setOpen(false)
   };
 
   /**
@@ -51,7 +54,7 @@ function TextModal(props: any) {
         title="发布通知/公告"
         open={open}
         onOk={handleOk}
-        onCancel={handleCancel}
+        onCancel={() => setOpen(false)}
         confirmLoading={confirmLoading}
         width={1200}
       >
@@ -86,7 +89,7 @@ export default function Notice() {
     <div className="index-notice">
       <h3 className='title'>
         通知/公告
-        <TextModal onOk={onOk} />
+        <TextModal />
       </h3>
     </div>
   )

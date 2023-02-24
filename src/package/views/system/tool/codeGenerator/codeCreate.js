@@ -60,10 +60,18 @@ export function get${firstUp(toHump(tableName))}Page(${firstLow(toHump(tableName
 
 
 /**
- * 新增和编辑
+ * 新增
  */
-export function save${firstUp(toHump(tableName))}(${firstLow(toHump(tableName))}){
-    return request.post(\`\${baseUrl}/save\`,${firstLow(toHump(tableName))})
+export function add${firstUp(toHump(tableName))}(${firstLow(toHump(tableName))}){
+    return request.post(\`\${baseUrl}/add\`,${firstLow(toHump(tableName))})
+}
+
+
+/**
+ * 编辑
+ */
+export function edit${firstUp(toHump(tableName))}(${firstLow(toHump(tableName))}){
+    return request.post(\`\${baseUrl}/edit\`,${firstLow(toHump(tableName))})
 }
 
 
