@@ -316,14 +316,24 @@ public class ${className}Controller {
     }
 
     /**
-     * 新增和编辑
-     * 自增主键为空时为新增，否则为编辑
+     * 新增
      * @param ${objName} 参数数据
      * @return 操作成功的数量
      */
-    @PostMapping("/save")${getPreAuthorize('save')}
-    public int save${className}(@RequestBody ${className} ${objName}){
-        return ${objName}Service.save(${objName});
+    @PostMapping("/add")${getPreAuthorize('add')}
+    public int add${className}(@RequestBody ${className} ${objName}){
+        return ${objName}Service.insert(${objName});
+    }
+    
+
+    /**
+     * 编辑
+     * @param ${objName} 参数数据
+     * @return 操作成功的数量
+     */
+    @PostMapping("/edit")${getPreAuthorize('edit')}
+    public int edit${className}(@RequestBody ${className} ${objName}){
+        return ${objName}Service.update(${objName});
     }
 
 
