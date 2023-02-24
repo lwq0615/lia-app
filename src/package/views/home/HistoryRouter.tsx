@@ -1,4 +1,3 @@
-import WithRouter from '@/package/components/hoc/WithRouter'
 import { Tag } from 'antd'
 import React from 'react'
 import { withAliveScope } from 'react-activation'
