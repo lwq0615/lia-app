@@ -18,20 +18,25 @@
   .index-body {
     margin-top: 20px;
     display: flex;
-    .index-left{
+
+    .index-left {
       flex: 1;
     }
+
     .index-right {
       width: 30%;
+
       .index-notice {
         background-color: #fff;
         height: 600px;
-        .title{
+
+        .title {
           padding: 10px 20px;
           font-weight: 600;
           margin: 0;
           border-bottom: 1px solid #f0f0f0;
-          a{
+
+          a {
             float: right;
             font-weight: 500;
           }
@@ -41,26 +46,17 @@
   }
 }
 
-.publish-notice{
-  .markdown{
-    display: flex;
-    .ant-form-item:first-child{
-      margin-right: 20px;
-    }
-    .ant-form-item{
-      flex: 1;
-      margin: 0;
-    }
-    .form-content{
-      flex: 1;
-      resize: none;
-      height: 450px;
-    }
-    .markdown-body{
-      padding: 20px;
-      height: 450px;
-      border: 1px solid #d9d9d9;
-      overflow: auto;
-    }
+.publish-notice {
+
+  .form-content {
+    height: 450px;
+    resize: none;
+  }
+
+  .markdown-body {
+    padding: 20px;
+    height: 450px;
+    border: 1px solid #d9d9d9;
+    overflow: auto;
   }
 }

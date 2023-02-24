@@ -1,5 +1,5 @@
 import { Modal, Button, Tree } from 'antd';
-import React, {useState} from 'react';
+import {useState} from 'react';
 
 function treeMap(tree){
     if(!tree){

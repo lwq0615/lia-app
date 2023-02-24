@@ -180,7 +180,7 @@ export default function Home() {
       </Sider>
       <Layout className="site-layout">
         <HomeHeader
-          toggle={setCollapsed}
+          toggle={() => setCollapsed(!collapsed)}
           collapsed={collapsed}
           userInfo={userInfo}
           routePath={routePath}

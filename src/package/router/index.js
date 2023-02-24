@@ -46,7 +46,11 @@ export function createRoutes(routers, arr = [], parentPath = '', parentTitle = '
       if (element[0] === '/') {
         element = element.substring(1)
       };
-      routeTitle["/" + parentPath + "/" + item.path] = parentTitle + '-' +item.label
+      if(parentPath){
+        routeTitle["/" + parentPath + "/" + item.path] = parentTitle + '-' +item.label
+      }else{
+        routeTitle["/" + item.path] = item.label
+      }
       arr.push(import('@/package/views/' + element).then(({ default: Element }) => {
         return (
           <Route
@@ -119,7 +123,7 @@ export const baseRoutes = [
 
 
 export const routeTitle = {
-  "*": "首页",
+  "*": "欢迎",
   "/login": "登录",
   "/register": "注册"
 }
