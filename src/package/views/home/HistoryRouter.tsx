@@ -9,7 +9,9 @@ interface Router {
 }
 
 @withAliveScope
-export default class HistoryRouter extends React.Component{
+export default class HistoryRouter extends React.Component<{
+    goRouter: Function
+}>{
 
     state:{ 
         historyRouterList:Router[],

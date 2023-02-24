@@ -101,10 +101,7 @@ export const baseRoutes = [
               }
             }
           }
-          return {
-            userInfo,
-            menus
-          }
+          return null
         }
       },
       {
