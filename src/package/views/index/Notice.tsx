@@ -15,13 +15,13 @@ function TextModal(props: any) {
 
   const handleOk = async () => {
     setLoading(true)
-    try{
+    try {
       const values = await formRef.current.validateFields()
       console.log(values);
       // props.onOk(value)
       setLoading(false)
       setOpen(false)
-    }catch(e) {
+    } catch (e) {
       setLoading(false)
     }
   };
@@ -40,12 +40,13 @@ function TextModal(props: any) {
       }
     }, 1000)
     setTask(id)
-  } 
+  }
 
   return (
     <>
       <a onClick={() => setOpen(true)} style={{ userSelect: 'none' }}>发布</a>
       <Modal
+        centered
         className="publish-notice"
         title="发布通知/公告"
         open={open}
@@ -56,7 +57,7 @@ function TextModal(props: any) {
       >
         <Form ref={formRef}>
           <Form.Item label="标题" name="title" rules={[{ required: true, message: '请输入标题!' }]}>
-            <Input placeholder="请输入"/>
+            <Input placeholder="请输入" />
           </Form.Item>
           <div className="markdown">
             <Form.Item label="详情" name="content">
