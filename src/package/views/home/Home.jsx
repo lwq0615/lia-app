@@ -175,7 +175,7 @@ export default class Home extends React.Component {
             <Layout className='lia_home_container'>
                 <Sider collapsed={this.state.collapsed} style={{ overflow: 'auto', paddingTop: 15 }} width={230}>
                     <div className='userInfo'>
-                        <span style={{ color: '#1890ff', padding: 5, cursor: "pointer" }} onClick={() => this.goRouter()}>
+                        <span style={{ color: '#1890ff', padding: 5}}>
                             {this.state.userInfo?.nick}
                         </span>
                     </div>
