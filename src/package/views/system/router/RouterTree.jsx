@@ -131,7 +131,10 @@ class RouterTree extends React.Component {
             return routers.splice(i, 1)[0]
           }
           if (Array.isArray(item.children)) {
-            return findRouter(routerId, item.children)
+            const res = findRouter(routerId, item.children)
+            if(res){
+              return res
+            }
           }
         }
       }

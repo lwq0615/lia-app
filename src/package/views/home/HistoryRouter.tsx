@@ -27,9 +27,6 @@ export default class HistoryRouter extends React.Component{
         this.setState({
             activeRouter: router.keyPath
         })
-        if(!router.keyPath){
-            return
-        }
         for(let item of this.state.historyRouterList){
             if(item.keyPath === router.keyPath){
                 return

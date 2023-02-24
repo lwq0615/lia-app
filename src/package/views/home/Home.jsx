@@ -2,14 +2,11 @@ import { Layout, Menu, Breadcrumb } from 'antd';
 import * as icons from '@ant-design/icons'
 import React from 'react';
 import './home.scss'
-import { getHeadImg } from '@/package/request/system/user'
 import WithRouter from '@/package/components/hoc/WithRouter';
-import defaultImg from './image/default.jpg'
 import HistoryRouter from './HistoryRouter.tsx'
 import HomeHeader from './HomeHeader';
 import RouterBody from './RouterBody'
 import WithRedux from '@/package/components/hoc/WithRedux'
-import { getPicUrl } from '@/package/request/system/file';
 
 const { Sider, Content } = Layout;
 
@@ -55,7 +52,6 @@ export default class Home extends React.Component {
     state = {
         collapsed: false,
         userInfo: this.props.loaderData.userInfo,
-        headImg: null,
         routers: routerMap(this.props.loaderData.menus),
         routePath: [],
         selectedKeys: null,
@@ -82,36 +78,31 @@ export default class Home extends React.Component {
     /**
      * 更新历史菜单，菜单路径，菜单选中项等信息
      */
-    updateRouterPath = (keys = [], routers = this.state.routers) => {
-        if (keys?.join("") === this.state.selectedKeys?.join("")) {
-            return
+    updateRouterPath = (keys, routers = this.state.routers) => {
+        if (!keys) {
+            keys = this.getPathKeys()
         }
         this.setState({
-            selectedKeys: keys
+            selectedKeys: keys || []
         })
+        if(!keys){
+            return
+        }
         let label = ''
         let element = ''
-        if (!keys || keys.length === 0) {
-            this.setState({
-                routePath: [<Breadcrumb.Item key='*'>首页</Breadcrumb.Item>]
+        let list = routers
+        let parent = null
+        this.setState({
+            routePath: keys.map(key => {
+                parent = this.findTarget(key, list)
+                if (parent) {
+                    list = parent.children
+                    label = parent.label
+                    element = parent.element
+                    return (<Breadcrumb.Item key={key}>{parent.label}</Breadcrumb.Item>)
+                }
             })
-            label = '首页'
-            element = 'index'
-        } else {
-            let list = routers
-            let parent = null
-            this.setState({
-                routePath: keys.map(key => {
-                    parent = this.findTarget(key, list)
-                    if (parent) {
-                        list = parent.children
-                        label = parent.label
-                        element = parent.element
-                        return (<Breadcrumb.Item key={key}>{parent.label}</Breadcrumb.Item>)
-                    }
-                })
-            })
-        }
+        })
         this.historyRouterRef?.addHistory({
             keyPath: keys.join(","),
             label,
@@ -122,29 +113,23 @@ export default class Home extends React.Component {
     /**
      * 根据keyPath跳转路由
      */
-    goRouter = (keys = [], routers = this.state.routers) => {
-        if (keys?.join("") === this.state.selectedKeys?.join("")) {
-            return
-        }
-        if (!keys || keys.length === 0) {
-            this.props.navigate("/")
-        } else {
-            let list = routers
-            let parent = null
-            let path = ''
-            keys.forEach(key => {
-                parent = this.findTarget(key, list)
-                if (parent) {
-                    list = parent.children
-                    path += "/" + parent.path
-                }
-            })
-            //跳转路由展示页面
-            if (path[0] === '/') {
-                path = path.substring(1)
+    goRouter = (keys) => {
+        const routers = this.state.routers
+        let list = routers
+        let parent = null
+        let path = ''
+        keys?.forEach(key => {
+            parent = this.findTarget(key, list)
+            if (parent) {
+                list = parent.children
+                path += "/" + parent.path
             }
-            this.props.navigate(path)
+        })
+        //跳转路由展示页面
+        if (path[0] === '/') {
+            path = path.substring(1)
         }
+        this.props.navigate(path)
         this.updateRouterPath(keys)
     }
 
@@ -159,7 +144,7 @@ export default class Home extends React.Component {
     /**
      * 根据当前URI获取路由路径
      */
-    getPathKeys = (path, list, keyPath = []) => {
+    getPathKeys = (path = [''], list = this.state.routers, keyPath = []) => {
         for (let i in list) {
             let item = list[i]
             if (item.path === path[0]) {
@@ -180,21 +165,8 @@ export default class Home extends React.Component {
      */
     componentDidMount = () => {
         //根据进入时的URI重新渲染视图
-        if (location.pathname !== "/") {
-            let keyPath = this.getPathKeys(location.pathname.substring(1).split("/"), this.state.routers)
-            this.updateRouterPath(keyPath, this.state.routers)
-        } else {
-            this.updateRouterPath()
-        }
-        this.getUserHeadImg()
-    }
-
-    getUserHeadImg = () => {
-        getHeadImg().then(fileId => {
-            this.setState({
-                headImg: fileId
-            })
-        })
+        let keyPath = this.getPathKeys(location.pathname.substring(1).split("/"))
+        this.updateRouterPath(keyPath, this.state.routers)
     }
 
 
@@ -203,15 +175,8 @@ export default class Home extends React.Component {
             <Layout className='lia_home_container'>
                 <Sider collapsed={this.state.collapsed} style={{ overflow: 'auto', paddingTop: 15 }} width={230}>
                     <div className='userInfo'>
-                        <img
-                            src={this.state.headImg
-                                ? getPicUrl(this.state.headImg)
-                                : defaultImg}
-                            className="headImg"
-                            onClick={() => this.goRouter()}
-                        />
                         <span style={{ color: '#1890ff', padding: 5, cursor: "pointer" }} onClick={() => this.goRouter()}>
-                            {!this.state.collapsed && this.state.userInfo?.nick}
+                            {this.state.userInfo?.nick}
                         </span>
                     </div>
                     {
@@ -229,7 +194,6 @@ export default class Home extends React.Component {
                     <HomeHeader
                         toggle={this.toggle}
                         userInfo={this.state.userInfo}
-                        headImg={this.state.headImg}
                         routePath={this.state.routePath}
                     />
                     <HistoryRouter
@@ -239,9 +203,6 @@ export default class Home extends React.Component {
                     />
                     <Content className="content-body">
                         <RouterBody
-                            userInfo={this.state.userInfo}
-                            headImg={this.state.headImg}
-                            reloadHeadImg={this.getUserHeadImg}
                             routers={this.state.routers}
                         />
                     </Content>

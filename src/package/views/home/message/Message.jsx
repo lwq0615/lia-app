@@ -119,7 +119,6 @@ class Message extends React.Component {
                         />
                         <MsgBox 
                             userInfo={this.props.userInfo}
-                            userHeadImg={this.props.userHeadImg}
                             person={this.state.nowPerson}
                             ref={ref => this.msgBoxNode = ref}
                         />

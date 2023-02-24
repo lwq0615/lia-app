@@ -30,11 +30,6 @@ function RouterBody(props) {
                     classNames="route"
                 >
                     <Routes location={props.location}>
-                        <Route exact index path="*" element={<KeepAlive cacheKey='index' name='index'><Index
-                            userInfo={props.userInfo}
-                            headImg={props.headImg}
-                            reloadHeadImg={props.reloadHeadImg}
-                        /></KeepAlive>} />
                         {routers}
                     </Routes>
                 </CSSTransition>

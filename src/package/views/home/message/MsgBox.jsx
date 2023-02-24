@@ -3,6 +3,7 @@ import { getMsgRecordPage, readMessage } from '@/package/request/system/message'
 import propTypes from 'prop-types'
 import { getHeadImg } from './Person'
 import { wsSend } from "./websocket";
+import { getHeadImg as getHeadImgFileId } from "@/package/request/system/user";
 
 export default class MsgBox extends React.Component {
 
@@ -13,7 +14,8 @@ export default class MsgBox extends React.Component {
 
     state = {
         msgList: null,
-        over: false
+        over: false,
+        headImgFileId: null
     }
 
     // 为true时每次聊天列表变化都会自动滚动到底部
@@ -118,6 +120,11 @@ export default class MsgBox extends React.Component {
                 this.loadMsgList(params)
             }
         }
+        getHeadImgFileId().then(res => {
+            this.setState({
+                headImgFileId: res
+            })
+        })
     }
 
     /**
@@ -134,7 +141,7 @@ export default class MsgBox extends React.Component {
                 view.push(
                     <div key={i} className="right">
                         <p>{item.content}</p>
-                        <img className="headImg" src={getHeadImg(this.props.userHeadImg)} />
+                        <img className="headImg" src={getHeadImg(this.state.headImgFileId)} />
                     </div>
                 )
             } else {

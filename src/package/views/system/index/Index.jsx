@@ -2,11 +2,11 @@ import UserInfo from "./UserInfo";
 import Notice from "./Notice";
 
 
-export default function Index(props) {
+export default function Index() {
 
   return (
     <section className="system-index">
-      <UserInfo {...props} />
+      <UserInfo />
       <div className="index-body">
         <div className="index-left"></div>
         <div className="index-right">

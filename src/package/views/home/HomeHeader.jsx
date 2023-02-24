@@ -50,7 +50,7 @@ function HomeHeader(props) {
                     <Tooltip title="开发文档">
                         <icons.QuestionCircleOutlined className='icon' onClick={openDocs} />
                     </Tooltip>
-                    <Message userInfo={props.userInfo} userHeadImg={props.headImg} />
+                    <Message userInfo={props.userInfo} />
                     <Tooltip title="退出登录">
                         <Button size='large' danger type="primary" shape="circle" icon={<icons.LogoutOutlined />} onClick={logoutClick} />
                     </Tooltip>
