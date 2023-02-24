@@ -79,13 +79,13 @@ export default class Home extends React.Component {
      * 更新历史菜单，菜单路径，菜单选中项等信息
      */
     updateRouterPath = (keys, routers = this.state.routers) => {
-        if (!keys) {
-            keys = this.getPathKeys()
-        }
         this.setState({
             selectedKeys: keys || []
         })
         if(!keys){
+            this.setState({
+                routePath: [(<Breadcrumb.Item key='welcome'>欢迎</Breadcrumb.Item>)]
+            })
             return
         }
         let label = ''
@@ -175,7 +175,7 @@ export default class Home extends React.Component {
             <Layout className='lia_home_container'>
                 <Sider collapsed={this.state.collapsed} style={{ overflow: 'auto', paddingTop: 15 }} width={230}>
                     <div className='userInfo'>
-                        <span style={{ color: '#1890ff', padding: 5, cursor: "pointer" }} onClick={() => this.goRouter()}>
+                        <span style={{ color: '#1890ff', padding: 5}}>
                             {this.state.userInfo?.nick}
                         </span>
                     </div>

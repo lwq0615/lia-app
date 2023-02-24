@@ -7,9 +7,6 @@
         "paths": {
             "@/*": [
                 "src/*"
-            ],
-            "@/comp": [
-                "src/components"
             ]
         },
         "target": "es5", // 生成代码的语言版本

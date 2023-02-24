@@ -2,11 +2,19 @@ import * as echarts from 'echarts';
 import { useEffect, useRef } from 'react';
 
 
-export default function AppLoading(props) {
+const style = {
+  display: 'flex',
+  height: '100%',
+  justifyContent: "center",
+  alignItems: "center"
+}
 
-  const dom = useRef(null)
-  const color = props.color || '#1677ff'
-  const text = props.text || "Loading···"
+
+export default function Welcome() {
+
+  const dom: any = useRef(null)
+  const color = '#1677ff'
+  const text = "Welcome"
 
   useEffect(() => {
     let myChart = echarts.init(dom.current);
@@ -21,7 +29,7 @@ export default function AppLoading(props) {
             top: 'center',
             style: {
               text: text,
-              fontSize: 80,
+              fontSize: 120,
               fontWeight: 'bold',
               lineDash: [0, 200],
               lineDashOffset: 0,
@@ -75,6 +83,8 @@ export default function AppLoading(props) {
   }, [])
 
   return (
-    <div ref={dom} className="lia-loading"></div>
+    <div style={style}>
+      <canvas ref={dom} width='700' height='300'></canvas>
+    </div>
   )
 }

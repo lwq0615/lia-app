@@ -16,10 +16,10 @@ function HomeHeader(props) {
      */
     function logoutClick() {
         logout().then(() => {
-            props.dispatch(login(null))
-            props.dispatch(changeMenus(null))
             localStorage.removeItem(process.env.REACT_APP_HTTP_HEADER)
             props.navigate("/login")
+            props.dispatch(login(null))
+            props.dispatch(changeMenus(null))
         })
     }
 

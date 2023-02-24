@@ -1,10 +1,10 @@
 import KeepAlive, { AliveScope } from 'react-activation'
 import { SwitchTransition, CSSTransition } from 'react-transition-group'
-import Index from '@/package/views/system/index/Index'
-import { Routes, Route } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import WithRouter from '@/package/components/hoc/WithRouter';
 import { useEffect, useState } from 'react'
 import { createRoutes } from '@/package/router/index'
+import Welcome from '../Welcome';
 
 
 
@@ -30,6 +30,15 @@ function RouterBody(props) {
                     classNames="route"
                 >
                     <Routes location={props.location}>
+                        <Route
+                            key='welcome'
+                            path="*"
+                            element={
+                                <KeepAlive name='welcome' cacheKey='welcome'>
+                                    <Welcome />
+                                </KeepAlive>
+                            }
+                        />
                         {routers}
                     </Routes>
                 </CSSTransition>
