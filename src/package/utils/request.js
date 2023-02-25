@@ -37,7 +37,7 @@ const msgMap = {}
  */
 function createMsg(errCode, msg) {
     // 已经有该消息则不重复提示
-    if (!msgMap[errCode]) {
+    if (!msgMap[errCode] || errCode === 403) {
         msgMap[errCode] = true
         message.warning(msg, 3, () => {
             delete msgMap[errCode]
