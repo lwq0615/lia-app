@@ -225,8 +225,7 @@ export function entityCode({ data, tableName, primaryKey, createByFlag, createTi
         let str = `    /**
      * 主键
      */
-    @TableId(type = ${primaryKey.type === "autoIncrement" ? "IdType.AUTO" : "IdType.ASSIGN_ID"})
-    @TableField("\`${toLine(primaryKey.name)}\`")
+    @TableId(value = "\`${toLine(primaryKey.name)}\`", type = ${primaryKey.type === "autoIncrement" ? "IdType.AUTO" : "IdType.ASSIGN_ID"})
     private Long ${primaryKey.name};\n\n`
 
         data.forEach(item => {
