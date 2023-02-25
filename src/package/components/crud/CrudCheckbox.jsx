@@ -20,6 +20,7 @@ export default function CrudCheckbox(props) {
         setVisible(true)
     }
 
+    let style = {}
     if(props.disabled){
         style = {
             cursor: 'no-drop',
@@ -34,6 +35,7 @@ export default function CrudCheckbox(props) {
                 open={visible}
                 centered={true}
                 title={props.column.title}
+                className="lia-crud-edit-checkbox-modal"
                 okText='确定'
                 width={700}
                 closable={true}

@@ -220,9 +220,10 @@ class Role extends React.Component {
             width: 1000,
             centered: true,
             destroyOnClose: true,
+            className: "diagram-modal",
             keyboard: true,
             okText: "确定",
-            content: (<Diagram companyId={this.props.companyId} />)
+            content: (<Diagram {...this.props}/>)
         })
     }
 

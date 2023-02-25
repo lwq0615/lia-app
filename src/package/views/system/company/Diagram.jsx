@@ -1,29 +1,23 @@
-import * as echarts from 'echarts';
-import { useEffect } from 'react';
+import { OrganizationGraph } from '@ant-design/graphs';
 import { getSysRolePage } from '@/package/request/system/role'
+import { useEffect, useState } from 'react';
 
-//十六进制颜色随机
-function color16(){
-  const r = Math.floor(Math.random()*256);
-  const g = Math.floor(Math.random()*256);
-  const b = Math.floor(Math.random()*256);
-  const color = `#${r.toString(16)}${g.toString(16)}${b.toString(16)}`;
-  return color;
-}
-
-export default function Diagram(props) {
+export default function Diagram(props){
+  const [data, setData] = useState()
 
   useEffect(() => {
-    let chartDom = document.getElementById('diagram');
-    let myChart = echarts.init(chartDom);
-    let option;
-    myChart.showLoading();
     getSysRolePage({ companyId: props.companyId }).then(res => {
-      const roleList = []
+      const comp = {
+        id: 'c:'+props.companyId,
+        value: {
+          name: props.companyName
+        },
+        children: []
+      }
       res.list.forEach(child => {
         // 如果该角色的上级是自己或者为空，说明这是最上层角色
         if (child.superior === child.roleId || child.superior === null || child.superior === void 0) {
-          roleList.push(child)
+          comp.children.push(child)
           return
         }
         for (let superior of res.list) {
@@ -34,77 +28,133 @@ export default function Diagram(props) {
           }
         }
       })
-      const selected = {}
-      roleList.forEach(item => {
-        if(roleList.indexOf(item) === 0){
-          selected[item.name] = true
-        }else{
-          selected[item.name] = false
+      res.list.forEach(item => {
+        item.id = ""+item.roleId
+        item.value = {
+          name: item.name
         }
       })
-      myChart.setOption(
-        (option = {
-          tooltip: {
-            trigger: 'item',
-            triggerOn: 'mousemove'
-          },
-          legend: {
-            top: '2%',
-            left: '3%',
-            orient: 'vertical',
-            data: roleList.map(item => {
-              return {
-                name: item.name,
-                icon: 'rectangle',
-                itemStyle: {
-                  color: color16()
-                }
-              }
-            }),
-            selected,
-            borderColor: '#c23531'
-          },
-          series: roleList.map(item => {
-            return {
-              type: 'tree',
-              name: item.name,
-              data: [item],
-              top: '5%',
-              left: '7%',
-              bottom: '2%',
-              right: '12%',
-              symbolSize: 15,
-              label: {
-                position: 'left',
-                verticalAlign: 'middle',
-                align: 'right',
-                fontSize: 14,
-                backgroundColor: 'white',
-                padding: 5
-              },
-              leaves: {
-                label: {
-                  position: 'right',
-                  verticalAlign: 'middle',
-                  align: 'left'
-                }
-              },
-              emphasis: {
-                focus: 'descendant'
-              },
-              expandAndCollapse: true,
-              animationDuration: 550,
-              animationDurationUpdate: 750,
-              initialTreeDepth: -1
-            }
-          })
-        })
-      );
-      option && myChart.setOption(option);
-      myChart.hideLoading();
+      setData(comp)
     })
   }, [])
-  return (
-    <canvas id='diagram' width="900" height="400"></canvas>
-  )
-}
+
+  const getTextAttrs = () => {
+    return {
+      fontSize: 16,
+      fill: '#fff',
+    };
+  };
+  const getNodeStyle = () => {
+    return {
+      fill: '#1E88E5',
+      stroke: '#1E88E5',
+      radius: 5,
+    };
+  };
+
+  const calcStrLen = function calcStrLen(str) {
+    var len = 0;
+    for (var i = 0; i < str.length; i++) {
+      if (str.charCodeAt(i) > 0 && str.charCodeAt(i) < 128) {
+        len++;
+      } else {
+        len += 2;
+      }
+    }
+    return len;
+  };
+
+  const config = {
+    nodeCfg: {
+      size: [40, 40],
+      autoWidth: true,
+      padding: 10,
+      style: (item) => {
+        const { level } = item.value;
+        return {
+          fill: 'transparent',
+          stroke: 'transparent',
+          radius: 4,
+          cursor: 'pointer',
+          ...getNodeStyle()
+        };
+      },
+      nodeStateStyles: {
+        hover: {
+          lineWidth: 2,
+          stroke: '#96DEFF',
+        },
+      },
+      label: {
+        style: (cfg, group, type) => {
+          const { href } = cfg.value;
+
+          if (type !== 'name') {
+            return {};
+          }
+          return {
+            fontSize: 16,
+            cursor: 'pointer',
+            fill: href ? '#1890ff' : '#000',
+            ...getTextAttrs()
+          };
+        },
+      },
+      anchorPoints: [
+        [0, 0.5],
+        [1, 0.5],
+      ],
+    },
+    edgeCfg: {
+      type: 'polyline',
+      style: {
+        stroke: '#000',
+        endArrow: false,
+      },
+    },
+    markerCfg: (cfg) => {
+      const { direction } = cfg.value;
+      return {
+        position: direction,
+        show: true
+      };
+    },
+    layout: {
+      type: 'mindmap',
+      direction: 'H',
+      getWidth: (cfg) => {
+        const { name } = cfg.value;
+        const fontSize = 16;
+        const width = (fontSize * calcStrLen(name)) / 2;
+        return width;
+      },
+      getHeight: () => {
+        return 25;
+      },
+      getVGap: () => {
+        return 20;
+      },
+      getHGap: () => {
+        return 40;
+      },
+      getSide: (d) => {
+        return d.data.value.direction === 'left' ? 'left' : 'right';
+      },
+    },
+    autoFit: true,
+    fitCenter: true,
+    animate: false,
+    behaviors: ['drag-canvas', 'zoom-canvas'],
+    onReady: (graph) => {
+      graph.on('node:click', (evt) => {
+        const { item, target } = evt;
+        const { value } = item.get('model');
+        if (value.href) {
+          window.open(value.href);
+        }
+      });
+    },
+  };
+  return data ? <OrganizationGraph {...config} data={data} /> : null
+};
+

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Row, Col, Input, Select, DatePicker, InputNumber, TreeSelect, Switch } from 'antd';
+import { Form, Row, Col, Input, Select, DatePicker, InputNumber, TreeSelect, Switch, Button } from 'antd';
 import CrudCheckbox from './CrudCheckbox';
 import CrudMultipleTree from './CrudMultipleTree';
 import Icons from './Icons';
@@ -148,14 +148,23 @@ class CrudForm extends React.Component {
         else if (column.type === 'multipleTree') {
             const treeData = this.props.dict && this.props.dict[column.dataIndex]
             const values = this.props.formDefaultValues?.[column.dataIndex]
-            return (
-                <CrudMultipleTree
-                    values={values}
-                    treeData={treeData}
-                    column={column}
-                    disabled={disabled}
-                />
-            )
+            if (this.props.title === "详情") {
+                const show = () => {
+                    this.props.nodes.crudTableRef.showTree(values, column)
+                }
+                return (
+                    <Button type="link" onClick={show}>查看</Button>
+                )
+            } else {
+                return (
+                    <CrudMultipleTree
+                        values={values}
+                        treeData={treeData}
+                        column={column}
+                        disabled={disabled}
+                    />
+                )
+            }
         }
         else if (column.type === 'tree') {
             return (
@@ -174,14 +183,24 @@ class CrudForm extends React.Component {
         else if (column.type === 'checkbox') {
             const options = this.props.dict && this.props.dict[column.dataIndex]
             const values = this.props.formDefaultValues?.[column.dataIndex]
-            return (
-                <CrudCheckbox
-                    disabled={disabled}
-                    options={options}
-                    values={values}
-                    column={column}
-                />
-            )
+            if (this.props.title === "详情") {
+                const show = () => {
+                    this.props.nodes.crudTableRef.showCheckBox(values, column)
+                }
+                return (
+                    <Button type="link" onClick={show}>查看</Button>
+                )
+            }
+            else {
+                return (
+                    <CrudCheckbox
+                        disabled={disabled}
+                        options={options}
+                        values={values}
+                        column={column}
+                    />
+                )
+            }
         }
         else if (column.type === 'switch') {
             return (

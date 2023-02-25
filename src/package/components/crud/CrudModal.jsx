@@ -66,6 +66,7 @@ class CrudModal extends React.Component {
             columns={this.props.columns}
             ref={ref => this.saveFormRef = ref}
             title={this.props.title}
+            nodes={this.props.nodes}
             dict={this.props.dict}
           />
         </Modal>

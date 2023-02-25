@@ -43,7 +43,9 @@ class CrudTable extends React.Component {
 
 
     showCheckBox = (list, column, e) => {
-        e.stopPropagation()
+        if(e){
+            e.stopPropagation()
+        }
         const options = this.props.dict && this.props.dict[column.dataIndex]
         Modal.success({
             centered: true,
@@ -58,7 +60,9 @@ class CrudTable extends React.Component {
 
 
     showTree = (list, column, e) => {
-        e.stopPropagation()
+        if(e){
+            e.stopPropagation()
+        }
         function treeMap(tree) {
             if (!tree) {
                 return null
@@ -391,6 +395,7 @@ class CrudTable extends React.Component {
                     onSave={this.props.onSave}
                     columns={this.props.columns}
                     visible={this.state.editVisible}
+                    nodes={this.props.nodes}
                     setVisible={this.setEditVisible}
                 />
                 <CrudModal
@@ -400,6 +405,7 @@ class CrudTable extends React.Component {
                     search={this.getPage}
                     onSave={this.props.onSave}
                     columns={this.props.columns}
+                    nodes={this.props.nodes}
                     visible={this.state.detailVisible}
                     setVisible={this.setDetailVisible}
                 />

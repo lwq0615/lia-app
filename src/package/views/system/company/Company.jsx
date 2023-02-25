@@ -4,6 +4,7 @@ import { message, Button, Modal } from "antd"
 import { getCreateByDict } from '@/package/request/system/user'
 import Role from './Role'
 import React from 'react'
+import './company.scss'
 
 export default class Company extends React.Component {
 
