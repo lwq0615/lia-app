@@ -46,7 +46,7 @@ export default function Home() {
   const location = useLocation()
   const [collapsed, setCollapsed] = useState(false)
   const [routePath, setRoutePath] = useState([])
-  const [selectedKeys, setSelectedKeys] = useState([])
+  const [selectedKeys, setSelectedKeys] = useState(null)
   const historyRouterRef = useRef()
   const userInfo = useSelector((state) => state.loginUser.userInfo)
   const routers = routerMap(useSelector((state) => state.loginUser.menus))
