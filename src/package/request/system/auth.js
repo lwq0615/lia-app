@@ -50,3 +50,11 @@ export function moveAuthToRouter(authIds, routerId){
         "content-type": false
     })
 }
+
+
+/**
+ * 查询用户是否有某个key的权限
+ */
+export function hasAuth(key){
+    return request.get(`${baseUrl}/hasAuth?key=${key}`)
+}

@@ -11,12 +11,12 @@
 }
 
 .lia-crud-modal .ant-modal-body {
-    max-height: 500px;
+    max-height: 550px;
 }
 
 .icons-modal {
     .ant-modal-body {
-        max-height: 500px;
+        max-height: 550px;
         overflow: auto;
         display: grid;
         grid-template-columns: repeat(5, 1fr);
@@ -38,7 +38,7 @@
 }
 
 .ant-modal-body .checkbox-group {
-    max-height: 500px;
+    max-height: 550px;
     overflow: auto;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -46,6 +46,6 @@
 }
 
 .ant-modal-body .multiple-tree {
-    max-height: 500px;
+    max-height: 550px;
     overflow: auto;
 }

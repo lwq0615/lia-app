@@ -1,24 +1,69 @@
-import { useRef, useState, ChangeEvent, useEffect } from "react"
+import { useRef, useState, useEffect, createElement } from "react"
 import { marked } from "marked"
-import { Modal, Input, Form, message, Row, Col, Select, Switch } from "antd";
+import { Modal, Input, Form, message, Row, Col, Select, Switch, Tabs } from "antd";
 import { addSysNotice } from "@/package/request/index/notice";
 import { getDictByKey } from "@/package/request/system/dictData";
 
 const { TextArea } = Input;
 
-function PublishModal() {
 
-  const textRef = useRef<any>(null)
+function TabMarkdown(props: any) {
+
   const markdown = useRef<any>(null)
+  const [value, setValue] = useState<string>('')
+
+  function valueChange(e: any) {
+    setValue(e.target.value);
+    props.onChange(e.target.value)
+  }
+
+  const items = [
+    {
+      label: '编辑',
+      key: 'edit',
+      forceRender: true,
+      children: (
+        <TextArea placeholder="Markdown" className="form-content" onChange={valueChange} />
+      )
+    },
+    {
+      label: '预览',
+      key: 'preview',
+      forceRender: true,
+      children: (
+        <div className='markdown-body' ref={markdown}></div>
+      )
+    }
+  ]
+
+  const tabChange = (key: string) => {
+    if (key === 'preview') {
+      markdown.current.innerHTML = marked.parse(value)
+    }
+  }
+
+  return (
+    <Tabs
+      onChange={tabChange}
+      type="card"
+      items={items}
+    />
+  )
+}
+
+
+
+export default function Publish() {
+
   const formRef = useRef<any>(null)
   const [open, setOpen] = useState<boolean>(false)
   const [levelOption, setLevelOption] = useState([])
-  const [task, setTask] = useState<NodeJS.Timeout>()
   const [confirmLoading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
     getDictByKey('sys:notice:level').then((res: any) => {
       setLevelOption(res);
+      formRef.current.setFieldValue("level", res[0].value)
     })
   }, [])
 
@@ -32,7 +77,6 @@ function PublishModal() {
         message.success("发布成功")
         setOpen(false)
         formRef.current.resetFields()
-        markdown.current.innerHTML = ''
       } else {
         message.warning("发布失败")
       }
@@ -42,19 +86,6 @@ function PublishModal() {
     }
   };
 
-  /**
-   * markdown文本改变
-   */
-  const markChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    clearTimeout(task)
-    const id: NodeJS.Timeout = setTimeout(() => {
-      if (markdown.current) {
-        markdown.current.innerHTML = marked.parse(e.target.value)
-      }
-    }, 1000)
-    setTask(id)
-  }
-
   return (
     <>
       <a onClick={() => setOpen(true)} style={{ userSelect: 'none' }}>发布</a>
@@ -63,19 +94,24 @@ function PublishModal() {
         className="publish-notice"
         title="发布通知/公告"
         open={open}
+        forceRender
         onOk={handleOk}
         onCancel={() => setOpen(false)}
         confirmLoading={confirmLoading}
-        width={1200}
+        width={1000}
       >
         <Form ref={formRef}>
           <Row gutter={24}>
-            <Col span={12}>
-              <Form.Item label="标题" name="title" rules={[{ required: true, message: '请输入标题!' }]}>
+            <Col span={14}>
+              <Form.Item
+                label="标题"
+                name="title"
+                rules={[{ required: true, message: '请输入标题!' }]}
+              >
                 <Input placeholder="请输入" />
               </Form.Item>
             </Col>
-            <Col span={7}>
+            <Col span={5}>
               <Form.Item label="等级" name="level" rules={[{ required: true, message: '请选择等级!' }]}>
                 <Select
                   placeholder="请选择"
@@ -83,19 +119,14 @@ function PublishModal() {
                 />
               </Form.Item>
             </Col>
-            <Col span={5}>
+            <Col span={3}>
               <Form.Item label="是否置顶" name="topFlag" valuePropName="checked">
                 <Switch checkedChildren="是" unCheckedChildren="否" />
               </Form.Item>
             </Col>
-            <Col span={12}>
-              <Form.Item label="详情" name="content">
-                <TextArea placeholder="Markdown" className="form-content" ref={textRef} onChange={markChange} />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item label="预览">
-                <div className='markdown-body' ref={markdown}></div>
+            <Col span={24}>
+              <Form.Item label="详情" name="content" style={{ marginBottom: 20 }}>
+                <TabMarkdown />
               </Form.Item>
             </Col>
           </Row>
@@ -103,23 +134,4 @@ function PublishModal() {
       </Modal>
     </>
   );
-}
-
-
-export default function Notice() {
-
-  const markdown = useRef<any>(null)
-
-  const onOk = (value: string) => {
-    markdown.current.innerHTML = marked.parse(value)
-  }
-
-  return (
-    <div className="index-notice">
-      <h3 className='title'>
-        通知/公告
-        <PublishModal />
-      </h3>
-    </div>
-  )
 }

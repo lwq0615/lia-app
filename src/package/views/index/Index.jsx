@@ -1,5 +1,5 @@
 import UserInfo from "./UserInfo";
-import Notice from "./Notice";
+import Notice from "./notice/Notice";
 
 
 export default function Index() {
