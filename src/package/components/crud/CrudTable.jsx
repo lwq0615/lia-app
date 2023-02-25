@@ -26,7 +26,8 @@ class CrudTable extends React.Component {
         selectedRowKeys: [],
         selectedRows: [],
         rightDeleteConfirm: false,
-        visible: false,
+        editVisible: false,
+        detailVisible: false,
         formDefaultValues: {}
     }
 
@@ -99,6 +100,7 @@ class CrudTable extends React.Component {
         const newColumns = []
         for (let i in props.columns) {
             const column = { ...props.columns[i] }
+            const oldHtml = column.html
             let html = text => text
             // 隐藏不展示的字段
             if (column.show === false) {
@@ -120,9 +122,16 @@ class CrudTable extends React.Component {
             }
             // 隐藏文本，通过按钮展开
             else if (column.hideText) {
-                html = (text) => {
+                html = (text, record, index) => {
+                    const hideTextClick = (e) => {
+                        const node = oldHtml ? oldHtml(text, record, index) : text
+                        this.showHideText(node, column.title, e)
+                    }
                     return column.html ? (
-                        <Button type="link" onClick={(e) => this.showHideText(oldHtml(text), column.title, e)}>查看</Button>
+                        <Button
+                            type="link"
+                            onClick={hideTextClick}
+                        >查看</Button>
                     ) : (
                         <Button type="link" onClick={(e) => this.showHideText(text, column.title, e)}>查看</Button>
                     )
@@ -140,9 +149,9 @@ class CrudTable extends React.Component {
                 }
             }
             column.html = (text) => {
-                if((text === void 0 || text === null) && column.nullValue !== void 0){
+                if ((text === void 0 || text === null) && column.nullValue !== void 0) {
                     return column.nullValue
-                }else{
+                } else {
                     return html(text)
                 }
             }
@@ -165,6 +174,7 @@ class CrudTable extends React.Component {
             const getBtns = (record) => {
                 let config = []
                 const btns = {
+                    "detail": (<Button key="detail" type="primary" size='small' onClick={(e) => { this.detailClick(record, e) }}>详情</Button>),
                     "edit": (<Button key="edit" type="primary" size='small' onClick={(e) => { this.editClick(record, e) }}>编辑</Button>),
                     "delete": (<CrudConfirm nodes={props.nodes} deleteClick={props.deleteClick} msg={props.deleteMsg} key="delete" deleteSubmit={() => this.deleteSubmit([record])} />)
                 }
@@ -193,9 +203,15 @@ class CrudTable extends React.Component {
     }
 
 
-    setVisible = (visible) => {
+    setEditVisible = (editVisible) => {
         this.setState({
-            visible: visible
+            editVisible: editVisible
+        })
+    }
+
+    setDetailVisible = (detailVisible) => {
+        this.setState({
+            detailVisible: detailVisible
         })
     }
 
@@ -211,8 +227,23 @@ class CrudTable extends React.Component {
         this.setState({
             formDefaultValues: record
         })
-        this.setVisible(true)
+        this.setEditVisible(true)
     }
+
+    /**
+     * 点击详情按钮
+     */
+    detailClick = async (record, e) => {
+        e.stopPropagation()
+        if (this.props.detailClick && await this.props.detailClick(record) === false) {
+            return
+        }
+        this.setState({
+            formDefaultValues: record
+        })
+        this.setDetailVisible(true)
+    }
+
 
     /**
      * 提交删除
@@ -359,8 +390,18 @@ class CrudTable extends React.Component {
                     search={this.getPage}
                     onSave={this.props.onSave}
                     columns={this.props.columns}
-                    visible={this.state.visible}
-                    setVisible={this.setVisible}
+                    visible={this.state.editVisible}
+                    setVisible={this.setEditVisible}
+                />
+                <CrudModal
+                    title='详情'
+                    formDefaultValues={this.state.formDefaultValues}
+                    dict={this.props.dict}
+                    search={this.getPage}
+                    onSave={this.props.onSave}
+                    columns={this.props.columns}
+                    visible={this.state.detailVisible}
+                    setVisible={this.setDetailVisible}
                 />
             </>
         )

@@ -70,7 +70,7 @@ export default function Code(props) {
         // 是否显示行索引，默认true
         showIndex: true,
         // 是否展示右侧操作栏，默认["edit", "delete"]
-        rightAction: [(record) => {
+        rightAction: ["detail", (record) => {
             return (<Button key="continue" type="primary" size='small' onClick={(e) => { continueEdit(record) }}>继续编辑</Button>)
         }, "delete"],
         // 配置按钮组，默认["add", "delete", "search"]

@@ -32,7 +32,7 @@ class Crud extends React.Component {
     static defaultProps = {
         selection: true,
         showIndex: true,
-        rightAction: ["edit", "delete"],
+        rightAction: ["detail", "edit", "delete"],
         showSearch: true,
         menuBtns: ["add", "delete", "search", "excel"]
     }

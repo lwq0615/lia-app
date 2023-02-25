@@ -16,7 +16,7 @@ class CrudForm extends React.Component {
         // 如果表单有默认值，先将日期格式转换为moment
         if (props.formDefaultValues) {
             for (let column of props.columns) {
-                if(column.type === 'switch'){
+                if (column.type === 'switch') {
                     const columnDict = props.dict[column.dataIndex]
                     props.formDefaultValues[column.dataIndex] = columnDict && columnDict[0].value === props.formDefaultValues[column.dataIndex]
                     continue
@@ -69,10 +69,11 @@ class CrudForm extends React.Component {
     }
 
     createField = (column) => {
+        const disabled = (column.editEnable === false && this.props.title === '编辑') || this.props.title === '详情'
         if (column.dict && column.type === 'select') {
             return (
                 <Select
-                    disabled={column.editEnable === false && this.props.title === '编辑'}
+                    disabled={disabled}
                     allowClear
                     placeholder={column.placeholder || "请选择" + column.title}
                     showSearch
@@ -91,7 +92,7 @@ class CrudForm extends React.Component {
                     style={{ width: '100%' }}
                     picker='date'
                     allowClear
-                    disabled={column.editEnable === false && this.props.title === '编辑'}
+                    disabled={disabled}
                 />
             )
         }
@@ -102,7 +103,7 @@ class CrudForm extends React.Component {
                     picker='date'
                     placeholder={column.placeholder || "请选择" + column.title}
                     allowClear
-                    disabled={column.editEnable === false && this.props.title === '编辑'}
+                    disabled={disabled}
                 />
             )
         }
@@ -114,14 +115,14 @@ class CrudForm extends React.Component {
                     picker='date'
                     placeholder={column.placeholder || "请选择" + column.title}
                     allowClear
-                    disabled={column.editEnable === false && this.props.title === '编辑'}
+                    disabled={disabled}
                 />
             )
         }
         else if (column.type === 'textarea' && (this.props.title === '编辑' || this.props.title === '新增')) {
             return (
                 <TextArea
-                    disabled={column.editEnable === false && this.props.title === '编辑'}
+                    disabled={disabled}
                     allowClear
                     placeholder={column.placeholder || "请输入" + column.title}
                     rows={4}
@@ -131,7 +132,7 @@ class CrudForm extends React.Component {
         else if (column.type === 'icon') {
             const value = this.props.formDefaultValues?.[column.dataIndex]
             return (
-                <Icons value={value} />
+                <Icons value={value} disabled={disabled} />
             )
         }
         else if (column.type === 'number') {
@@ -139,7 +140,7 @@ class CrudForm extends React.Component {
                 <InputNumber
                     style={{ width: '100%' }}
                     placeholder={column.placeholder || "请选择" + column.title}
-                    disabled={column.editEnable === false && this.props.title === '编辑'}
+                    disabled={disabled}
                     onPressEnter={() => { this.props.title === '搜索' && this.props.submit && this.props.submit() }}
                 />
             )
@@ -148,7 +149,12 @@ class CrudForm extends React.Component {
             const treeData = this.props.dict && this.props.dict[column.dataIndex]
             const values = this.props.formDefaultValues?.[column.dataIndex]
             return (
-                <CrudMultipleTree values={values} treeData={treeData} column={column} />
+                <CrudMultipleTree
+                    values={values}
+                    treeData={treeData}
+                    column={column}
+                    disabled={disabled}
+                />
             )
         }
         else if (column.type === 'tree') {
@@ -158,6 +164,7 @@ class CrudForm extends React.Component {
                         maxHeight: 400,
                         overflow: 'auto',
                     }}
+                    disabled={disabled}
                     allowClear
                     treeData={this.treeDataMap(this.props.dict[column.dataIndex])}
                     placeholder={column.placeholder || "请选择" + column.title}
@@ -168,12 +175,17 @@ class CrudForm extends React.Component {
             const options = this.props.dict && this.props.dict[column.dataIndex]
             const values = this.props.formDefaultValues?.[column.dataIndex]
             return (
-                <CrudCheckbox options={options} values={values} column={column} />
+                <CrudCheckbox
+                    disabled={disabled}
+                    options={options}
+                    values={values}
+                    column={column}
+                />
             )
         }
         else if (column.type === 'switch') {
             return (
-                <Switch disabled={column.editEnable === false && this.props.title === '编辑'} />
+                <Switch disabled={disabled} />
             )
         }
         else {
@@ -181,7 +193,7 @@ class CrudForm extends React.Component {
                 <Input
                     placeholder={column.placeholder || "请输入" + column.title}
                     allowClear
-                    disabled={column.editEnable === false && this.props.title === '编辑'}
+                    disabled={disabled}
                     onPressEnter={() => { this.props.title === '搜索' && this.props.submit && this.props.submit() }}
                 />
             )
@@ -205,6 +217,9 @@ class CrudForm extends React.Component {
                 }
             }
             if (column.editShow === false && this.props.title === '编辑') {
+                continue
+            }
+            if (column.detailShow === false && this.props.title === '详情') {
                 continue
             }
             children.push(
@@ -266,7 +281,7 @@ class CrudForm extends React.Component {
         return (
             <Form
                 initialValues={this.props.formDefaultValues || {}}
-                className="ant-advanced-search-form crud-form"
+                className={`ant-advanced-search-form crud-form ${this.props.title === '详情' ? 'detail' : ""}`}
                 ref={ref => this.formRef = ref}
             >
                 <Row gutter={24}>{this.getFields()}</Row>

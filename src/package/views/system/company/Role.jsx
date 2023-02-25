@@ -86,7 +86,7 @@ class Role extends React.Component {
                 // 是否显示行索引，默认true
                 showIndex: true,
                 // 是否展示右侧操作栏，默认["edit", "delete"]
-                rightAction: ["edit", "delete"],
+                rightAction: ["detail", "edit", "delete"],
                 // 表格行是否可选择(默认false)
                 selection: true,
                 // 配置显示的按钮

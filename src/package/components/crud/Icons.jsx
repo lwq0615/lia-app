@@ -39,6 +39,9 @@ export default class Icons extends React.Component {
     }
 
     showList = () => {
+        if(this.props.disabled){
+            return
+        }
         this.setState({
             show: true
         })
@@ -52,12 +55,16 @@ export default class Icons extends React.Component {
 
     render() {
         const NowIcon = this.state.NowIcon
+        const style = {
+            cursor: this.props.disabled ? 'no-drop' : 'pointer',
+            color: this.props.disabled ? 'rgba(0,0,0,0.25)' : '#40a9ff'
+        }
         return (
             <div>
                 {
                     NowIcon
-                    ? <NowIcon onClick={this.showList} style={{ fontSize: 24, color: '#40a9ff' }} />
-                    : <Button type="link" onClick={this.showList}>选择</Button>
+                    ? <NowIcon onClick={this.showList} style={{...style, fontSize: 24}} />
+                    : <Button type="link" onClick={this.showList} style={style} >选择</Button>
                 }
                 <Modal
                     title="选择图标"

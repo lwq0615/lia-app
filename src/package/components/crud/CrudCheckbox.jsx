@@ -13,9 +13,23 @@ export default function CrudCheckbox(props) {
         setVisible(false)
     }
 
+    const show = () => {
+        if(props.disabled){
+            return
+        }
+        setVisible(true)
+    }
+
+    if(props.disabled){
+        style = {
+            cursor: 'no-drop',
+            color: 'rgba(0,0,0,0.25)'
+        }
+    }
+
     return (
         <>
-            <Button type="link" onClick={(e) => setVisible(true)}>编辑</Button>
+            <Button type="link" onClick={show} style={style}>编辑</Button>
             <Modal
                 open={visible}
                 centered={true}

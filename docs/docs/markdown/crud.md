@@ -15,11 +15,12 @@ lia-app提供了Crud组件，组件提供了很多个性化接口，只需要使
 | columns | 表格字段配置，详情请查看column配置 | Array | 是 | -- |
 | selection | 是否允许选中行数据 | bool | 否 | false |
 | showIndex | 展示行索引 | bool | 否 | true |
-| rightAction | 是否展示右侧操作栏，可以在数组中添加自定义方法return一个可渲染节点 | bool, Array | 否 | ["edit", "delete"] |
+| rightAction | 是否展示右侧操作栏，可以在数组中添加自定义方法return一个可渲染节点 | bool, Array | 否 | ["detail", "edit", "delete"] |
 | menuBtns | 配置显示的按钮，可以在数组中添加自定义方法return一个可渲染节点 | bool, Array | 否 | ["add", "delete", "search", "excel"] |
 | onSelection | 表格选中项改变 | function(selectedRowKeys<br/>,selectedRows) | 否 | -- |
 | onRowClick | 点击表格行 | function(record, event) | 否 | -- |
 | editClick | 点击编辑按钮，return false时取消默认编辑弹窗 | function(record) | 否 | -- |
+| detailClick | 点击详情按钮，return false时取消默认详情弹窗 | function(record) | 否 | -- |
 | deleteClick | 点击删除 | function(records) | 否 | -- |
 | addClick | 点击新增按钮，return false时取消默认新增弹窗 | function | 否 | -- |
 | showSearch | 条件查询 | bool | 否 | true |
@@ -31,6 +32,7 @@ lia-app提供了Crud组件，组件提供了很多个性化接口，只需要使
 | ---  | --- | ---  | ---      | ---   |
 | defaultValue | 新增时的默认值 | any | 否 | -- |
 | addShow | 新增时是否展示该字段 | bool | 否 | true |
+| detailShow | 详情是否展示该字段 | bool | 否 | true |
 | editShow | 编辑时是否展示该字段 | bool | 否 | true |
 | editEnable | 编辑时是否允许编辑字段 | bool | 否 | true |
 | required | 该字段是否必填 | bool | 否 | false |

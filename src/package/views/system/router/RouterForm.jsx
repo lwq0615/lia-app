@@ -1,5 +1,4 @@
-import React from 'react';
-import { Button, Form, Input, InputNumber, Row, Col, TreeSelect, message, Divider } from 'antd';
+import { Button, Form, Input, Row, Col, TreeSelect, message, Divider } from 'antd';
 import Confirm from '@/package/components/confirm/Confirm.jsx'
 import { saveSysRouter, deleteRouters } from '@/package/request/system/router'
 import Icons from '@/package/components/crud/Icons.jsx'
@@ -136,7 +135,7 @@ const RouterForm = ({ routerDict, formValue, formTitle, routerId, reloadTree, se
                     </Col>
                     <Col span={12}>
                         <Form.Item name="icon" label="图标">
-                            <Icons value={findFormValue('icon', formValue)} />
+                            <Icons value={findFormValue('icon', formValue)}/>
                         </Form.Item>
                     </Col>
                 </Row>
