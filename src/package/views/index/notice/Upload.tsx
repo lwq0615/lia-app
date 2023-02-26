@@ -1,29 +1,28 @@
 import React, { useState } from 'react';
 import { UploadOutlined } from '@ant-design/icons';
 import type { UploadProps } from 'antd';
-import { Button, message, Upload } from 'antd';
+import { Button, Upload } from 'antd';
 import { UploadFile } from 'antd/lib/upload';
 
 
-
-
-const App: React.FC = () => {
+const App: React.FC = (props: any) => {
 
   const [fileList, setFileList] = useState<UploadFile[]>([])
 
-  const props: UploadProps = {
+  const uProps: UploadProps = {
     name: 'file',
     beforeUpload: (file) => {
       return false
     },
     onChange: (info) => {
       setFileList([...info.fileList]);
+      if(props.onChange) props.onChange([...info.fileList])
     },
     multiple: true
   };
 
   return (
-    <Upload {...props} fileList={fileList}>
+    <Upload {...uProps} fileList={fileList}>
       <Button icon={<UploadOutlined />}>上传附件</Button>
     </Upload>
   );

@@ -9,10 +9,8 @@ const { TextArea } = Input;
 export default function TabMarkdown(props: any) {
 
   const markdown = useRef<any>(null)
-  const [value, setValue] = useState<string>('')
 
   function valueChange(e: any) {
-    setValue(e.target.value);
     props.onChange(e.target.value)
   }
 
@@ -22,7 +20,7 @@ export default function TabMarkdown(props: any) {
       key: 'edit',
       forceRender: true,
       children: (
-        <TextArea placeholder="详情" className="form-content" onChange={valueChange} />
+        <TextArea placeholder="详情" className="form-content" onChange={valueChange} value={props.value}/>
       )
     },
     {
@@ -37,7 +35,7 @@ export default function TabMarkdown(props: any) {
 
   const tabChange = (key: string) => {
     if (key === 'preview') {
-      markdown.current.innerHTML = marked.parse(value)
+      markdown.current.innerHTML = marked.parse(props.value || '')
     }
   }
 

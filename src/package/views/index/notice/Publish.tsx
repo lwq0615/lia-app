@@ -47,6 +47,7 @@ export default function Publish() {
   const [roleTree, setRoleTree] = useState<TreeItem[]>([])
   const [levelOption, setLevelOption] = useState<any[]>([])
   const [confirmLoading, setLoading] = useState<boolean>(false)
+  const [content, setContent] = useState<string>()
 
   useEffect(() => {
     // 公告等级字典
@@ -65,11 +66,15 @@ export default function Publish() {
       const values = await formRef.current.validateFields()
       values.publishTo = values.publishTo?.filter((item: any) =>typeof item === "number")
       values.topFlag = values.topFlag ? '1' : '0'
+      values.content = content
+      console.log(values);
+      return
       const res: any = await addSysNotice(values)
       if (res > 0) {
         message.success("发布成功")
         setOpen(false)
         formRef.current.resetFields()
+        setContent(void 0)
         formRef.current.setFieldValue("level", levelOption[0].value)
       } else {
         message.warning("发布失败")
@@ -132,7 +137,7 @@ export default function Publish() {
               </Col>
             </Row>
           </Form>
-          <TabMarkdown />
+          <TabMarkdown value={content} onChange={setContent}/>
         </div>
       </Modal>
     </>
