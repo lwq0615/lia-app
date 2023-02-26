@@ -96,6 +96,7 @@ export default function Publish() {
         open={open}
         forceRender
         onOk={handleOk}
+        okText="发布"
         onCancel={() => setOpen(false)}
         confirmLoading={confirmLoading}
         width={1000}

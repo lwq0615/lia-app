@@ -70,7 +70,7 @@ class CrudMenu extends React.Component {
                 heads[item.dataIndex] = item.title
             }
         })
-        this.props.getPage().then(({list}) => {
+        this.props.getPage({}, {}).then(({list}) => {
             list.forEach(item => {
                 for(let key in item){
                     // 需要进行字典映射
