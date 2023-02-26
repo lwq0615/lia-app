@@ -1,15 +1,20 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Modal, Button, Checkbox } from 'antd';
+import propTypes from 'prop-types'
 
 
 export default function CrudCheckbox(props) {
 
     const [visible, setVisible] = useState(false);
 
-    let values = props.values
+    let values = props.defaultValues
+
+    const ok = () => {
+        props.onChange(values)
+        setVisible(false)
+    }
 
     const hide = () => {
-        props.onChange(values)
         setVisible(false)
     }
 
@@ -34,13 +39,13 @@ export default function CrudCheckbox(props) {
             <Modal
                 open={visible}
                 centered={true}
-                title={props.column.title}
+                title={props.title}
                 className="lia-crud-edit-checkbox-modal"
                 okText='确定'
                 width={700}
                 closable={true}
                 onCancel={hide}
-                onOk={hide}
+                onOk={ok}
             >
                 <Checkbox.Group
                     className='checkbox-group'
@@ -51,4 +56,12 @@ export default function CrudCheckbox(props) {
             </Modal>
         </>
     )
+}
+
+
+CrudCheckbox.propTypes = {
+    defaultValues: propTypes.array,
+    disabled: propTypes.bool,
+    title: propTypes.node,
+    options: propTypes.array.isRequired
 }

@@ -1,12 +1,14 @@
 import { Modal, Button, Tree } from 'antd';
-import {useState} from 'react';
+import { useState } from 'react';
+import propTypes from 'prop-types'
 
-function treeMap(tree){
-    if(!tree){
+
+function treeMap(tree) {
+    if (!tree) {
         return null
     }
     return tree.map(item => {
-        return Object.assign({...item},{
+        return Object.assign({ ...item }, {
             title: item.label,
             key: item.value,
             children: treeMap(item.children)
@@ -14,28 +16,35 @@ function treeMap(tree){
     })
 }
 
-const App = (props) => {
+
+const MultipleTree = (props) => {
 
     const [visible, setVisible] = useState(false);
+    let checkeds = []
+
+    const ok = () => {
+        props.onChange(checkeds)
+        setVisible(false)
+    }
 
     const hide = () => {
         setVisible(false)
     }
 
     const show = () => {
-        if(props.disabled){
+        if (props.disabled) {
             return
         }
         setVisible(true)
     }
 
     const onCheck = (checkedKeys) => {
-        props.onChange(checkedKeys.checked)
+        checkeds = checkedKeys
     };
     const treeData = treeMap(props.treeData)
-    let values = props.values
+    let values = props.defaultValues
     let style = {}
-    if(props.disabled){
+    if (props.disabled) {
         style = {
             cursor: 'no-drop',
             color: 'rgba(0,0,0,0.25)'
@@ -48,17 +57,17 @@ const App = (props) => {
             <Modal
                 open={visible}
                 centered={true}
-                title={props.column.title}
+                title={props.title}
                 okText='确定'
                 width={600}
                 closable={true}
                 onCancel={hide}
-                onOk={hide}
+                onOk={ok}
             >
                 <Tree
                     className='multiple-tree'
                     checkable
-                    checkStrictly
+                    checkStrictly={props.checkStrictly}
                     defaultCheckedKeys={values}
                     onCheck={onCheck}
                     treeData={treeData}
@@ -68,4 +77,13 @@ const App = (props) => {
     )
 };
 
-export default App;
+
+MultipleTree.propTypes = {
+    defaultValues: propTypes.array,
+    checkStrictly: propTypes.bool,
+    disabled: propTypes.bool,
+    title: propTypes.node,
+    treeData: propTypes.array.isRequired
+}
+
+export default MultipleTree;

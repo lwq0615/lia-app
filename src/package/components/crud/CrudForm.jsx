@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Row, Col, Input, Select, DatePicker, InputNumber, TreeSelect, Switch, Button } from 'antd';
-import CrudCheckbox from './CrudCheckbox';
-import CrudMultipleTree from './CrudMultipleTree';
+import CrudCheckbox from '../form/Checkbox';
+import CrudMultipleTree from '../form/MultipleTree';
 import Icons from './Icons';
 import moment from 'moment';
 
@@ -158,9 +158,9 @@ class CrudForm extends React.Component {
             } else {
                 return (
                     <CrudMultipleTree
-                        values={values}
+                        defaultValues={values}
                         treeData={treeData}
-                        column={column}
+                        title={column.title}
                         disabled={disabled}
                     />
                 )
@@ -196,8 +196,8 @@ class CrudForm extends React.Component {
                     <CrudCheckbox
                         disabled={disabled}
                         options={options}
-                        values={values}
-                        column={column}
+                        defaultValues={values}
+                        title={column.title}
                     />
                 )
             }

@@ -4,20 +4,58 @@ import { addSysNotice } from "@/package/request/index/notice";
 import { getDictByKey } from "@/package/request/system/dictData";
 import TabMarkdown from "./TabMarkdown";
 import Upload from './Upload'
+import MultipleTree from '@/package/components/form/MultipleTree'
+import { getRoleDict } from "@/package/request/system/role";
 
+
+type TreeItem= {
+  label: string,
+  value: any,
+  children?: TreeItem[]
+}
+
+
+/**
+ * 获取企业角色树
+ */
+const getRoleTree = () => {
+  const roleTreeDict: TreeItem[] = []
+  return getRoleDict().then((res: any) => {
+    const companyRoleTree: any = {}
+    res.forEach((item: any) => {
+      if (!Array.isArray(companyRoleTree[item.remark])) {
+        companyRoleTree[item.remark] = []
+      }
+      companyRoleTree[item.remark].push(item)
+    })
+    Object.keys(companyRoleTree).forEach(item => {
+      roleTreeDict.push({
+        label: item,
+        value: "company:"+item,
+        children: companyRoleTree[item]
+      })
+    })
+    return roleTreeDict
+  })
+}
 
 
 export default function Publish() {
 
   const formRef = useRef<any>(null)
   const [open, setOpen] = useState<boolean>(false)
-  const [levelOption, setLevelOption] = useState([])
+  const [roleTree, setRoleTree] = useState<TreeItem[]>([])
+  const [levelOption, setLevelOption] = useState<any[]>([])
   const [confirmLoading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
+    // 公告等级字典
     getDictByKey('sys:notice:level').then((res: any) => {
       setLevelOption(res);
       formRef.current.setFieldValue("level", res[0].value)
+    })
+    getRoleTree().then((res: TreeItem[]) => {
+      setRoleTree(res)
     })
   }, [])
 
@@ -25,12 +63,14 @@ export default function Publish() {
     setLoading(true)
     try {
       const values = await formRef.current.validateFields()
+      values.publishTo = values.publishTo?.filter((item: any) =>typeof item === "number")
       values.topFlag = values.topFlag ? '1' : '0'
       const res: any = await addSysNotice(values)
       if (res > 0) {
         message.success("发布成功")
         setOpen(false)
         formRef.current.resetFields()
+        formRef.current.setFieldValue("level", levelOption[0].value)
       } else {
         message.warning("发布失败")
       }
@@ -77,10 +117,7 @@ export default function Publish() {
               </Col>
               <Col span={24}>
                 <Form.Item label="推送给" name="publishTo" rules={[{ required: true, message: '请选择推送目标!' }]}>
-                  <Select
-                    placeholder="请选择"
-                    options={levelOption}
-                  />
+                  <MultipleTree treeData={roleTree} title="推送给"/>
                 </Form.Item>
               </Col>
               <Col span={24}>
@@ -90,7 +127,7 @@ export default function Publish() {
               </Col>
               <Col span={24}>
                 <Form.Item label="附件" name="files">
-                  <Upload/>
+                  <Upload />
                 </Form.Item>
               </Col>
             </Row>
