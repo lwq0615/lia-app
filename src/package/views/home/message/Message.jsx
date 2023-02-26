@@ -6,7 +6,7 @@ import { getNoReadCount, readMessage } from '@/package/request/system/message'
 import PersonList from './PersonList'
 import MsgBox from './MsgBox'
 import './message.scss'
-import WithRouter from '@/package/components/hoc/WithRouter';
+import withRouter from '@/package/components/hoc/WithRouter';
 
 class Message extends React.Component {
     state = {
@@ -131,4 +131,4 @@ class Message extends React.Component {
 }
 
 
-export default WithRouter(Message)
+export default withRouter(Message)

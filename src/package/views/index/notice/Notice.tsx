@@ -1,19 +1,12 @@
-import { useEffect, useRef, useState} from "react"
 import Publish from "./Publish"
 import './notice.scss'
-import { hasAuth } from "@/package/request/system/auth"
+import useHasAuth from "@/package/hook/hasAuth"
 
 
 
 export default function Notice() {
 
-  const [canPubilsh, setCanPubilsh] = useState<boolean>(false)
-
-  useEffect(() => {
-    hasAuth("system:notice:add").then(res => {
-      setCanPubilsh(res as any)
-    })
-  }, [])
+  const canPubilsh = useHasAuth("system:notice:add")
 
   return (
     <div className="index-notice">

@@ -1,55 +1,9 @@
-import { useRef, useState, useEffect, createElement } from "react"
-import { marked } from "marked"
-import { Modal, Input, Form, message, Row, Col, Select, Switch, Tabs } from "antd";
+import { useRef, useState, useEffect } from "react"
+import { Modal, Input, Form, message, Row, Col, Select, Switch } from "antd";
 import { addSysNotice } from "@/package/request/index/notice";
 import { getDictByKey } from "@/package/request/system/dictData";
-
-const { TextArea } = Input;
-
-
-function TabMarkdown(props: any) {
-
-  const markdown = useRef<any>(null)
-  const [value, setValue] = useState<string>('')
-
-  function valueChange(e: any) {
-    setValue(e.target.value);
-    props.onChange(e.target.value)
-  }
-
-  const items = [
-    {
-      label: '编辑',
-      key: 'edit',
-      forceRender: true,
-      children: (
-        <TextArea placeholder="Markdown" className="form-content" onChange={valueChange} />
-      )
-    },
-    {
-      label: '预览',
-      key: 'preview',
-      forceRender: true,
-      children: (
-        <div className='markdown-body' ref={markdown}></div>
-      )
-    }
-  ]
-
-  const tabChange = (key: string) => {
-    if (key === 'preview') {
-      markdown.current.innerHTML = marked.parse(value)
-    }
-  }
-
-  return (
-    <Tabs
-      onChange={tabChange}
-      type="card"
-      items={items}
-    />
-  )
-}
+import TabMarkdown from "./TabMarkdown";
+import Upload from './Upload'
 
 
 
@@ -101,37 +55,48 @@ export default function Publish() {
         confirmLoading={confirmLoading}
         width={1000}
       >
-        <Form ref={formRef}>
-          <Row gutter={24}>
-            <Col span={14}>
-              <Form.Item
-                label="标题"
-                name="title"
-                rules={[{ required: true, message: '请输入标题!' }]}
-              >
-                <Input placeholder="请输入" />
-              </Form.Item>
-            </Col>
-            <Col span={5}>
-              <Form.Item label="等级" name="level" rules={[{ required: true, message: '请选择等级!' }]}>
-                <Select
-                  placeholder="请选择"
-                  options={levelOption}
-                />
-              </Form.Item>
-            </Col>
-            <Col span={3}>
-              <Form.Item label="是否置顶" name="topFlag" valuePropName="checked">
-                <Switch checkedChildren="是" unCheckedChildren="否" />
-              </Form.Item>
-            </Col>
-            <Col span={24}>
-              <Form.Item label="详情" name="content" style={{ marginBottom: 20 }}>
-                <TabMarkdown />
-              </Form.Item>
-            </Col>
-          </Row>
-        </Form>
+        <div className="form-body">
+          <Form ref={formRef} labelCol={{ span: 6 }}>
+            <Row gutter={24}>
+              <Col span={24}>
+                <Form.Item
+                  label="标题"
+                  name="title"
+                  rules={[{ required: true, message: '请输入标题!' }]}
+                >
+                  <Input placeholder="请输入" />
+                </Form.Item>
+              </Col>
+              <Col span={24}>
+                <Form.Item label="等级" name="level" rules={[{ required: true, message: '请选择等级!' }]}>
+                  <Select
+                    placeholder="请选择"
+                    options={levelOption}
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={24}>
+                <Form.Item label="推送给" name="publishTo" rules={[{ required: true, message: '请选择推送目标!' }]}>
+                  <Select
+                    placeholder="请选择"
+                    options={levelOption}
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={24}>
+                <Form.Item label="是否置顶" name="topFlag" valuePropName="checked">
+                  <Switch checkedChildren="是" unCheckedChildren="否" />
+                </Form.Item>
+              </Col>
+              <Col span={24}>
+                <Form.Item label="附件" name="files">
+                  <Upload/>
+                </Form.Item>
+              </Col>
+            </Row>
+          </Form>
+          <TabMarkdown />
+        </div>
       </Modal>
     </>
   );

@@ -3,7 +3,7 @@ import React from "react"
 import './login.scss'
 import { Form, Input, Button, Checkbox, message } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
-import WithRouter from '@/package/components/hoc/WithRouter';
+import withRouter from '@/package/components/hoc/WithRouter';
 import { sysUserLogin } from '@/package/request/system/user.js'
 import { getParamValue } from '@/package/request/system/param'
 import CheckCode from "@/package/components/checkCode/CheckCode"
@@ -154,4 +154,4 @@ class Login extends React.Component {
     }
 }
 
-export default WithRouter(Login)
+export default withRouter(Login)

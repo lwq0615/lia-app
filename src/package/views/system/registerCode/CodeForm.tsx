@@ -3,7 +3,7 @@ import { Form, InputNumber, TreeSelect, Row, Col, Button, message } from 'antd';
 import { getRoleDict } from '@/package/request/system/role'
 import { create } from '@/package/request/system/registerCode'
 import excel from '@/package/utils/excel'
-import WithRedux from '@/package/components/hoc/WithRedux';
+import withRedux from '@/package/components/hoc/WithRedux';
 
 interface DictData {
     dataId: number,
@@ -177,4 +177,4 @@ const CodeForm: React.FC = (props: any) => {
         )
 };
 
-export default WithRedux(CodeForm);
+export default withRedux(CodeForm);

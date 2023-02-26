@@ -3,9 +3,9 @@ import { Layout, Breadcrumb, Button, Tooltip, Space } from 'antd';
 import * as icons from '@ant-design/icons'
 import React from 'react';
 import { logout } from '@/package/request/system/user'
-import WithRouter from '@/package/components/hoc/WithRouter';
+import withRouter from '@/package/components/hoc/WithRouter';
 import { login, changeMenus } from '@/package/store/loginUserSlice';
-import WithRedux from '@/package/components/hoc/WithRedux';
+import withRedux from '@/package/components/hoc/WithRedux';
 
 const { Header } = Layout
 
@@ -61,4 +61,4 @@ function HomeHeader(props) {
 }
 
 
-export default WithRedux(WithRouter(HomeHeader))
+export default withRedux(withRouter(HomeHeader))

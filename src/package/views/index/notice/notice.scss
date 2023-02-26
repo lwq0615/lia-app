@@ -1,24 +1,44 @@
-
 .publish-notice {
 
-  .ant-modal-body{
+  .ant-modal-body {
     max-height: 550px;
     overflow: auto;
-    padding-bottom: 0;
-    .ant-tabs-nav{
-      margin: 0;
-    }
-    .form-content {
-      height: 400px;
-      resize: none;
-    }
-  
-    .markdown-body {
-      padding: 10px;
-      height: 400px;
-      border: 1px solid #d9d9d9;
-      overflow: auto;
-    }
+    padding-bottom: 15px;
 
+    .form-body {
+      display: flex;
+
+      .ant-form {
+        width: 300px;
+        margin-right: 10px;
+      }
+
+      .ant-tabs {
+        flex: 1;
+
+        .ant-tabs-nav {
+          margin: 0;
+        }
+
+        .ant-tabs-nav::after{
+          display: block;
+          content: "Markdown";
+          margin-right: 10px;
+          color: rgba(0,0,0,.25);
+        }
+
+        .form-content {
+          height: 450px;
+          resize: none;
+        }
+
+        .markdown-body {
+          padding: 10px;
+          height: 450px;
+          border: 1px solid #d9d9d9;
+          overflow: auto;
+        }
+      }
+    }
   }
 }

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import './register.scss'
 import { Form, Input, Button, message } from 'antd'
 import { UserOutlined, LockOutlined, FieldStringOutlined, FieldNumberOutlined } from '@ant-design/icons'
-import WithRouter from '@/package/components/hoc/WithRouter';
+import withRouter from '@/package/components/hoc/WithRouter';
 import { getParamValue } from '@/package/request/system/param'
 import CheckCode from "@/package/components/checkCode/CheckCode"
 import { registerUser } from '@/package/request/system/user'
@@ -110,4 +110,4 @@ const Register: React.FC = function (props: any) {
     )
 }
 
-export default WithRouter(Register)
+export default withRouter(Register)

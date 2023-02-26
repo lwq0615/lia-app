@@ -1,7 +1,7 @@
 import { AliveScope } from 'react-activation'
 import { SwitchTransition, CSSTransition } from 'react-transition-group'
 import { Route, Routes } from 'react-router-dom';
-import WithRouter from '@/package/components/hoc/WithRouter';
+import withRouter from '@/package/components/hoc/WithRouter';
 import { useEffect, useState } from 'react'
 import { createRoutes } from '@/package/router/index'
 import Welcome from '../Welcome';
@@ -44,4 +44,4 @@ function RouterBody(props) {
   )
 }
 
-export default WithRouter(RouterBody)
+export default withRouter(RouterBody)
