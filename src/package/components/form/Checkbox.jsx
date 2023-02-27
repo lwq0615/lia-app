@@ -6,8 +6,7 @@ import propTypes from 'prop-types'
 export default function CrudCheckbox(props) {
 
     const [visible, setVisible] = useState(false);
-
-    let values = props.defaultValues
+    const [values, setValues] = useState(props.defaultValues || [])
 
     const ok = () => {
         props.onChange(values)
@@ -51,7 +50,7 @@ export default function CrudCheckbox(props) {
                     className='checkbox-group'
                     options={props.options}
                     defaultValue={values}
-                    onChange={(newVal) => values = newVal}
+                    onChange={(newVal) => setValues(newVal)}
                 />
             </Modal>
         </>

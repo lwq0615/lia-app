@@ -20,10 +20,10 @@ function treeMap(tree) {
 const MultipleTree = (props) => {
 
     const [visible, setVisible] = useState(false);
-    let checkeds = []
+    const [checked, setChecked] = useState([])
 
     const ok = () => {
-        props.onChange(checkeds)
+        props.onChange(checked)
         setVisible(false)
     }
 
@@ -39,7 +39,7 @@ const MultipleTree = (props) => {
     }
 
     const onCheck = (checkedKeys) => {
-        checkeds = checkedKeys
+        setChecked(checkedKeys)
     };
     const treeData = treeMap(props.treeData)
     let values = props.defaultValues

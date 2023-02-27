@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react"
-import { Modal, Input, Form, message, Row, Col, Select, Switch, UploadFile } from "antd";
+import { Modal, Input, Form, message, Row, Col, Select, Switch } from "antd";
 import { addSysNotice } from "@/package/request/index/notice";
 import { getDictByKey } from "@/package/request/system/dictData";
 import TabMarkdown from "./TabMarkdown";
@@ -64,12 +64,20 @@ export default function Publish() {
   const handleOk = async () => {
     setLoading(true)
     try {
-      console.log(await uploadRef.current?.upload())
-      return
       const values = await formRef.current.validateFields()
       values.publishTo = values.publishTo?.filter((item: any) =>typeof item === "number")
       values.topFlag = values.topFlag ? '1' : '0'
       values.content = content
+      const uploadRes = await uploadRef.current?.upload()
+      if(uploadRes){
+        const { success, error } = uploadRes
+        values.files = success.map(item => item.fileId)
+        if(error.length){
+          message.error("部分文件上传失败!请重试或者取消上传")
+          setLoading(false)
+          return
+        }
+      }
       const res: any = await addSysNotice(values)
       if (res > 0) {
         message.success("发布成功")
