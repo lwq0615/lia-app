@@ -47,6 +47,9 @@ export default class App extends React.Component<{
         })
       })
       Promise.all(task).then(res => {
+        this.setState({
+          fileList: this.state.fileList
+        })
         resolve({success, error})
       })
     })
