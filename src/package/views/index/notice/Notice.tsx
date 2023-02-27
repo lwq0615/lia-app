@@ -4,6 +4,7 @@ import useHasAuth from "@/package/hook/hasAuth"
 import { List, Pagination, PaginationProps } from 'antd';
 import { getSysNoticePage } from "@/package/request/index/notice";
 import { useEffect, useState } from "react";
+import modal from "@/package/components/modal/Modal";
 
 interface Notice {
   id: number,
@@ -35,6 +36,10 @@ export default function Notice() {
     setCurrent(pageNumber)
   };
 
+  const showDetail = (notice: Notice) => {
+    modal()
+  }
+
   return (
     <div className="index-notice card">
       <List
@@ -48,7 +53,7 @@ export default function Notice() {
         bordered
         dataSource={list}
         renderItem={(item) => (<List.Item>
-          <span>{item.title}</span>
+          <span onClick={() => showDetail(item)}>{item.title}</span>
         </List.Item>)}
       />
       <Pagination
