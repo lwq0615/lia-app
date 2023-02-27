@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react"
-import { Modal, Input, Form, message, Row, Col, Select, Switch } from "antd";
+import { Modal, Input, Form, message, Row, Col, Select, Switch, UploadFile } from "antd";
 import { addSysNotice } from "@/package/request/index/notice";
 import { getDictByKey } from "@/package/request/system/dictData";
 import TabMarkdown from "./TabMarkdown";
@@ -43,6 +43,7 @@ const getRoleTree = () => {
 export default function Publish() {
 
   const formRef = useRef<any>(null)
+  const uploadRef = useRef<Upload>(null)
   const [open, setOpen] = useState<boolean>(false)
   const [roleTree, setRoleTree] = useState<TreeItem[]>([])
   const [levelOption, setLevelOption] = useState<any[]>([])
@@ -63,6 +64,8 @@ export default function Publish() {
   const handleOk = async () => {
     setLoading(true)
     try {
+      console.log(await uploadRef.current?.upload())
+      return
       const values = await formRef.current.validateFields()
       values.publishTo = values.publishTo?.filter((item: any) =>typeof item === "number")
       values.topFlag = values.topFlag ? '1' : '0'
@@ -79,6 +82,7 @@ export default function Publish() {
       }
       setLoading(false)
     } catch (e) {
+      console.error(e)
       setLoading(false)
     }
   };
@@ -130,7 +134,7 @@ export default function Publish() {
               </Col>
               <Col span={24}>
                 <Form.Item label="附件" name="files">
-                  <Upload />
+                  <Upload ref={uploadRef}/>
                 </Form.Item>
               </Col>
             </Row>

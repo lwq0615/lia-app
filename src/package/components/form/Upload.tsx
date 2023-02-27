@@ -1,35 +1,62 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { UploadOutlined } from '@ant-design/icons';
-import type { UploadProps } from 'antd';
 import { Button, Upload } from 'antd';
 import { UploadFile } from 'antd/lib/upload';
+import { uploadFile } from '@/package/request/system/file';
 
 
-const App: React.FC = (props: any) => {
+export default class App extends React.Component<{
+  onChange?: ([]) => void
+}> {
 
-  const [fileList, setFileList] = useState<UploadFile[]>([])
+  state = {
+    fileList: [],
+    uProps: {
+      name: 'file',
+      beforeUpload: () => false,
+      onChange: (info: any) => {
+        info.fileList.forEach((item: any) => {
+          item.url = window.URL.createObjectURL(item.originFileObj)
+        })
+        this.setState({
+          fileList: [...info.fileList]
+        })
+        if (this.props.onChange) this.props.onChange([...info.fileList])
+      },
+      multiple: true
+    }
+  }
 
-  const uProps: UploadProps = {
-    name: 'file',
-    beforeUpload: (file) => {
-      return false
-    },
-    onChange: (info) => {
-      info.fileList.forEach((item: any) => {
-        item.url = window.URL.createObjectURL(item.originFileObj)
+  upload = async () => {
+    this.setState({
+      fileList: this.state.fileList.map((item: any) => {
+        item.status = "uploading"
+        return item
       })
-      setFileList([...info.fileList]);
-      if(props.onChange) props.onChange([...info.fileList])
-    },
-    multiple: true
-  };
+    })
+    return new Promise((resolve, reject) => {
+      const success: UploadFile[] = []
+      const error: UploadFile[] = []
+      const task = this.state.fileList.map((file: UploadFile) => {
+        return uploadFile(file.originFileObj).then(res => {
+          file.status = "success"
+          success.push(file)
+        }).catch(e => {
+          file.status = "error"
+          error.push(file)
+        })
+      })
+      Promise.all(task).then(res => {
+        resolve({success, error})
+      })
+    })
+  }
 
-  return (
-    <Upload {...uProps} fileList={fileList}>
-      <Button icon={<UploadOutlined />}>上传附件</Button>
-    </Upload>
-  );
-
-}
-
-export default App;
+  render(): React.ReactNode {
+    return (
+      <Upload {...this.state.uProps} fileList={this.state.fileList}>
+        <Button icon={<UploadOutlined />}>上传附件</Button>
+      </Upload>
+    )
+  }
+};
