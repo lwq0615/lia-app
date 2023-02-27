@@ -15,6 +15,9 @@ const App: React.FC = (props: any) => {
       return false
     },
     onChange: (info) => {
+      info.fileList.forEach((item: any) => {
+        item.url = window.URL.createObjectURL(item.originFileObj)
+      })
       setFileList([...info.fileList]);
       if(props.onChange) props.onChange([...info.fileList])
     },

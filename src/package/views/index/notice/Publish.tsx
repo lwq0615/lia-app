@@ -3,7 +3,7 @@ import { Modal, Input, Form, message, Row, Col, Select, Switch } from "antd";
 import { addSysNotice } from "@/package/request/index/notice";
 import { getDictByKey } from "@/package/request/system/dictData";
 import TabMarkdown from "./TabMarkdown";
-import Upload from './Upload'
+import Upload from '@/package/components/form/Upload'
 import MultipleTree from '@/package/components/form/MultipleTree'
 import { getRoleDict } from "@/package/request/system/role";
 
@@ -67,8 +67,6 @@ export default function Publish() {
       values.publishTo = values.publishTo?.filter((item: any) =>typeof item === "number")
       values.topFlag = values.topFlag ? '1' : '0'
       values.content = content
-      console.log(values);
-      return
       const res: any = await addSysNotice(values)
       if (res > 0) {
         message.success("发布成功")

@@ -4,6 +4,36 @@ import propTypes from 'prop-types'
 import { getHeadImg } from './Person'
 import { wsSend } from "./websocket";
 import { getHeadImg as getHeadImgFileId } from "@/package/request/system/user";
+import { useSelector } from "react-redux";
+
+
+/**
+ * 聊天列表
+ */
+function MsgList(props) {
+    const userInfo = useSelector(state => state.loginUser.userInfo)
+    const view = []
+    for (let i in props.list || []) {
+        const item = props.list[i]
+        if (item.sendBy === userInfo.userId) {
+            view.push(
+                <div key={i} className="right">
+                    <p>{item.content}</p>
+                    <img className="headImg" src={getHeadImg(userInfo.headImg)} />
+                </div>
+            )
+        } else {
+            view.push(
+                <div key={i} className="left">
+                    <img className="headImg" src={getHeadImg(props.person)} />
+                    <p>{item.content}</p>
+                </div>
+            )
+        }
+    }
+    return view
+}
+
 
 export default class MsgBox extends React.Component {
 
@@ -127,35 +157,6 @@ export default class MsgBox extends React.Component {
         })
     }
 
-    /**
-     * 生成聊天记录列表视图
-     */
-    createMsgList = (list) => {
-        if (!Array.isArray(list)) {
-            return
-        }
-        const view = []
-        for(let i in list){
-            const item = list[i]
-            if (item.sendBy === this.props.userInfo.userId) {
-                view.push(
-                    <div key={i} className="right">
-                        <p>{item.content}</p>
-                        <img className="headImg" src={getHeadImg(this.state.headImgFileId)} />
-                    </div>
-                )
-            } else {
-                view.push(
-                    <div key={i} className="left">
-                        <img className="headImg" src={getHeadImg(this.props.person)} />
-                        <p>{item.content}</p>
-                    </div>
-                )
-            }
-        }
-        return view
-    }
-
 
     /**
      * 收到消息并且正处于该聊天界面时更新列表并更改消息状态为已读
@@ -164,7 +165,7 @@ export default class MsgBox extends React.Component {
         this.setState({
             msgList: this.state.msgList.concat(msg)
         })
-        if(msg.sendTo === this.props.userInfo.userId){
+        if (msg.sendTo === this.props.userInfo.userId) {
             readMessage({
                 sendBy: this.props.person.userId,
                 sendTo: this.props.userInfo.userId
@@ -179,7 +180,7 @@ export default class MsgBox extends React.Component {
         if (e.charCode !== 13) return
         e.preventDefault()
         const input = this.msgInputDom
-        if(!input.value) return
+        if (!input.value) return
         // 通过websocket发送消息
         const message = {
             content: input.value,
@@ -197,7 +198,7 @@ export default class MsgBox extends React.Component {
             <section className="msgbox-container">
                 <div className="msg-list" id="msgList" ref={ref => this.msgListDom = ref}>
                     {this.state.over && "暂无更多消息"}
-                    {this.createMsgList(this.state.msgList)}
+                    <MsgList list={this.state.msgList} person={this.props.person}/>
                 </div>
                 <div className="menu"></div>
                 <textarea
