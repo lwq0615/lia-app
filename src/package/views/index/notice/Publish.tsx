@@ -54,7 +54,7 @@ export default function Publish() {
     // 公告等级字典
     getDictByKey('sys:notice:level').then((res: any) => {
       setLevelOption(res);
-      formRef.current.setFieldValue("level", res[0].value)
+      formRef.current?.setFieldValue("level", res[0].value)
     })
     getRoleTree().then((res: TreeItem[]) => {
       setRoleTree(res)

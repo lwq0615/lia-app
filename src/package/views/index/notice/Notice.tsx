@@ -1,28 +1,39 @@
 import Publish from "./Publish"
 import './notice.scss'
 import useHasAuth from "@/package/hook/hasAuth"
-import { List } from 'antd';
+import { List, Pagination, PaginationProps } from 'antd';
 import { getSysNoticePage } from "@/package/request/index/notice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-
-const data = [
-  'Racing car sprays burning fuel into crowd.',
-  'Japanese princess to wed commoner.',
-  'Australian walks 100km after outback crash.',
-  'Man charged over missing wedding girl.',
-  'Los Angeles battles huge wildfires.',
-];
+interface Notice {
+  id: number,
+  title: string,
+  content?: string,
+  topFlag: string,
+  level: string,
+  delFlag: string,
+  createBy: number,
+  createTime: string,
+  updateTime: string
+}
 
 export default function Notice() {
 
   const canPubilsh = useHasAuth("system:notice:add")
+  const [list, setList] = useState<Notice[]>([])
+  const [current, setCurrent] = useState<number>(1)
+  const [total, setTotal] = useState<number>(0)
 
   useEffect(() => {
-    getSysNoticePage({}, 1, 10).then(res => {
-      console.log(res);
+    getSysNoticePage({}, current, 10).then((res: any) => {
+      setList(res.list as unknown as Notice[]);
+      setTotal(res.total)
     })
-  }, [])
+  }, [current])
+
+  const onChange: PaginationProps['onChange'] = (pageNumber) => {
+    setCurrent(pageNumber)
+  };
 
   return (
     <div className="index-notice card">
@@ -35,10 +46,18 @@ export default function Notice() {
           </h3>
         }
         bordered
-        dataSource={data}
+        dataSource={list}
         renderItem={(item) => (<List.Item>
-          <span>{item}</span>
+          <span>{item.title}</span>
         </List.Item>)}
+      />
+      <Pagination
+        size="small"
+        defaultCurrent={1}
+        total={total}
+        showSizeChanger={false}
+        current={current}
+        onChange={onChange}
       />
     </div>
   )

@@ -15,7 +15,7 @@ export default function useHasAuth(key: string) {
     hasAuth(key).then(res => {
       setCan(res as any)
     })
-  })
+  }, [])
 
   return can
 

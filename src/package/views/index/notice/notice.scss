@@ -1,5 +1,6 @@
 .index-notice {
-  height: 600px;
+
+  padding-bottom: 5px;
 
   .ant-list {
     border: none;
@@ -24,6 +25,10 @@
       float: right;
       font-weight: 500;
     }
+  }
+
+  .ant-pagination{
+    text-align: center;
   }
 }
 
