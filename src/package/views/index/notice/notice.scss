@@ -1,4 +1,34 @@
-.publish-notice {
+.index-notice {
+  height: 600px;
+
+  .ant-list {
+    border: none;
+
+    .ant-list-item {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      display: block;
+
+      span {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .title {
+    font-weight: 600;
+    margin: 0;
+
+    a {
+      float: right;
+      font-weight: 500;
+    }
+  }
+}
+
+
+.publish-notice-modal {
 
   .ant-modal-body {
     max-height: 550px;
@@ -20,11 +50,11 @@
           margin: 0;
         }
 
-        .ant-tabs-nav::after{
+        .ant-tabs-nav::after {
           display: block;
           content: "Markdown";
           margin-right: 10px;
-          color: rgba(0,0,0,.25);
+          color: rgba(0, 0, 0, .25);
         }
 
         .form-content {

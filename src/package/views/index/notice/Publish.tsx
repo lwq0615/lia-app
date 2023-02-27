@@ -100,7 +100,7 @@ export default function Publish() {
       <a onClick={() => setOpen(true)} style={{ userSelect: 'none' }}>发布</a>
       <Modal
         centered
-        className="publish-notice"
+        className="publish-notice-modal"
         title="发布通知/公告"
         open={open}
         forceRender

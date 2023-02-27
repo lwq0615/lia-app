@@ -26,7 +26,7 @@ export default function UserInfo() {
   }
 
   return (
-    <div className='index-user-info'>
+    <div className='index-user-info card'>
       <Upload
         accept='image/*'
         customRequest={uploadHeadImg}

@@ -2,8 +2,12 @@
   background-color: #f0f2f5;
   height: 100%;
 
-  .index-user-info {
+  .card{
+    border-radius: 5px;
     background-color: #fff;
+  }
+
+  .index-user-info {
     padding: 12px;
 
     .headImg {
@@ -25,23 +29,6 @@
 
     .index-right {
       width: 30%;
-
-      .index-notice {
-        background-color: #fff;
-        height: 600px;
-
-        .title {
-          padding: 10px 20px;
-          font-weight: 600;
-          margin: 0;
-          border-bottom: 1px solid #f0f0f0;
-
-          a {
-            float: right;
-            font-weight: 500;
-          }
-        }
-      }
     }
   }
 }
