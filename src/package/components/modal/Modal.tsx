@@ -1,9 +1,18 @@
 import { Modal, ModalFuncProps } from "antd";
-import ReactDOM from 'react-dom';
+import './modal.scss'
 
-const dom = document.createElement("div")
-document.body.appendChild(dom)
 
-export default function modal(props?: ModalFuncProps): void{
-  ReactDOM.render(<Modal {...props} open={true}/>, dom);
+
+export default function modal(props?: ModalFuncProps): void {
+
+  const className = props?.className ? (props.className + " ant-modal-hoc") : "ant-modal-hoc"
+
+  Modal.confirm({
+    width: 1000,
+    centered: true,
+    closable: true,
+    okText: "确定",
+    ...props,
+    className
+  })
 }

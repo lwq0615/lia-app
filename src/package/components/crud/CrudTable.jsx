@@ -37,7 +37,8 @@ class CrudTable extends React.Component {
         Modal.success({
             centered: true,
             title: title,
-            content: text
+            content: text,
+            okText: "确定"
         })
     }
 

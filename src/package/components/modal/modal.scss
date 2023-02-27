@@ -1,0 +1,32 @@
+.ant-modal-hoc {
+  .ant-modal-body {
+    padding: 0;
+
+    .ant-modal-confirm-body {
+      .anticon {
+        display: none;
+      }
+
+      .ant-modal-confirm-title {
+        padding: 16px 50px 16px 24px;
+        border-bottom: 1px solid #f0f0f0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      div.ant-modal-confirm-content {
+        padding: 24px;
+        margin: 0;
+        overflow: auto;
+        max-height: 550px;
+      }
+    }
+
+    .ant-modal-confirm-btns {
+      padding: 10px 16px;
+      margin: 0;
+      border-top: 1px solid #f0f0f0;
+    }
+  }
+}
