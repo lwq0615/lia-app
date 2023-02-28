@@ -1,4 +1,4 @@
-import { List, Tag, Space } from "antd"
+import { List, Tag, Space, Button } from "antd"
 import modal from "@/package/components/modal/Modal"
 import { marked } from "marked"
 import { useEffect, useState } from "react"
@@ -7,6 +7,8 @@ import ReactDOM from 'react-dom'
 import { getFileUrl } from "@/package/request/system/file"
 import { getUserDetail } from "@/package/request/system/user"
 import moment from 'moment'
+import Publish from "./Publish"
+import { TreeItem } from "./Notice"
 
 
 export interface Notice {
@@ -79,8 +81,9 @@ function FileLinks(props: any) {
 
 
 export default function NoticeItem(props: {
-  levelOption: any[],
-  item: Notice
+  item: Notice,
+  levelOption: any[] | undefined,
+  roleTree: TreeItem[] | undefined,
 }) {
 
   const [markRef, setMarkRef] = useState<any>()
@@ -133,7 +136,7 @@ export default function NoticeItem(props: {
   }
 
   function getLevelLabel() {
-    const levelLabel = props.levelOption.find(option => option.value === props.item.level)?.label
+    const levelLabel = props.levelOption?.find(option => option.value === props.item.level)?.label
     switch (levelLabel) {
       case "普通":
         return null
@@ -152,11 +155,14 @@ export default function NoticeItem(props: {
 
   return (
     <List.Item key={props.item.id} className={props.item.topFlag === '1' ? 'notice-item-top' : ''}>
-      <span onClick={() => showDetail()} className="notice--item-title">
+      <span onClick={() => showDetail()} className="notice-item-title">
         {getLevelLabel()}
         {props.item.title}
       </span>
-      <div className="notice--item-time">{moment(props.item.createTime).fromNow().replace(/ /g, "")}</div>
+      <div className="notice-item-time">{moment(props.item.createTime).fromNow().replace(/ /g, "")}</div>
+      <Publish levelOption={props.levelOption} roleTree={props.roleTree} className="notice-item-edit-btn" notice={props.item}>
+        <Button size="small">编辑</Button>
+      </Publish>
     </List.Item>
   )
 

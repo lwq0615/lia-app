@@ -8,20 +8,33 @@
     .ant-list-item {
       display: flex;
       padding: 4px 16px;
+      position: relative;
 
-      .notice--item-title {
+      .notice-item-title {
         cursor: pointer;
         flex: 1;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
       }
-      .notice--item-time{
+      .notice-item-time{
         width: 80px;
         text-align: right;
         color: rgba(0, 0, 0, .7);
         font-size: 13px;
       }
+      .notice-item-edit-btn{
+        position: absolute;
+        right: 16px;
+        display: none;
+        align-items: center;
+        z-index: 33;
+        justify-content: end;
+      }
+    }
+
+    .ant-list-item:hover .notice-item-edit-btn{
+      display: flex;
     }
 
     .notice-item-top{
