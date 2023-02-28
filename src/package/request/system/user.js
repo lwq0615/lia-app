@@ -30,6 +30,15 @@ export function getSysUserInfo() {
 
 
 /**
+ * 根据id获取用户信息
+ * @returns 
+ */
+export function getUserDetail(userId) {
+    return request.post(`${baseUrl}/detail`, userId)
+}
+
+
+/**
  * 分页查询用户列表
  * @param {*} user 查询参数
  * @param {*} current 当前页（可为空）

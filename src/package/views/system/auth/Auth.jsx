@@ -60,8 +60,9 @@ class Auth extends React.Component {
                 })
             },
             // 需要加载数据时触发 params => {}
-            getPage: (params, page) => {
-                return null
+            getPage: (params = {}, page = {}) => {
+                params.createTime = params.createTime?.join(",")
+                return getSysAuthPage(params, page.current, page.size)
             },
             // 新增编辑提交钩子 async (form, type) => {}
             // 如果需要获取返回值再关闭弹窗，请使用await
@@ -140,12 +141,12 @@ class Auth extends React.Component {
     crudRef = null
 
     onTreeSelect = (key) => {
+        if(this.state.routerId === key){
+            key = void 0
+        }
         this.setState({
             routerId: key
         })
-        if (!key) {
-            return
-        }
         const option = this.state.option
         option.getPage = (params = {}, page = {}) => {
             params.createTime = params.createTime?.join(",")

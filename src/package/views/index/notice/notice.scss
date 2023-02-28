@@ -6,14 +6,21 @@
     border: none;
 
     .ant-list-item {
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      display: block;
+      display: flex;
       padding: 4px 16px;
 
-      span {
+      .notice--item-title {
         cursor: pointer;
+        flex: 1;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      .notice--item-time{
+        width: 80px;
+        text-align: right;
+        color: rgba(0, 0, 0, .7);
+        font-size: 13px;
       }
     }
 
@@ -102,4 +109,9 @@
     margin-right: 10px;
     user-select: none;
   }
+}
+
+// 公告创建信息
+.notice-item-create-info{
+  padding: 5px 5px 10px 5px;
 }

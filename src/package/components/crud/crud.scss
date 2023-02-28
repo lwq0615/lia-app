@@ -1,5 +1,7 @@
 .lia-crud {
     height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
 
     .ant-spin-nested-loading {
         height: 100%;
