@@ -37,17 +37,13 @@ function FileLinks(props: any) {
           [附件]&nbsp;${first.name}
         </a>
       </li>
-      {open && <div>
-        {
-          list.map((file: any) => {
-            return (
-              <li className="file-item">
-                <a key={file.fileId} href={getFileUrl(file.fileId)}>[附件]&nbsp;${file.name}</a>
-              </li>
-            )
-          })
-        }
-      </div>}
+      {open && list.map((file: any) => {
+          return (
+            <li className="file-item">
+              <a key={file.fileId} href={getFileUrl(file.fileId)}>[附件]&nbsp;${file.name}</a>
+            </li>
+          )
+        })}
     </div>
   )
 }
