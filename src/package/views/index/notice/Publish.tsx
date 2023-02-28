@@ -17,51 +17,59 @@ export default function Publish(props: {
   children?: ReactElement
 }) {
 
-  const formRef = useRef<any>(null)
+  const [formRef, setFormRef] = useState<any>(null)
   const uploadRef = useRef<Upload>(null)
   const [open, setOpen] = useState<boolean>(false)
   const [confirmLoading, setLoading] = useState<boolean>(false)
   const [content, setContent] = useState<string>()
 
+  /**
+   * 新增状态下设置默认等级
+   */
   useEffect(() => {
-    props.levelOption && formRef.current?.setFieldValue("level", props.levelOption[0].value)
-  }, [props.levelOption])
+    !props.notice && formRef && props.levelOption && formRef.setFieldValue("level", props.levelOption[0].value)
+  }, [props.levelOption, formRef])
 
-  const openModal = () => {
-    setOpen(true)
-    if (props.notice) {
+  /**
+   * 编辑状态下设置表单默认值
+   */
+  useEffect(() => {
+    if (props.notice && formRef) {
       setContent(props.notice.content)
-      formRef.current?.setFieldsValue({
+      formRef.setFieldsValue({
         ...props.notice
       })
     }
-  }
+  }, [formRef])
 
   const handleOk = async () => {
     setLoading(true)
     try {
-      const values = await formRef.current.validateFields()
+      const values = await formRef.validateFields()
       values.publishTo = values.publishTo?.filter((item: any) => typeof item === "number")
       values.topFlag = values.topFlag ? '1' : '0'
       values.content = content
+      // 上传附件
       const uploadRes = await uploadRef.current?.upload()
       if (uploadRes) {
         const { success, error } = uploadRes
         values.files = success.map(item => item.fileId)
+        // 有上传失败的文件
         if (error.length) {
           message.error("部分文件上传失败!请重试或者取消上传")
           setLoading(false)
           return
         }
       }
+      // 全部上传成功
       const res: any = await addSysNotice(values)
       if (res > 0) {
         message.success("发布成功")
         setOpen(false)
-        formRef.current.resetFields()
+        formRef.resetFields()
         setContent(void 0)
         if (props.levelOption?.length) {
-          formRef.current.setFieldValue("level", props.levelOption[0].value)
+          formRef.setFieldValue("level", props.levelOption[0].value)
         }
         props.onOk && props.onOk(values)
       } else {
@@ -76,13 +84,12 @@ export default function Publish(props: {
 
   return (
     <>
-      <span onClick={openModal} className={props.className}>{props.children}</span>
+      <span onClick={() => setOpen(true)} className={props.className}>{props.children}</span>
       <Modal
         centered
         className="publish-notice-modal"
         title="发布通知/公告"
         open={open}
-        forceRender={!props.notice}
         okText="发布"
         footer={
           <>
@@ -96,7 +103,7 @@ export default function Publish(props: {
         width={1000}
       >
         <div className="form-body">
-          <Form ref={formRef} labelCol={{ span: 6 }}>
+          <Form ref={ref => setFormRef(ref)} labelCol={{ span: 6 }}>
             <Row gutter={24}>
               <Col span={24}>
                 <Form.Item
