@@ -2,6 +2,9 @@ import { List } from "antd"
 import modal from "@/package/components/modal/Modal"
 import { marked } from "marked"
 import { useEffect, useState } from "react"
+import { getFilesOfNotice } from "@/package/request/index/notice"
+import ReactDOM from 'react-dom'
+import { getFileUrl } from "@/package/request/system/file"
 
 
 export interface Notice {
@@ -16,6 +19,39 @@ export interface Notice {
   updateTime: string
 }
 
+function FileLinks(props: any) {
+  const [open, setOpen] = useState<boolean>(false)
+  if (!Array.isArray(props.fileList) || !props.fileList.length) {
+    return null
+  }
+  const list = [...props.fileList]
+  const first = list.pop()
+  return (
+    <div className="notice-detail-file-list">
+      {list.length ?
+        <a className="open-icon" onClick={() => setOpen(!open)}>
+          {open ? '收起' : '展开'}
+        </a> : null}
+      <li className="file-item">
+        <a style={{ display: 'inline' }} href={getFileUrl(first.fileId)}>
+          [附件]&nbsp;${first.name}
+        </a>
+      </li>
+      {open && <div>
+        {
+          list.map((file: any) => {
+            return (
+              <li className="file-item">
+                <a key={file.fileId} href={getFileUrl(file.fileId)}>[附件]&nbsp;${file.name}</a>
+              </li>
+            )
+          })
+        }
+      </div>}
+    </div>
+  )
+}
+
 
 export default function NoticeItem(props: {
   levelOption: any[],
@@ -23,18 +59,27 @@ export default function NoticeItem(props: {
 }) {
 
   const [ref, setRef] = useState<any>()
+  const [fileListRef, setFileListRef] = useState<any>()
+  const [fileList, setFileList] = useState<any[]>()
 
   useEffect(() => {
-    ref && (ref.innerHTML = marked.parse(props.item.content || ''))
-  }, [ref])
+    if (ref && fileList && fileListRef) {
+      ReactDOM.render(<FileLinks fileList={fileList} />, fileListRef)
+      ref.innerHTML = marked.parse(props.item.content || '')
+    }
+  }, [ref, fileList, fileListRef])
 
   const showDetail = () => {
-    console.log(props.item);
-    
+    getFilesOfNotice(props.item.id).then(res => {
+      setFileList(res as any || []);
+    })
     modal({
       title: <span>{getLevelLabel()}{props.item.title}</span>,
       content: (
-        <div className="markdown-body" ref={ref => setRef(ref)}></div>
+        <>
+          <div ref={ref => setFileListRef(ref)}></div>
+          <div className="markdown-body" ref={ref => setRef(ref)}></div>
+        </>
       )
     })
   }

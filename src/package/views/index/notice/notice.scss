@@ -27,7 +27,7 @@
     }
   }
 
-  .ant-pagination{
+  .ant-pagination {
     text-align: center;
   }
 }
@@ -75,5 +75,24 @@
         }
       }
     }
+  }
+}
+
+// 详情弹窗附件列表
+.notice-detail-file-list {
+  background-color: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(5, 5, 5, 0.06);
+  border-radius: 5px;
+  padding: 5px;
+  .file-item{
+    border-bottom: 1px solid rgba(5, 5, 5, 0.06);
+  }
+  .file-item:last-child{
+    border-bottom: none;
+  }
+  .open-icon{
+    float: right;
+    margin-right: 10px;
+    user-select: none;
   }
 }

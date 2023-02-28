@@ -38,3 +38,12 @@ export function editSysNotice(sysNotice){
 export function deleteSysNotices(sysNoticeIds){
     return request.post(`${baseUrl}/delete`,sysNoticeIds)
 }               
+
+
+/**
+ * 获取公告相关附件
+ * @param {*} noticeId 公告id
+ */
+export function getFilesOfNotice(noticeId){
+    return request.post(`${baseUrl}/getFilesOfNotice`,noticeId)
+}

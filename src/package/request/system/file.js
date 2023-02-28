@@ -28,3 +28,14 @@ export function uploadFile(file) {
     formData.append("uuid", file.uid)
     return request.post(`${baseUrl}/upload`, formData)
 }
+
+
+/**
+ * 获取文件资源下载地址
+ */
+export function getFileUrl(fileId) {
+    const url = process.env.REACT_APP_HTTP_URL + baseUrl + "/getFile"
+    const headerName = process.env.REACT_APP_HTTP_HEADER
+    const token = localStorage.getItem(process.env.REACT_APP_HTTP_HEADER)
+    return `${url}?fileId=${fileId}&${headerName}=${token}`
+}

@@ -9,6 +9,7 @@ import { getSysUserInfo } from '../request/system/user';
 import { getRouterOfRole } from '../request/system/router';
 import { Route } from 'react-router-dom';
 import Root from '@/package/views/Root'
+import ErrorPage from '../components/error/Error';
 
 
 
@@ -85,6 +86,7 @@ export const baseRoutes = [
   {
     path: "*",
     element: <Root />,
+    errorElement: <ErrorPage/>,
     children: [
       {
         path: "*",
