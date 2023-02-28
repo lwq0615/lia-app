@@ -14,7 +14,7 @@ export interface Notice {
   topFlag: string,
   level: string,
   delFlag: string,
-  createBy: number,
+  creater: number,
   createTime: string,
   updateTime: string
 }
@@ -32,15 +32,15 @@ function FileLinks(props: any) {
         <a className="open-icon" onClick={() => setOpen(!open)}>
           {open ? '收起' : '展开'}
         </a> : null}
-      <li className="file-item">
+      <li className="file-item" key={first.fileId}>
         <a style={{ display: 'inline' }} href={getFileUrl(first.fileId)}>
-          [附件]&nbsp;${first.name}
+          [附件]&nbsp;{first.name}
         </a>
       </li>
       {open && list.map((file: any) => {
           return (
-            <li className="file-item">
-              <a key={file.fileId} href={getFileUrl(file.fileId)}>[附件]&nbsp;${file.name}</a>
+            <li className="file-item" key={file.fileId}>
+              <a key={file.fileId} href={getFileUrl(file.fileId)}>[附件]&nbsp;{file.name}</a>
             </li>
           )
         })}
@@ -99,7 +99,7 @@ export default function NoticeItem(props: {
   }
 
   return (
-    <List.Item>
+    <List.Item key={props.item.id}>
       <span onClick={() => showDetail()}>
         {getLevelLabel()}
         {props.item.title}

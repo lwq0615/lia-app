@@ -103,9 +103,9 @@ class Auth extends React.Component {
                 },
                 {
                     title: '创建人',
-                    dataIndex: 'createBy',
+                    dataIndex: 'creater',
                     align: 'center',
-                    key: 'createBy',
+                    key: 'creater',
                     addShow: false,
                     editShow: false,
                     type: "select",

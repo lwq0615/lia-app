@@ -49,7 +49,7 @@ class Router extends React.Component {
 
     setForm = (form, title, id) => {
         // 各个字段
-        const keys = ['label', 'path', 'element', 'parent', 'icon', 'createBy', 'createTime', 'remark']
+        const keys = ['label', 'path', 'element', 'parent', 'icon', 'creater', 'createTime', 'remark']
         let formValue = []
         if (form) {
             formValue = keys.map(key => {

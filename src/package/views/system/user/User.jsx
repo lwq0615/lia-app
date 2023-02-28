@@ -154,7 +154,7 @@ const option = {
         },
         {
             title: '创建人',
-            dataIndex: 'createBy',
+            dataIndex: 'creater',
             align: 'center',
             addShow: false,
             editShow: false,

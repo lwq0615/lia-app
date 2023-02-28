@@ -90,12 +90,12 @@ function dataConcat(data, createByFlag, createTimeFlag, updateTimeFlag, remarkFl
     if (createByFlag) {
         data = data.concat({
             len: 0,
-            name: "createBy",
+            name: "creater",
             notNull: false,
             remark: "创建人",
             type: "Long",
             unique: false,
-            createBy: true
+            creater: true
         })
     }
     if (createTimeFlag) {
@@ -146,8 +146,8 @@ export function viewCode({ data, tableName, primaryKey, createByFlag, createTime
                     dataIndex: '${item.name}',
                     align: 'center',
                     required: ${item.notNull},
-                    addShow: ${item.createBy || item.createTime || item.updateTime ? 'false' : "true"},
-                    editShow: ${item.createBy || item.createTime || item.updateTime ? 'false' : "true"}${item.type.includes("date") ? ',\n                    type: "' + item.type + '",\n                    range: true' : ""}
+                    addShow: ${item.creater || item.createTime || item.updateTime ? 'false' : "true"},
+                    editShow: ${item.creater || item.createTime || item.updateTime ? 'false' : "true"}${item.type.includes("date") ? ',\n                    type: "' + item.type + '",\n                    range: true' : ""}
                 }`
         }).join(",\n")
     }
@@ -237,7 +237,7 @@ export function entityCode({ data, tableName, primaryKey, createByFlag, createTi
             } 
             else {
                 str += `${item.remark ? '    /**\n     * '+item.remark+'\n     */' : ''}
-    @TableField("\`${toLine(item.name)}\`")${item.createBy ? "\n    @CreateBy" : ""}${item.like ? "\n    @Like" : ""}${item.notNull ? "\n    @Required" : ""}
+    @TableField("\`${toLine(item.name)}\`")${item.creater ? "\n    @Creater" : ""}${item.like ? "\n    @Like" : ""}${item.notNull ? "\n    @Required" : ""}
     private ${item.type} ${item.name};\n\n`
             }
         })

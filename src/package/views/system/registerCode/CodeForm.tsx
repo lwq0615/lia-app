@@ -10,7 +10,7 @@ interface DictData {
     value: any,
     label: string,
     typeId: number,
-    createBy: number,
+    creater: number,
     createTime: string,
     remark: string
 }
@@ -25,7 +25,7 @@ interface TreeDataItem {
 interface CodeData {
     id: number,
     code: string,
-    createBy: number,
+    creater: number,
     createTime: string,
     roleId: number,
     useBy: number | null,

@@ -101,9 +101,9 @@ export default class SysRegisterCode extends React.Component {
                 },
                 {
                     title: '创建人',
-                    dataIndex: 'createBy',
+                    dataIndex: 'creater',
                     align: 'center',
-                    key: 'createBy',
+                    key: 'creater',
                     addShow: false,
                     editShow: false,
                     required: false,
