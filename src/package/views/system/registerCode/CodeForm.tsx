@@ -72,13 +72,13 @@ const CodeForm: React.FC = (props: any) => {
         data.forEach(item => {
             item.roleName = role.label
             item.companyName = role.remark
-            item.createByName = props.getReduxState("loginUser.userInfo")?.nick
+            item.CreaterName = props.getReduxState("loginUser.userInfo")?.nick
         })
         const heads = {
             code: '注册码',
             roleName: '可激活角色',
             companyName: '所属企业',
-            createByName: '创建人',
+            CreaterName: '创建人',
             createTime: '创建时间'
         }
         excel(heads, data, role.remark + role.label + '注册码')

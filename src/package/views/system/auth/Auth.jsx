@@ -3,7 +3,7 @@ import React from "react"
 import Crud from "@/package/components/crud/Crud"
 import { message, Button, Modal, Spin } from "antd"
 import { getSysAuthPage, saveSysAuth, deleteAuths, moveAuthToRouter } from '@/package/request/system/auth'
-import { getCreateByDict } from '@/package/request/system/user'
+import { getCreaterDict } from '@/package/request/system/user'
 import { getSysRouterTree } from '@/package/request/system/router'
 import { getDictByKey } from "@/package/request/system/dictData"
 import RouterTree from "../router/RouterTree"
@@ -109,7 +109,7 @@ class Auth extends React.Component {
                     addShow: false,
                     editShow: false,
                     type: "select",
-                    dict: getCreateByDict
+                    dict: getCreaterDict
                 },
                 {
                     title: '创建时间',

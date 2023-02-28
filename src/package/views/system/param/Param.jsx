@@ -2,7 +2,7 @@
 import React from 'react'
 import Crud from '@/package/components/crud/Crud'
 import { getSysParamPage, saveSysParam, deleteSysParams } from '@/package/request/system/param'
-import { getCreateByDict } from '@/package/request/system/user'
+import { getCreaterDict } from '@/package/request/system/user'
 import { message } from "antd"
 
 
@@ -72,7 +72,7 @@ export default class SysParam extends React.Component {
                     addShow: false,
                     editShow: false,
                     type: "select",
-                    dict: getCreateByDict
+                    dict: getCreaterDict
                 },
                 {
                     title: '创建时间',

@@ -92,6 +92,6 @@ export function getHeadImg(){
  * 获取创建人字典表
  * @returns 
  */
-export function getCreateByDict(){
-    return request.get(`${baseUrl}/getCreateByDict`)
+export function getCreaterDict(){
+    return request.get(`${baseUrl}/getCreaterDict`)
 }

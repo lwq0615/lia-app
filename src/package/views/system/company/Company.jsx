@@ -1,7 +1,7 @@
 import Crud from '@/package/components/crud/Crud'
 import { getSysCompanyPage, saveSysCompany, deleteCompanys } from '@/package/request/system/company'
 import { message, Button, Modal } from "antd"
-import { getCreateByDict } from '@/package/request/system/user'
+import { getCreaterDict } from '@/package/request/system/user'
 import Role from './Role'
 import React from 'react'
 import './company.scss'
@@ -101,7 +101,7 @@ export default class Company extends React.Component {
                     addShow: false,
                     editShow: false,
                     type: "select",
-                    dict: getCreateByDict
+                    dict: getCreaterDict
                 },
                 {
                     title: '创建时间',

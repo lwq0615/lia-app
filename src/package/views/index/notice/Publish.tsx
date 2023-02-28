@@ -40,7 +40,9 @@ const getRoleTree = () => {
 }
 
 
-export default function Publish() {
+export default function Publish(props: {
+  onOk?: (values: object) => void
+}) {
 
   const formRef = useRef<any>(null)
   const uploadRef = useRef<Upload>(null)
@@ -85,6 +87,7 @@ export default function Publish() {
         formRef.current.resetFields()
         setContent(void 0)
         formRef.current.setFieldValue("level", levelOption[0].value)
+        props.onOk && props.onOk(values)
       } else {
         message.warning("发布失败")
       }

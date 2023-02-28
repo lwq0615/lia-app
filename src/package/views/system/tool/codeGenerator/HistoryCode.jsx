@@ -1,5 +1,5 @@
 
-import { getCreateByDict } from '@/package/request/system/user'
+import { getCreaterDict } from '@/package/request/system/user'
 import Crud from '@/package/components/crud/Crud'
 import { getSysToolCodePage, saveSysToolCode, deleteSysToolCodes } from '@/package/request/system/tool/code'
 import { Button, message } from "antd"
@@ -40,9 +40,9 @@ export default function Code(props) {
             },
             {
                 "name": [
-                    "createByFlag"
+                    "CreaterFlag"
                 ],
-                "value": record.createByFlag === '1'
+                "value": record.CreaterFlag === '1'
             },
             {
                 "name": [
@@ -145,7 +145,7 @@ export default function Code(props) {
                 addShow: false,
                 editShow: false,
                 type: "select",
-                dict: getCreateByDict
+                dict: getCreaterDict
             },
             {
                 title: '创建时间',

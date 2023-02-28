@@ -6,7 +6,7 @@ import { getRoleDict } from '@/package/request/system/role'
 import { Button, message, Modal } from "antd"
 import { PlusOutlined } from '@ant-design/icons';
 import CodeForm from './CodeForm.tsx'
-import { getCreateByDict } from '@/package/request/system/user'
+import { getCreaterDict } from '@/package/request/system/user'
 
 
 export default class SysRegisterCode extends React.Component {
@@ -108,7 +108,7 @@ export default class SysRegisterCode extends React.Component {
                     editShow: false,
                     required: false,
                     type: 'select',
-                    dict: getCreateByDict
+                    dict: getCreaterDict
                 },
                 {
                     title: '创建时间',

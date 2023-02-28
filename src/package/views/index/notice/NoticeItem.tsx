@@ -54,16 +54,34 @@ export default function NoticeItem(props: {
   item: Notice
 }) {
 
-  const [ref, setRef] = useState<any>()
+  const [markRef, setMarkRef] = useState<any>()
   const [fileListRef, setFileListRef] = useState<any>()
   const [fileList, setFileList] = useState<any[]>()
+  const [creater, setCreater] = useState<any>()
 
+  /**
+   * 渲染markdown
+   */
   useEffect(() => {
-    if (ref && fileList && fileListRef) {
-      ReactDOM.render(<FileLinks fileList={fileList} />, fileListRef)
-      ref.innerHTML = marked.parse(props.item.content || '')
+    if (markRef) {
+      markRef.innerHTML = marked.parse(props.item.content || '')
     }
-  }, [ref, fileList, fileListRef])
+  }, [markRef])
+
+  /**
+   * 渲染附件列表
+   */
+  useEffect(() => {
+    fileListRef && fileList && ReactDOM.render(<FileLinks fileList={fileList} />, fileListRef)
+  }, [fileListRef, fileList])
+
+
+  /**
+   * 渲染发布者信息
+   */
+  useEffect(() => {
+
+  }, [creater])
 
   const showDetail = () => {
     getFilesOfNotice(props.item.id).then(res => {
@@ -73,8 +91,9 @@ export default function NoticeItem(props: {
       title: <span>{getLevelLabel()}{props.item.title}</span>,
       content: (
         <>
+          <div ref={ref => setCreater(ref)}></div>
           <div ref={ref => setFileListRef(ref)}></div>
-          <div className="markdown-body" ref={ref => setRef(ref)}></div>
+          <div className="markdown-body" ref={ref => setMarkRef(ref)}></div>
         </>
       )
     })
@@ -99,7 +118,7 @@ export default function NoticeItem(props: {
   }
 
   return (
-    <List.Item key={props.item.id}>
+    <List.Item key={props.item.id} className={props.item.topFlag === '1' ? 'notice-item-top' : ''}>
       <span onClick={() => showDetail()}>
         {getLevelLabel()}
         {props.item.title}

@@ -86,8 +86,8 @@ export function delete${firstUp(toHump(tableName))}s(${firstLow(toHump(tableName
 `
 }
 
-function dataConcat(data, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag) {
-    if (createByFlag) {
+function dataConcat(data, CreaterFlag, createTimeFlag, updateTimeFlag, remarkFlag) {
+    if (CreaterFlag) {
         data = data.concat({
             len: 0,
             name: "creater",
@@ -137,8 +137,8 @@ function dataConcat(data, createByFlag, createTimeFlag, updateTimeFlag, remarkFl
 /**
  * 前端文件代码生成
  */
-export function viewCode({ data, tableName, primaryKey, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag }) {
-    data = dataConcat(data, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag)
+export function viewCode({ data, tableName, primaryKey, CreaterFlag, createTimeFlag, updateTimeFlag, remarkFlag }) {
+    data = dataConcat(data, CreaterFlag, createTimeFlag, updateTimeFlag, remarkFlag)
     function getColumnsCode() {
         return data.map(item => {
             return `                {
@@ -219,8 +219,8 @@ ${getColumnsCode()}
 /**
  * 实体类代码生成
  */
-export function entityCode({ data, tableName, primaryKey, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag, module }) {
-    data = dataConcat(data, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag)
+export function entityCode({ data, tableName, primaryKey, CreaterFlag, createTimeFlag, updateTimeFlag, remarkFlag, module }) {
+    data = dataConcat(data, CreaterFlag, createTimeFlag, updateTimeFlag, remarkFlag)
     const columnCode = () => {
         let str = `    /**
      * 主键
@@ -411,8 +411,8 @@ public interface ${className}Mapper extends BaseMapper<${className}> {
 }
 
 
-export function mybatisCode({ data, tableName, primaryKey, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag, module }) {
-    data = dataConcat(data, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag)
+export function mybatisCode({ data, tableName, primaryKey, CreaterFlag, createTimeFlag, updateTimeFlag, remarkFlag, module }) {
+    data = dataConcat(data, CreaterFlag, createTimeFlag, updateTimeFlag, remarkFlag)
     const className = firstUp(toHump(tableName))
     const objName = firstLow(toHump(tableName))
     function getResultMap() {
@@ -452,8 +452,8 @@ const mysqlMap = {
 /**
  * 生成mysql建表语句
  */
-export function mysqlCode({ tableName, data, primaryKey, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag }) {
-    data = dataConcat(data, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag)
+export function mysqlCode({ tableName, data, primaryKey, CreaterFlag, createTimeFlag, updateTimeFlag, remarkFlag }) {
+    data = dataConcat(data, CreaterFlag, createTimeFlag, updateTimeFlag, remarkFlag)
     function columnsCode() {
         let columns = []
         columns.push(`

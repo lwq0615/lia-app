@@ -15,15 +15,22 @@ export default function NoticeComp() {
   const [total, setTotal] = useState<number>(0)
   const [levelOption, setLevelOption] = useState<any[]>([])
 
-  useEffect(() => {
+  const getPage = () => {
     getSysNoticePage({}, current, 10).then((res: any) => {
       setList(res.list as unknown as Notice[]);
       setTotal(res.total)
     })
+  }
+
+  useEffect(() => {
     // 公告等级字典
     getDictByKey('sys:notice:level').then((res: any) => {
       setLevelOption(res);
     })
+  }, [])
+
+  useEffect(() => {
+    getPage()
   }, [current])
 
   const onChange: PaginationProps['onChange'] = (pageNumber) => {
@@ -37,7 +44,7 @@ export default function NoticeComp() {
         header={
           <h3 className='title'>
             通知/公告
-            {canPubilsh && <Publish/>}
+            {canPubilsh && <Publish onOk={getPage}/>}
           </h3>
         }
         bordered

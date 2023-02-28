@@ -1,6 +1,6 @@
 import Crud from '@/package/components/crud/Crud'
 import { getSysDictDataPage, saveSysDictData, deleteSysDictDatas } from '@/package/request/system/dictData'
-import { getCreateByDict } from '@/package/request/system/user'
+import { getCreaterDict } from '@/package/request/system/user'
 import { message } from "antd"
 
 
@@ -66,7 +66,7 @@ export default function SysDictData(props) {
                 addShow: false,
                 editShow: false,
                 type: "select",
-                dict: getCreateByDict
+                dict: getCreaterDict
             },
             {
                 title: '创建时间',

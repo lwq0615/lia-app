@@ -193,7 +193,7 @@ export default class CodeGenerator extends React.Component {
             module: params.module,
             primaryKey: JSON.stringify(params.primaryKey),
             httpUrl: params.httpUrl,
-            createByFlag: params.createByFlag ? "1" : "0",
+            CreaterFlag: params.CreaterFlag ? "1" : "0",
             createTimeFlag: params.createTimeFlag ? "1" : "0",
             updateTimeFlag: params.updateTimeFlag ? "1" : "0",
             remarkFlag: params.remarkFlag ? "1" : "0"
@@ -289,7 +289,7 @@ export default class CodeGenerator extends React.Component {
 
 
     onFinish = (values) => {
-        let { module, tableName, httpUrl, primaryKeyType, createByFlag, createTimeFlag, updateTimeFlag, remarkFlag } = values
+        let { module, tableName, httpUrl, primaryKeyType, CreaterFlag, createTimeFlag, updateTimeFlag, remarkFlag } = values
         // 去除空格
         tableName = tableName.replace(/ /g, '')
         httpUrl = httpUrl?.replace(/ /g, '')
@@ -340,7 +340,7 @@ export default class CodeGenerator extends React.Component {
             tableName, 
             primaryKey, 
             httpUrl, 
-            createByFlag, 
+            CreaterFlag, 
             createTimeFlag,
             updateTimeFlag, 
             remarkFlag
@@ -351,7 +351,7 @@ export default class CodeGenerator extends React.Component {
 
     defaultFormValues = {
         primaryKeyType: "autoIncrement",
-        createByFlag: true,
+        CreaterFlag: true,
         createTimeFlag: true,
         updateTimeFlag: true,
         remarkFlag: true
@@ -422,7 +422,7 @@ export default class CodeGenerator extends React.Component {
                     <Col span={4}>
                         <Form.Item
                             valuePropName="checked"
-                            name="createByFlag"
+                            name="CreaterFlag"
                             label="添加创建人字段"
                         >
                             <Switch defaultChecked />

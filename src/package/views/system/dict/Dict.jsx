@@ -2,7 +2,7 @@ import Crud from '@/package/components/crud/Crud'
 import { getSysDictTypePage, saveSysDictType, deleteSysDictTypes } from '@/package/request/system/dictType'
 import { message, Button, Modal } from "antd"
 import DictData from './DictData'
-import { getCreateByDict } from '@/package/request/system/user'
+import { getCreaterDict } from '@/package/request/system/user'
 import React from 'react'
 
 
@@ -81,7 +81,7 @@ export default class SysDictType extends React.Component {
                         addShow: false,
                         editShow: false,
                         type: "select",
-                        dict: getCreateByDict
+                        dict: getCreaterDict
                     },
                     {
                         title: '创建时间',

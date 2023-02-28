@@ -4,7 +4,7 @@ import Crud from "@/package/components/crud/Crud"
 import { Button, message, Modal } from "antd"
 import { getSysRolePage, saveSysRole, deleteRoles, getRoleOfCompanyDict } from '@/package/request/system/role'
 import { getAuthDict } from '@/package/request/system/auth'
-import { getCreateByDict } from '@/package/request/system/user'
+import { getCreaterDict } from '@/package/request/system/user'
 import { getSysRouterTree } from '@/package/request/system/router'
 import { PartitionOutlined } from '@ant-design/icons';
 import Diagram from "./Diagram"
@@ -184,7 +184,7 @@ class Role extends React.Component {
                         addShow: false,
                         editShow: false,
                         type: "select",
-                        dict: getCreateByDict
+                        dict: getCreaterDict
                     },
                     {
                         title: '创建时间',

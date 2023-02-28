@@ -4,7 +4,7 @@ import RouterTree from "./RouterTree"
 import RouterForm from "./RouterForm"
 import moment from 'moment';
 import { getSysRouterTree, getRouterById } from '@/package/request/system/router'
-import { getCreateByDict } from '@/package/request/system/user'
+import { getCreaterDict } from '@/package/request/system/user'
 
 
 
@@ -29,7 +29,7 @@ class Router extends React.Component {
         this.setState({
             routerTreeData: (await getSysRouterTree())[0].children,
             routerDict: await getSysRouterTree(),
-            userDict: await getCreateByDict()
+            userDict: await getCreaterDict()
         })
         this.setForm()
     }

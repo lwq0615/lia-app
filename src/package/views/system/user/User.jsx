@@ -2,7 +2,7 @@
 import React from "react"
 import Crud from "@/package/components/crud/Crud"
 import { message } from "antd"
-import { getSysUserPage, saveSysUser, deleteUsers, getCreateByDict } from '@/package/request/system/user'
+import { getSysUserPage, saveSysUser, deleteUsers, getCreaterDict } from '@/package/request/system/user'
 import { getSexDict, getUserStatusDict } from '@/package/request/system/dictData'
 import { getRoleDict } from '@/package/request/system/role'
 import { getCompanyDict } from '@/package/request/system/company'
@@ -159,7 +159,7 @@ const option = {
             addShow: false,
             editShow: false,
             type: "select",
-            dict: getCreateByDict
+            dict: getCreaterDict
         },
         {
             title: '创建时间',
