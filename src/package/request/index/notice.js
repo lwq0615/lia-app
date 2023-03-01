@@ -47,3 +47,11 @@ export function deleteSysNotices(sysNoticeIds){
 export function getFilesOfNotice(noticeId){
     return request.post(`${baseUrl}/getFilesOfNotice`,noticeId)
 }
+
+/**
+ * 获取公告相关角色
+ * @param {*} noticeId 公告id
+ */
+export function getRolesOfNotice(noticeId){
+    return request.post(`${baseUrl}/getRolesOfNotice`,noticeId)
+}

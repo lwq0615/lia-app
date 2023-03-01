@@ -20,12 +20,6 @@ function treeMap(tree) {
 const MultipleTree = (props) => {
 
     const [visible, setVisible] = useState(false);
-    const [checked, setChecked] = useState([])
-
-    const ok = () => {
-        props.onChange(checked)
-        setVisible(false)
-    }
 
     const hide = () => {
         setVisible(false)
@@ -38,11 +32,11 @@ const MultipleTree = (props) => {
         setVisible(true)
     }
 
+
     const onCheck = (checkedKeys) => {
-        setChecked(checkedKeys)
+        props.onChange(checkedKeys)
     };
     const treeData = treeMap(props.treeData)
-    let values = props.defaultValues
     let style = {}
     if (props.disabled) {
         style = {
@@ -58,17 +52,18 @@ const MultipleTree = (props) => {
                 open={visible}
                 centered={true}
                 title={props.title}
-                okText='确定'
                 width={600}
                 closable={true}
                 onCancel={hide}
-                onOk={ok}
+                footer={
+                    <Button type='primary' onClick={hide}>确定</Button>
+                }
             >
                 <Tree
                     className='multiple-tree'
                     checkable
                     checkStrictly={props.checkStrictly}
-                    defaultCheckedKeys={values}
+                    checkedKeys={props.value}
                     onCheck={onCheck}
                     treeData={treeData}
                 />
@@ -79,7 +74,7 @@ const MultipleTree = (props) => {
 
 
 MultipleTree.propTypes = {
-    defaultValues: propTypes.array,
+    value: propTypes.array,
     checkStrictly: propTypes.bool,
     disabled: propTypes.bool,
     title: propTypes.node,

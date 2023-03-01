@@ -125,6 +125,7 @@ export default function NoticeItem(props: {
     })
     modal({
       title: <span>{getLevelLabel()}{props.item.title}</span>,
+      cancelText: false,
       content: (
         <>
           <div ref={ref => setFileListRef(ref)}></div>

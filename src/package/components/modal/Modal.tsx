@@ -7,7 +7,7 @@ export default function modal(props?: ModalFuncProps): void {
 
   const className = props?.className ? (props.className + " ant-modal-hoc") : "ant-modal-hoc"
 
-  Modal.confirm({
+  Modal[props?.cancelText === false ? 'success' : "confirm"]({
     width: 1000,
     centered: true,
     closable: true,

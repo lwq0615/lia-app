@@ -17,13 +17,15 @@
         white-space: nowrap;
         text-overflow: ellipsis;
       }
-      .notice-item-time{
+
+      .notice-item-time {
         width: 80px;
         text-align: right;
         color: rgba(0, 0, 0, .7);
         font-size: 13px;
       }
-      .notice-item-edit-btn{
+
+      .notice-item-edit-btn {
         position: absolute;
         right: 16px;
         display: none;
@@ -33,11 +35,11 @@
       }
     }
 
-    .ant-list-item:hover .notice-item-edit-btn{
+    .ant-list-item:hover .notice-item-edit-btn {
       display: flex;
     }
 
-    .notice-item-top{
+    .notice-item-top {
       background-color: #fffbe6;
       // color: #40a9ff;
     }
@@ -62,12 +64,15 @@
 .publish-notice-modal {
 
   .ant-modal-body {
-    max-height: 550px;
+    max-height: 600px;
     overflow: auto;
     padding-bottom: 15px;
+    padding: 0;
+
 
     .form-body {
       display: flex;
+      padding: 24px;
 
       .ant-form {
         width: 300px;
@@ -111,13 +116,16 @@
   border-radius: 5px;
   padding: 5px;
   margin-bottom: 10px;
-  .file-item{
+
+  .file-item {
     border-bottom: 1px solid rgba(5, 5, 5, 0.06);
   }
-  .file-item:last-child{
+
+  .file-item:last-child {
     border-bottom: none;
   }
-  .open-icon{
+
+  .open-icon {
     float: right;
     margin-right: 10px;
     user-select: none;
@@ -125,6 +133,6 @@
 }
 
 // 公告创建信息
-.notice-item-create-info{
+.notice-item-create-info {
   padding: 5px 5px 10px 5px;
 }

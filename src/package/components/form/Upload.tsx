@@ -1,9 +1,19 @@
 import React from 'react';
 import { UploadOutlined } from '@ant-design/icons';
 import { Button, Upload } from 'antd';
-import { UploadFile } from 'antd/lib/upload';
-import { uploadFile } from '@/package/request/system/file';
+import type { UploadFile } from 'antd/lib/upload';
+import { uploadFile, getFileUrl } from '@/package/request/system/file';
 import './css/upload.scss'
+
+
+interface SysFile {
+  fileId: number,
+  name: string,
+  path: string,
+  size: number,
+  uploadTime: string,
+  uploadUser: number
+}
 
 
 export default class App extends React.Component<{
@@ -16,8 +26,11 @@ export default class App extends React.Component<{
       name: 'file',
       beforeUpload: () => false,
       onChange: (info: any) => {
-        info.fileList.forEach((item: any) => {
-          item.url = window.URL.createObjectURL(item.originFileObj)
+        info.fileList.forEach((item: UploadFile) => {
+          if(item.status === 'success'){
+            return
+          }
+          item.url = window.URL.createObjectURL(item.originFileObj as Blob)
         })
         this.setState({
           fileList: [...info.fileList]
@@ -29,8 +42,27 @@ export default class App extends React.Component<{
     success: []
   }
 
+  /**
+   * 设置已经上传的文件列表
+   */
+  pushFileList = (list: SysFile[]) => {
+    const files: UploadFile[] = []
+    list?.forEach(item => {
+      files.push({
+        status: "success",
+        name: item.name,
+        uid: item.path.split("/").pop()?.split(".").slice(0, -1).join(".") as string,
+        url: getFileUrl(item.fileId)
+      })
+    })
+    this.setState({
+      fileList: files as any,
+      success: list
+    })
+  }
+
   upload: () => Promise<{
-    success: any[],
+    success: SysFile[],
     error: UploadFile[]
   } | void> = async () => {
     if(!Array.isArray(this.state.fileList) || !this.state.fileList.length){

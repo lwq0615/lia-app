@@ -47,7 +47,7 @@ const Confirm = (props) => {
 };
 
 Confirm.propTypes = {
-    deleteSubmit: propTypes.func,
+    deleteSubmit: propTypes.func.isRequired,
     msg: propTypes.string,
     type: propTypes.string,
     size: propTypes.string,
