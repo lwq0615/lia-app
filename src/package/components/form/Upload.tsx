@@ -26,7 +26,6 @@ export default class App extends React.Component<{
       name: 'file',
       beforeUpload: () => false,
       onChange: (info: any) => {
-        console.log(info);
         info.fileList.forEach((item: UploadFile) => {
           if(item.status === 'success'){
             return
