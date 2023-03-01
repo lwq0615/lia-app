@@ -57,39 +57,35 @@ export default function Publish(props: {
       values.topFlag = values.topFlag ? '1' : '0'
       values.content = content
       // 上传附件
-      const uploadRes = await uploadRef.current?.upload()
-      if (uploadRes) {
-        const { success, error } = uploadRes
-        values.files = success.map(item => item.fileId)
-        // 有上传失败的文件
-        if (error.length) {
-          message.error("部分文件上传失败!请重试或者取消上传")
-          setLoading(false)
-          return
+      uploadRef.current?.upload().then(async files => {
+        // 全部上传成功
+        values.files = files?.map(item => (item.originFileObj as any).fileId)
+        if (props.notice) {
+          var res: any = await editSysNotice({
+            ...values,
+            id: props.notice.id
+          })
+        } else {
+          var res: any = await addSysNotice(values)
         }
-      }
-      // 全部上传成功
-      if (props.notice) {
-        var res: any = await editSysNotice({
-          ...values,
-          id: props.notice.id
-        })
-      } else {
-        var res: any = await addSysNotice(values)
-      }
-      if (res > 0) {
-        message.success("发布成功")
-        setOpen(false)
-        formRef.resetFields()
-        setContent(void 0)
-        if (props.levelOption?.length) {
-          formRef.setFieldValue("level", props.levelOption[0].value)
+        if (res > 0) {
+          message.success("发布成功")
+          setOpen(false)
+          formRef.resetFields()
+          setContent(void 0)
+          if (props.levelOption?.length) {
+            formRef.setFieldValue("level", props.levelOption[0].value)
+          }
+          props.onOk && props.onOk(values)
+        } else {
+          message.warning("发布失败")
         }
-        props.onOk && props.onOk(values)
-      } else {
-        message.warning("发布失败")
-      }
-      setLoading(false)
+        setLoading(false)
+      }).catch(err => {
+        message.error("部分文件上传失败!请重试或者取消上传")
+        setLoading(false)
+        return
+      })
     } catch (e) {
       console.error(e)
       setLoading(false)

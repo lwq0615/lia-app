@@ -25,6 +25,7 @@ export default class App extends React.Component<{
     uProps: {
       name: 'file',
       beforeUpload: () => false,
+      multiple: true,
       onChange: (info: any) => {
         info.fileList.forEach((item: UploadFile) => {
           if(item.status === 'success'){
@@ -36,10 +37,8 @@ export default class App extends React.Component<{
           fileList: [...info.fileList]
         })
         if (this.props.onChange) this.props.onChange([...info.fileList])
-      },
-      multiple: true
-    },
-    success: []
+      }
+    }
   }
 
   /**
@@ -52,19 +51,16 @@ export default class App extends React.Component<{
         status: "success",
         name: item.name,
         uid: item.path.split("/").pop()?.split(".").slice(0, -1).join(".") as string,
-        url: getFileUrl(item.fileId)
+        url: getFileUrl(item.fileId),
+        originFileObj: item as any
       })
     })
     this.setState({
-      fileList: files as any,
-      success: list
+      fileList: files as any
     })
   }
 
-  upload: () => Promise<{
-    success: SysFile[],
-    error: UploadFile[]
-  } | void> = async () => {
+  upload: () => Promise<UploadFile[] | void> = async () => {
     if(!Array.isArray(this.state.fileList) || !this.state.fileList.length){
       return
     }
@@ -77,24 +73,29 @@ export default class App extends React.Component<{
       })
     })
     return new Promise((resolve, reject) => {
-      const error: UploadFile[] = []
       const task = this.state.fileList.map((file: UploadFile) => {
         if(file.status === "success"){
-          return
+          return file
         }
         return uploadFile(file.originFileObj).then(res => {
           file.status = "success"
-          this.state.success.push(res as never)
+          file.originFileObj = res as any
+          return file
         }).catch(e => {
           file.status = "error"
-          error.push(file)
+          return file
         })
       })
       Promise.all(task).then(res => {
         this.setState({
           fileList: this.state.fileList
         })
-        resolve({success: this.state.success, error})
+        const error = res.filter(file => file?.status !== "success")
+        if(error.length){
+          reject(error)
+        }else{
+          resolve(this.state.fileList)
+        }
       })
     })
   }
