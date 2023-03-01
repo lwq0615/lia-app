@@ -70,7 +70,10 @@ export default function Publish(props: {
       }
       // 全部上传成功
       if (props.notice) {
-        var res: any = await editSysNotice(values)
+        var res: any = await editSysNotice({
+          ...values,
+          id: props.notice.id
+        })
       } else {
         var res: any = await addSysNotice(values)
       }
