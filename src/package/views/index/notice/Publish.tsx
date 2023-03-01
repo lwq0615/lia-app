@@ -10,7 +10,7 @@ import Confirm from "@/package/components/confirm/Confirm";
 
 
 export default function Publish(props: {
-  onOk?: (values: object) => void,
+  onOk?: Function,
   notice?: Notice,
   levelOption: any[] | undefined,
   roleTree: TreeItem[] | undefined,
@@ -40,6 +40,7 @@ export default function Publish(props: {
       getRolesOfNotice(props.notice.id).then((res: any) => {
         formRef.setFieldsValue({
           ...props.notice,
+          topFlag: props.notice?.topFlag === '1',
           publishTo: res.map((item: any) => item.roleId)
         })
       })
@@ -76,7 +77,7 @@ export default function Publish(props: {
           if (props.levelOption?.length) {
             formRef.setFieldValue("level", props.levelOption[0].value)
           }
-          props.onOk && props.onOk(values)
+          props.onOk && props.onOk()
         } else {
           message.warning("发布失败")
         }

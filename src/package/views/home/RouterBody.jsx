@@ -4,7 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 import withRouter from '@/package/components/hoc/WithRouter';
 import { useEffect, useState } from 'react'
 import { createRoutes } from '@/package/router/index'
-import Welcome from '../Welcome';
+import Welcome from '../../components/welcome/Welcome';
 
 
 

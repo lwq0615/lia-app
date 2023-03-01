@@ -90,7 +90,7 @@ export default function NoticeComp() {
         }
         bordered
         dataSource={list}
-        renderItem={(item) => (<NoticeItem item={item} levelOption={levelOption} roleTree={roleTree}/>)}
+        renderItem={(item) => (<NoticeItem item={item} levelOption={levelOption} roleTree={roleTree} getPage={getPage}/>)}
       />
       <Pagination
         size="small"
