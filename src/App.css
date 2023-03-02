@@ -2,3 +2,31 @@
 @import 'github-markdown-css/github-markdown.css';
 /* @import 'github-markdown-css/github-markdown-dark.css';
 @import 'github-markdown-css/github-markdown-light.css'; */
+
+
+/* 滚动条宽度 */
+*::-webkit-scrollbar{
+  width: 10px;
+  height: 10px;
+}
+
+/* 滚动条两端按钮 */
+*::-webkit-scrollbar-button{
+  display: none;
+}
+
+/* 内层滚动槽 */
+*::-webkit-scrollbar-track-piece{
+  background-color: whitesmoke;
+  border-radius: 5px;
+}
+
+/* 滑块 */
+*::-webkit-scrollbar-thumb{
+  background-color: rgb(199, 198, 198);
+  border-radius: 5px;
+  height: 5px;
+}
+*::-webkit-scrollbar-thumb:hover{
+  background-color: rgb(158, 156, 156);
+}
