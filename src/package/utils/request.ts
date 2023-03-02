@@ -9,8 +9,8 @@ interface Request extends AxiosInstance {
     request<R = any, D = any>(config: AxiosRequestConfig<D>): Promise<R>;
     get<R = any, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>
     delete<R = any, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>
-    post<R = any, D = any>(url: string, data?: any, config?: AxiosRequestConfig<D>): Promise<R>
-    put<R = any, D = any>(url: string, data?: any, config?: AxiosRequestConfig<D>): Promise<R>
+    post<R = any, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>
+    put<R = any, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>
 }
 
 const request: Request = axios.create({
