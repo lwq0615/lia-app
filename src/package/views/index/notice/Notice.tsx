@@ -43,6 +43,7 @@ const getRoleTree = () => {
 export default function NoticeComp() {
 
   const canPubilsh = useHasAuth("system:notice:add")
+  const canEdit = useHasAuth("system:notice:edit")
   const [list, setList] = useState<Notice[]>([])
   const [current, setCurrent] = useState<number>(1)
   const [total, setTotal] = useState<number>(0)
@@ -90,7 +91,7 @@ export default function NoticeComp() {
         }
         bordered
         dataSource={list}
-        renderItem={(item) => (<NoticeItem item={item} levelOption={levelOption} roleTree={roleTree} getPage={getPage}/>)}
+        renderItem={(item) => (<NoticeItem item={item} levelOption={levelOption} roleTree={roleTree} getPage={getPage} canEdit={canEdit}/>)}
       />
       <Pagination
         size="small"

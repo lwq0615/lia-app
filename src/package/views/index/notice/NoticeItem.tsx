@@ -84,7 +84,8 @@ export default function NoticeItem(props: {
   item: Notice,
   levelOption: any[] | undefined,
   roleTree: TreeItem[] | undefined,
-  getPage: Function
+  getPage: Function,
+  canEdit: boolean
 }) {
 
   const [markRef, setMarkRef] = useState<any>()
@@ -163,7 +164,7 @@ export default function NoticeItem(props: {
       </span>
       <div className="notice-item-time">{moment(props.item.createTime).fromNow().replace(/ /g, "")}</div>
       <Publish levelOption={props.levelOption} roleTree={props.roleTree} className="notice-item-edit-btn" notice={props.item} onOk={props.getPage}>
-        <Button size="small">编辑</Button>
+        { props.canEdit ? <Button size="small">编辑</Button> : null }
       </Publish>
     </List.Item>
   )

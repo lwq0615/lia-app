@@ -15,7 +15,7 @@ export default function Publish(props: {
   levelOption: any[] | undefined,
   roleTree: TreeItem[] | undefined,
   className?: string,
-  children?: ReactElement
+  children?: ReactElement | null
 }) {
 
   const [formRef, setFormRef] = useState<any>(null)
