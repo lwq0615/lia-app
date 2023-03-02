@@ -86,7 +86,7 @@ const CodeForm: React.FC = (props: any) => {
 
     useEffect(() => {
         const roleTreeDict: TreeDataItem[] = []
-        getRoleDict().then((res: any) => {
+        getRoleDict().then(res => {
             setRoleDict(res)
             const companyRoleTree:any = {}
             res.forEach((item: DictData) => {
