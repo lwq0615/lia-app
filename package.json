@@ -1,7 +1,6 @@
 {
   "name": "app",
   "version": "1.0.0",
-  "main": "main.js",
   "homepage": "/",
   "private": true,
   "dependencies": {
