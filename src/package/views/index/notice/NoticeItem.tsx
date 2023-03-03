@@ -9,6 +9,7 @@ import { getUserDetail } from "@/package/request/system/user"
 import moment from 'moment'
 import Publish from "./Publish"
 import { TreeItem } from "./Notice"
+import { useSelector } from "react-redux"
 
 
 export interface Notice {
@@ -93,6 +94,8 @@ export default function NoticeItem(props: {
   const [fileList, setFileList] = useState<any[]>()
   const [createrRef, setCreaterRef] = useState<any>()
   const [creater, setCreater] = useState<any>()
+  const userId = useSelector(state => (state as any).loginUser.userInfo.userId)
+  const canEdit = props.canEdit && props.item.creater === userId
 
   /**
    * 渲染markdown
@@ -164,7 +167,7 @@ export default function NoticeItem(props: {
       </span>
       <div className="notice-item-time">{moment(props.item.createTime).fromNow().replace(/ /g, "")}</div>
       <Publish levelOption={props.levelOption} roleTree={props.roleTree} className="notice-item-edit-btn" notice={props.item} onOk={props.getPage}>
-        { props.canEdit ? <Button size="small">编辑</Button> : null }
+        { canEdit ? <Button size="small">编辑</Button> : null }
       </Publish>
     </List.Item>
   )

@@ -161,6 +161,7 @@ class CrudForm extends React.Component {
                         defaultValues={values}
                         treeData={treeData}
                         title={column.title}
+                        searchAble
                         disabled={disabled}
                     />
                 )
