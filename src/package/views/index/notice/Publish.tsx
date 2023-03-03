@@ -144,7 +144,7 @@ export default function Publish(props: {
                 </Col>
                 <Col span={24}>
                   <Form.Item label="推送给" name="publishTo" rules={[{ required: true, message: '请选择推送目标!' }]}>
-                    <MultipleTree treeData={props.roleTree || []} title="推送给" />
+                    <MultipleTree treeData={props.roleTree || []} title="推送给" searchAble/>
                   </Form.Item>
                 </Col>
                 <Col span={24}>
