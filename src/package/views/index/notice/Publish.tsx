@@ -117,7 +117,7 @@ export default function Publish(props: {
         open={open}
         okText="发布"
         footer={null}
-        destroyOnClose
+        destroyOnClose={Boolean(props.notice)}
         onCancel={() => setOpen(false)}
         width={1000}
       >
