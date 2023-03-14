@@ -66,6 +66,9 @@ function createMsg(errCode: number, msg: string) {
  */
 request.interceptors.response.use(
     res => {
+        if(res.headers['content-type'].split(";")[0] !== 'application/json'){
+            return res.data
+        }
         if(res.data.code === 200){
             return res.data.data
         }else{

@@ -10,7 +10,7 @@ export default function excel(heads, data, fileName = "excelData"){
     // 增加\t为了不让表格显示科学计数法或者其他格式
     for(let item of data){
         for(const key of keys){
-            headStr += item[key]+"\t,";     
+            headStr += (item[key] || '')+"\t,";     
         }
         headStr+='\n';
     }
