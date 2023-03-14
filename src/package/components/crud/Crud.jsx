@@ -10,7 +10,6 @@ import { Spin } from 'antd'
 class Crud extends React.Component {
 
     static propTypes = {
-        tableName: propTypes.string,
         getPage: propTypes.func.isRequired,
         onSave: propTypes.func,
         onDelete: propTypes.func,
@@ -34,7 +33,7 @@ class Crud extends React.Component {
         showIndex: true,
         rightAction: ["detail", "edit", "delete"],
         showSearch: true,
-        menuBtns: ["add", "delete", "search", "excel"]
+        menuBtns: ["add", "delete", "search"]
     }
 
     state = {

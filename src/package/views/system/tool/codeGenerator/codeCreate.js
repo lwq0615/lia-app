@@ -168,7 +168,7 @@ export default class ${firstUp(toHump(tableName))} extends React.Component{
             showIndex: true,
             // 是否展示右侧操作栏，默认["edit", "delete"]
             rightAction: true,
-            // 配置按钮组，默认["add", "delete", "search", "excel"]
+            // 配置按钮组，默认["add", "delete", "search"]
             menuBtns: true,
             // 表格行是否可选择(默认false)
             selection: true,

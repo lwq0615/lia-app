@@ -1,20 +1,31 @@
 
 import React from "react"
 import Crud from "@/package/components/crud/Crud"
-import { message } from "antd"
+import { message, Button } from "antd"
 import { getSysUserPage, saveSysUser, deleteUsers, getCreaterDict } from '@/package/request/system/user'
 import { getSexDict, getUserStatusDict } from '@/package/request/system/dictData'
 import { getRoleDict } from '@/package/request/system/role'
 import { getCompanyDict } from '@/package/request/system/company'
+import { DownloadOutlined } from '@ant-design/icons';
+import { excelServer } from "@/package/utils/excel"
 
 const option = {
-    tableName: "系统用户",
     // 是否显示行索引，默认true
     showIndex: true,
     // 是否展示右侧操作栏，默认false
     rightAction: true,
     // 表格行是否可选择(默认false)
     selection: true,
+    menuBtns: ["add", "delete", "search", () => {
+        const exportExcel = () => {
+            excelServer({
+                url: "/system/user/excel"
+            }, '系统用户')
+        }
+        return (
+            <Button key="excel" type="primary" icon={<DownloadOutlined />} onClick={exportExcel}>导出Excel</Button>
+        )
+    }],
     // 触发删除钩子 records => {}
     //return true刷新页面数据
     onDelete: async records => {
@@ -193,7 +204,7 @@ class User extends React.Component {
 
     render() {
         return (
-            <Crud style={{padding: 24}} {...this.state.option} />
+            <Crud style={{ padding: 24 }} {...this.state.option} />
         )
     }
 }

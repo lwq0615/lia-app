@@ -27,7 +27,7 @@ export default class SysDictType extends React.Component {
                 rightAction: ["edit", (record) => {
                     return (<Button key="roleSet" type="primary" size='small' onClick={(e) => { this.showModal(e, record) }}>配置</Button>)
                 }, "delete"],
-                // 配置按钮组，默认["add", "delete", "search", "excel"]
+                // 配置按钮组，默认["add", "delete", "search"]
                 menuBtns: ["add", "delete", "search"],
                 // 表格行是否可选择(默认false)
                 selection: true,

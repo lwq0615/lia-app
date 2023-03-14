@@ -1,9 +1,8 @@
 import { Space, Button, } from 'antd';
 import React from 'react';
-import { SearchOutlined, PlusOutlined, DownloadOutlined } from '@ant-design/icons';
+import { SearchOutlined, PlusOutlined } from '@ant-design/icons';
 import CrudModal from './CrudModal'
 import CrudConfirm from './CrudConfirm';
-import excel from '@/package/utils/excel'
 
 
 class CrudMenu extends React.Component {
@@ -18,8 +17,7 @@ class CrudMenu extends React.Component {
         })
         this.state = {
             visible: false,
-            formDefaultValues,
-            excelLoading: false
+            formDefaultValues
         }
     }
 
@@ -41,51 +39,6 @@ class CrudMenu extends React.Component {
         }
     }
 
-    /**
-     * 将数据导出excel文件
-     */
-    toExcel = () => {
-        this.setState({
-            excelLoading: true
-        })
-        // 字典数据预处理
-        const dict = {}
-        for(let dictKey in this.props.dict){
-            const dictMap = {}
-            function columnDictMap(columnDict){
-                if(!Array.isArray(columnDict)){
-                    return
-                }
-                columnDict.forEach(item => {
-                    dictMap[item.value] = item.label
-                    columnDictMap(item.children)
-                })
-            }
-            columnDictMap(this.props.dict[dictKey])
-            dict[dictKey] = dictMap
-        }
-        const heads = {}
-        this.props.columns.forEach(item => {
-            if(item.show !== false){
-                heads[item.dataIndex] = item.title
-            }
-        })
-        this.props.getPage({}, {}).then(({list}) => {
-            list.forEach(item => {
-                for(let key in item){
-                    // 需要进行字典映射
-                    if(dict[key]){
-                        item[key] = dict[key][item[key]]
-                    }
-                }
-            })
-            excel(heads, list, this.props.tableName)
-            this.setState({
-                excelLoading: false
-            })
-        })
-    }
-
     setVisible = (visible) => {
         this.setState({
             visible: visible
@@ -105,7 +58,6 @@ class CrudMenu extends React.Component {
                 type='default' 
                 before={() => this.props.nodes.crudTableRef.state.selectedRows.length}/>),
             "search": (<Button key="search" type="primary" icon={<SearchOutlined />} onClick={this.search}>搜索</Button>),
-            "excel": (<Button key="excel" type="primary" loading={this.state.excelLoading} icon={<DownloadOutlined />} onClick={this.toExcel}>导出Excel</Button>)
         }
         if(this.props.menuBtns === true){
             config = Object.keys(btns)

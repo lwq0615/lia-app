@@ -15,12 +15,11 @@ export default class SysRegisterCode extends React.Component {
     open: false,
     option: {
       // 表格名称
-      tableName: "注册码",
       // 是否显示行索引，默认true
       showIndex: true,
       // 是否展示右侧操作栏，默认["edit", "delete"]
       rightAction: true,
-      // 配置按钮组，默认["add", "delete", "search", "excel"]
+      // 配置按钮组，默认["add", "delete", "search"]
       menuBtns: [() => {
         const openModal = () => {
           this.setState({ open: true })
@@ -28,7 +27,7 @@ export default class SysRegisterCode extends React.Component {
         return (
           <Button type='primary' icon={<PlusOutlined />} key="register" onClick={openModal}>生成注册码</Button>
         )
-      }, "delete", "search", "excel"],
+      }, "delete", "search"],
       // 表格行是否可选择(默认false)
       selection: true,
       // 触发删除钩子 records => {}
@@ -149,10 +148,12 @@ export default class SysRegisterCode extends React.Component {
     }
   }
 
+  crudRef = null
+
   render() {
     return (
       <>
-        <Crud {...this.state.option} style={{ padding: 24 }} />
+        <Crud {...this.state.option} style={{ padding: 24 }} ref={ref => this.crudRef = ref}/>
         <Modal
           open={this.state.open}
           title="生成注册码"
@@ -164,7 +165,7 @@ export default class SysRegisterCode extends React.Component {
           footer={null}
           onCancel={() => this.setState({ open: false })}
         >
-          <CodeForm></CodeForm>
+          <CodeForm crudRef={this.crudRef}></CodeForm>
         </Modal>
       </>
     )

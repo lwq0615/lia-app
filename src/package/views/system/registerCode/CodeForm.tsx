@@ -48,6 +48,7 @@ const CodeForm: React.FC = (props: any) => {
         create(values.roleId, values.count).then((res) => {
             if (Array.isArray(res) && res.length) {
                 showCode(res)
+                props.crudRef.refreshPage()
                 message.success("生成成功")
             } else {
                 message.warn("生成失败")

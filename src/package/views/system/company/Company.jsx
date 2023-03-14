@@ -19,7 +19,6 @@ export default class Company extends React.Component {
 
     state = {
         option: {
-            tableName: "企业信息",
             // 是否显示行索引，默认true
             showIndex: true,
             // 是否展示右侧操作栏，默认false
