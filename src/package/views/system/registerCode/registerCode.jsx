@@ -7,6 +7,7 @@ import { Button, message, Modal } from "antd"
 import { PlusOutlined } from '@ant-design/icons';
 import CodeForm from './CodeForm.tsx'
 import { getCreaterDict } from '@/package/request/system/user'
+import { DownloadOutlined } from '@ant-design/icons';
 
 
 export default class SysRegisterCode extends React.Component {
@@ -27,7 +28,16 @@ export default class SysRegisterCode extends React.Component {
         return (
           <Button type='primary' icon={<PlusOutlined />} key="register" onClick={openModal}>生成注册码</Button>
         )
-      }, "delete", "search"],
+      }, "delete", "search", () => {
+        const exportExcel = () => {
+          excelServer({
+            url: "/system/register/code/excel"
+          }, '注册码')
+        }
+        return (
+          <Button key="excel" type="primary" icon={<DownloadOutlined />} onClick={exportExcel}>导出Excel</Button>
+        )
+      }],
       // 表格行是否可选择(默认false)
       selection: true,
       // 触发删除钩子 records => {}
@@ -153,7 +163,7 @@ export default class SysRegisterCode extends React.Component {
   render() {
     return (
       <>
-        <Crud {...this.state.option} style={{ padding: 24 }} ref={ref => this.crudRef = ref}/>
+        <Crud {...this.state.option} style={{ padding: 24 }} ref={ref => this.crudRef = ref} />
         <Modal
           open={this.state.open}
           title="生成注册码"
