@@ -358,6 +358,7 @@ class CrudTable extends React.Component {
             <>
                 <Table
                     pagination={{
+                        size: "small",
                         position: ['bottomCenter'],
                         showSizeChanger: true,
                         showQuickJumper: true,
