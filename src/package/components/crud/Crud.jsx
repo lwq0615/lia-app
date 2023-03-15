@@ -48,6 +48,10 @@ class Crud extends React.Component {
         this.nodes.crudTableRef?.getPage()
     }
 
+    getQueryParam = () => {
+        return this.nodes.crudSearchRef?.getParams()
+    }
+
     componentDidMount = async () => {
         const newDict = {}
         for (let column of this.props.columns) {

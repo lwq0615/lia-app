@@ -5,6 +5,8 @@ import { getCreaterDict } from '@/package/request/system/user'
 import Role from './Role'
 import React from 'react'
 import './company.scss'
+import { DownloadOutlined } from '@ant-design/icons';
+import { excelServer } from "@/package/utils/excel"
 
 export default class Company extends React.Component {
 
@@ -25,6 +27,18 @@ export default class Company extends React.Component {
             rightAction: ["edit", (record) => {
                 return (<Button key="roleSet" type="primary" size='small' onClick={(e) => { this.showModal(e, record) }}>角色</Button>)
             }, "delete"],
+            menuBtns: ["add", "delete", "search", () => {
+                const exportExcel = async () => {
+                    excelServer({
+                        url: "/system/company/excel",
+                        method: 'post',
+                        data: this.params
+                    })
+                }
+                return (
+                    <Button key="excel" type="primary" icon={<DownloadOutlined />} onClick={exportExcel}>导出Excel</Button>
+                )
+            }],
             // 表格行是否可选择(默认false)
             selection: true,
             // 删除按钮提示信息
@@ -45,6 +59,7 @@ export default class Company extends React.Component {
             // 需要加载数据时触发 params => {}
             getPage: (params = {}, page = {}) => {
                 params.createTime = params.createTime?.join(",")
+                this.params = params
                 return getSysCompanyPage(params, page.current, page.size)
             },
             // 新增编辑提交钩子 async (form, type) => {}
@@ -130,6 +145,8 @@ export default class Company extends React.Component {
         companyName: null,
         companyId: null
     }
+
+    params = {}
 
     render() {
         return (

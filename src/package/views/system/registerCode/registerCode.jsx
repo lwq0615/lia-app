@@ -8,6 +8,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import CodeForm from './CodeForm.tsx'
 import { getCreaterDict } from '@/package/request/system/user'
 import { DownloadOutlined } from '@ant-design/icons';
+import { excelServer } from '@/package/utils/excel'
 
 
 export default class SysRegisterCode extends React.Component {
@@ -31,8 +32,10 @@ export default class SysRegisterCode extends React.Component {
       }, "delete", "search", () => {
         const exportExcel = () => {
           excelServer({
-            url: "/system/register/code/excel"
-          }, '注册码')
+            url: "/system/register/code/excel",
+            method: 'post',
+            data: this.params
+          })
         }
         return (
           <Button key="excel" type="primary" icon={<DownloadOutlined />} onClick={exportExcel}>导出Excel</Button>
@@ -56,6 +59,7 @@ export default class SysRegisterCode extends React.Component {
       // 需要加载数据时触发 params => {}
       getPage: (params = {}, page = {}) => {
         params.createTime = params.createTime?.join(",")
+        this.params = params
         return getSysRegisterCodePage(params, page.current, page.size)
       },
       // 新增编辑提交钩子 async (form, type) => {}
@@ -159,6 +163,7 @@ export default class SysRegisterCode extends React.Component {
   }
 
   crudRef = null
+  params = {}
 
   render() {
     return (

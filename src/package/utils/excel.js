@@ -1,4 +1,4 @@
-import request from "./request";
+import { download } from "./request";
 
 export default function excel(heads, data, fileName = "excelData") {
     // 列标题，逗号隔开，每一个逗号就是隔开一个单元格
@@ -27,13 +27,14 @@ const link = document.createElement("a")
 /**
  * 从服务器导出excel
  */
-export function excelServer(config, name) {
-    request({
+export function excelServer(config) {
+    download({
         ...config,
         responseType: 'blob'
     }).then(res => {
-        link.download = name + ".xlsx"
-        link.href = window.URL.createObjectURL(new Blob([res]))
+        const fileName = res.headers['content-disposition'].split(";")[1].split("=")[1]
+        link.download = decodeURIComponent(fileName)
+        link.href = window.URL.createObjectURL(new Blob([res.data]))
         link.click()
     })
 }

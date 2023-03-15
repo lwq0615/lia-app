@@ -42,33 +42,37 @@ const MultipleTree = (props) => {
   const treeData = treeMap(props.treeData)
   generateList(treeData)
 
-  const getParentKey = (key, tree) => {
-    let parentKey;
-
+  const getParentKey = (key, tree, parents = []) => {
     for (let i = 0; i < tree.length; i++) {
       const node = tree[i];
-
+      parents.push(node.key)
       if (node.children) {
         if (node.children.some((item) => item.key === key)) {
-          parentKey = node.key;
-        } else if (getParentKey(key, node.children)) {
-          parentKey = getParentKey(key, node.children);
+          return parents
+        } else {
+          const res = getParentKey(key, node.children, parents);
+          if(res){
+            return res
+          }
         }
       }
+      parents.pop()
     }
-    return parentKey;
   };
 
   const onChange = (e) => {
     const { value } = e.target;
     let newExpandedKeys = []
     if (value) {
-      newExpandedKeys = dataList.map((item) => {
+      const keys = dataList.map((item) => {
         if (item.title.indexOf(value) > -1) {
           return getParentKey(item.key, treeData);
         }
         return null;
-      }).filter((item, i, self) => item && self.indexOf(item) === i);
+      }).filter(item => item).reduce((v ,arr) => {
+        return v.concat(arr)
+      }, [])
+      newExpandedKeys = [...new Set(keys)]
     }
     setSearchValue(value)
     setExpandedKeys(newExpandedKeys)
