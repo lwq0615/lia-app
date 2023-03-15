@@ -162,8 +162,6 @@ export default class ${firstUp(toHump(tableName))} extends React.Component{
 
     state = {
         option: {
-            // 表格名称
-            tableName: "${tableName}",
             // 是否显示行索引，默认true
             showIndex: true,
             // 是否展示右侧操作栏，默认["edit", "delete"]
