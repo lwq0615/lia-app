@@ -35,6 +35,6 @@ export function deleteSysRegisterCodes(sysRegisterCodeIds){
 /**
  * 批量生成注册码
  */
-export function create(roleId, count){
-    return request.get(`${baseUrl}/create?roleId=${roleId}&count=${count}`)
+export function create(roleId, count, expireTime){
+    return request.get(`${baseUrl}/create?roleId=${roleId}&count=${count}&expireTime=${expireTime || ''}`)
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Form, InputNumber, TreeSelect, Row, Col, Button, message } from 'antd';
+import { Form, InputNumber, TreeSelect, Row, Col, Button, message, Radio } from 'antd';
 import { getRoleDict } from '@/package/request/system/role'
 import { create } from '@/package/request/system/registerCode'
 import excel from '@/package/utils/excel'
@@ -30,7 +30,7 @@ interface CodeData {
     roleId: number,
     useBy: number | null,
     useTime: number | null,
-    [key:string]: any
+    [key: string]: any
 
 }
 
@@ -45,7 +45,10 @@ const CodeForm: React.FC = (props: any) => {
      * 点击生成
      */
     const onFinish = (values: any) => {
-        create(values.roleId, values.count).then((res) => {
+        if(values.expireTime){
+            values.expireTime = values.expireTime * values.unit * 60 * 1000
+        }
+        create(values.roleId, values.count, values.expireTime).then((res) => {
             if (Array.isArray(res) && res.length) {
                 showCode(res)
                 props.crudRef.refreshPage()
@@ -67,7 +70,7 @@ const CodeForm: React.FC = (props: any) => {
      * 导出excel
      */
     function excelData(data: CodeData[]) {
-        const role:any = roleDict.find((item:any) => {
+        const role: any = roleDict.find((item: any) => {
             return item.value = roleId
         })
         data.forEach(item => {
@@ -89,10 +92,10 @@ const CodeForm: React.FC = (props: any) => {
         const roleTreeDict: TreeDataItem[] = []
         getRoleDict().then(res => {
             setRoleDict(res)
-            const companyRoleTree:any = {}
+            const companyRoleTree: any = {}
             res.forEach((item: DictData) => {
                 // 普通用户不需要注册码
-                if(item.value === 3){
+                if (item.value === 3) {
                     return
                 }
                 if (!Array.isArray(companyRoleTree[item.remark])) {
@@ -130,7 +133,7 @@ const CodeForm: React.FC = (props: any) => {
         : (
             <Form
                 name="basic"
-                initialValues={{ remember: true }}
+                initialValues={{ unit: 1 }}
                 onFinish={onFinish}
                 autoComplete="off"
             >
@@ -162,10 +165,34 @@ const CodeForm: React.FC = (props: any) => {
                             rules={[{
                                 required: true,
                                 type: 'number',
-                                min: 0
+                                min: 1
                             }]}
                         >
-                            <InputNumber style={{ width: '100%' }} />
+                            <InputNumber style={{ width: '100%' }} placeholder={"请输入要生成的数量"}/>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item
+                            label="有效期"
+                            name="expireTime"
+                            rules={[{
+                                type: 'number',
+                                min: 1
+                            }]}
+                        >
+                            <InputNumber style={{ width: '100%' }} placeholder={"注册码有效期"}/>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item
+                            label=""
+                            name="unit"
+                        >
+                            <Radio.Group>
+                                <Radio.Button value={1440}>天</Radio.Button>
+                                <Radio.Button value={60}>小时</Radio.Button>
+                                <Radio.Button value={1}>分钟</Radio.Button>
+                            </Radio.Group>
                         </Form.Item>
                     </Col>
                     <Col span={24}>

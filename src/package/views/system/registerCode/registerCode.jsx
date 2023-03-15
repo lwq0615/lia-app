@@ -9,6 +9,7 @@ import CodeForm from './CodeForm.tsx'
 import { getCreaterDict } from '@/package/request/system/user'
 import { DownloadOutlined } from '@ant-design/icons';
 import { excelServer } from '@/package/utils/excel'
+import moment from 'moment'
 
 
 export default class SysRegisterCode extends React.Component {
@@ -93,6 +94,25 @@ export default class SysRegisterCode extends React.Component {
           span: 6
         },
         {
+          title: '过期时间',
+          dataIndex: 'expireTime',
+          editShow: false,
+          align: 'center',
+          search: false,
+          html: (t, r) => {
+            if(t){
+              const time = moment(new Date(r.createTime).getTime() + (+t)).format("yyyy-MM-DD HH:mm:ss").toString()
+              if(new Date(time).getTime() > new Date().getTime()){
+                return time
+              }else{
+                return "已过期"
+              }
+            }else{
+              return ""
+            }
+          }
+        },
+        {
           title: '是否已使用',
           dataIndex: 'used',
           required: false,
@@ -114,6 +134,27 @@ export default class SysRegisterCode extends React.Component {
           ]
         },
         {
+          title: '是否已过期',
+          dataIndex: 'expired',
+          required: false,
+          addShow: false,
+          detailShow: false,
+          show: false,
+          editShow: false,
+          span: 6,
+          type: "select",
+          dict: [
+            {
+              label: '已过期',
+              value: true
+            },
+            {
+              label: "未过期",
+              value: false
+            }
+          ]
+        },
+        {
           title: '使用用户ID',
           dataIndex: 'useBy',
           align: 'center',
@@ -122,7 +163,7 @@ export default class SysRegisterCode extends React.Component {
           addShow: false,
           editShow: false,
           nullValue: "未使用",
-          span: 6
+          span: 4
         },
         {
           title: '使用时间',
@@ -145,6 +186,7 @@ export default class SysRegisterCode extends React.Component {
           editShow: false,
           required: false,
           type: 'select',
+          span: 4,
           dict: getCreaterDict
         },
         {

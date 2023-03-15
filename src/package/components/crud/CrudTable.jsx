@@ -152,12 +152,14 @@ class CrudTable extends React.Component {
                         <Icon style={{ fontSize: 20, color: '#40a9ff' }} />
                     )
                 }
+            }else{
+                html = oldHtml || html
             }
-            column.html = (text) => {
+            column.html = (text, record, index) => {
                 if ((text === void 0 || text === null) && column.nullValue !== void 0) {
                     return column.nullValue
                 } else {
-                    return html(text)
+                    return html(text, record, index)
                 }
             }
             newColumns.push(column)
@@ -340,8 +342,8 @@ class CrudTable extends React.Component {
                 }
                 //配置了html，则回调参数变化为映射后的值
                 if (column.html) {
-                    column.render = (text, record) => {
-                        return column.html(this.getDictLabel(dict, text), record)
+                    column.render = (text, record, index) => {
+                        return column.html(this.getDictLabel(dict, text), record, index)
                     }
                 }
                 //没有配置html，直接输出映射后的值
