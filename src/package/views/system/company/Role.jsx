@@ -221,6 +221,7 @@ class Role extends React.Component {
             centered: true,
             destroyOnClose: true,
             className: "diagram-modal",
+            maskClosable: true,
             keyboard: true,
             okText: "确定",
             content: (<Diagram {...this.props}/>)

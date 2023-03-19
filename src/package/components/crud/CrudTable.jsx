@@ -38,7 +38,8 @@ class CrudTable extends React.Component {
             centered: true,
             title: title,
             content: text,
-            okText: "确定"
+            okText: "确定",
+            maskClosable: true
         })
     }
 
@@ -52,6 +53,7 @@ class CrudTable extends React.Component {
             centered: true,
             title: column.title,
             destroyOnClose: true,
+            maskClosable: true,
             width: 700,
             okText: '确定',
             closable: true,
@@ -81,6 +83,7 @@ class CrudTable extends React.Component {
             centered: true,
             title: column.title,
             destroyOnClose: true,
+            maskClosable: true,
             width: 700,
             okText: '确定',
             closable: true,

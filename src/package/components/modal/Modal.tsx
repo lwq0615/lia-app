@@ -12,6 +12,7 @@ export default function modal(props?: ModalFuncProps): void {
     centered: true,
     closable: true,
     okText: "确定",
+    maskClosable: true,
     ...props,
     className
   })

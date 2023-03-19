@@ -278,6 +278,7 @@ export default class CodeGenerator extends React.Component {
             width: 1000,
             okText: '确定',
             centered: true,
+            maskClosable: true,
             className: 'code-generator-modal',
             destroyOnClose: true,
             title: '生成代码',
