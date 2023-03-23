@@ -75,7 +75,7 @@ class CrudForm extends React.Component {
                 <Select
                     disabled={disabled}
                     allowClear
-                    placeholder={column.placeholder || "请选择" + column.title}
+                    placeholder={this.props.title !== '详情' ? (column.placeholder || "请选择" + column.title) : ''}
                     showSearch
                     filterOption={(input, option) =>
                         option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -101,7 +101,7 @@ class CrudForm extends React.Component {
                 <DatePicker
                     style={{ width: '100%' }}
                     picker='date'
-                    placeholder={column.placeholder || "请选择" + column.title}
+                    placeholder={this.props.title !== '详情' ? (column.placeholder || "请选择" + column.title) : ''}
                     allowClear
                     disabled={disabled}
                 />
@@ -113,7 +113,7 @@ class CrudForm extends React.Component {
                     style={{ width: '100%' }}
                     type='datetime-local'
                     picker='date'
-                    placeholder={column.placeholder || "请选择" + column.title}
+                    placeholder={this.props.title !== '详情' ? (column.placeholder || "请选择" + column.title) : ''}
                     allowClear
                     disabled={disabled}
                 />
@@ -124,7 +124,7 @@ class CrudForm extends React.Component {
                 <TextArea
                     disabled={disabled}
                     allowClear
-                    placeholder={column.placeholder || "请输入" + column.title}
+                    placeholder={this.props.title !== '详情' ? (column.placeholder || "请输入" + column.title) : ''}
                     rows={4}
                 />
             )
@@ -139,7 +139,7 @@ class CrudForm extends React.Component {
             return (
                 <InputNumber
                     style={{ width: '100%' }}
-                    placeholder={column.placeholder || "请选择" + column.title}
+                    placeholder={this.props.title !== '详情' ? (column.placeholder || "请选择" + column.title) : ''}
                     disabled={disabled}
                     onPressEnter={() => { this.props.title === '搜索' && this.props.submit && this.props.submit() }}
                 />
@@ -177,7 +177,7 @@ class CrudForm extends React.Component {
                     disabled={disabled}
                     allowClear
                     treeData={this.treeDataMap(this.props.dict[column.dataIndex])}
-                    placeholder={column.placeholder || "请选择" + column.title}
+                    placeholder={this.props.title !== '详情' ? (column.placeholder || "请选择" + column.title) : ''}
                 />
             )
         }
@@ -211,7 +211,7 @@ class CrudForm extends React.Component {
         else {
             return (
                 <Input
-                    placeholder={column.placeholder || "请输入" + column.title}
+                    placeholder={this.props.title !== '详情' ? (column.placeholder || "请输入" + column.title) : ''}
                     allowClear
                     disabled={disabled}
                     onPressEnter={() => { this.props.title === '搜索' && this.props.submit && this.props.submit() }}

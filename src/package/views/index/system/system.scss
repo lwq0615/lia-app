@@ -1,0 +1,16 @@
+.index-system-info{
+  height: 250px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding-bottom: 10px;
+  .momory{
+    padding-right: 60px;
+    p{
+      font-size: 16px;
+    }
+    button{
+      border-radius: 6px;
+    }
+  }
+}

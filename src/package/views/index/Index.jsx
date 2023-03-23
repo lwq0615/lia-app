@@ -1,5 +1,6 @@
 import UserInfo from "./UserInfo";
 import Notice from "./notice/Notice";
+import System from "./system/System";
 
 
 export default function Index() {
@@ -8,7 +9,9 @@ export default function Index() {
     <section className="system-index">
       <UserInfo />
       <div className="index-body">
-        <div className="index-left"></div>
+        <div className="index-left">
+          <System/>
+        </div>
         <div className="index-right">
           <Notice/>
         </div>
