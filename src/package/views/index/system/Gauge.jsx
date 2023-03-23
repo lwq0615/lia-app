@@ -2,10 +2,10 @@ import { Gauge } from '@ant-design/plots';
 
 export default function DemoGauge(props) {
   let color = '#30BF78'
-  if(props.percent > 50){
+  if(props.percent > 40){
     color = '#faad14'
   }
-  if(props.percent > 75){
+  if(props.percent > 70){
     color = '#ff4d4f'
   }
   const config = {
