@@ -42,6 +42,7 @@ function routerMap(router) {
 
 export default function Home() {
 
+  const menuRef = useRef(null)
   const [full, setFull] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
@@ -52,15 +53,20 @@ export default function Home() {
   const userInfo = useSelector((state) => state.loginUser.userInfo)
   const routers = routerMap(useSelector((state) => state.loginUser.menus))
 
+  const fullScreen = (e) => {
+    if (e.ctrlKey && e.keyCode === 122) {
+      setFull(menuRef.current.style.display === 'none' ? false : true)
+    }
+  }
+
   useEffect(() => {
     //根据进入时的URI重新渲染视图
     let keyPath = getPathKeys(location.pathname.substring(1).split("/"))
     updateRouterPath(keyPath)
-    document.addEventListener('keydown', (e) => {
-      if (e.ctrlKey && e.keyCode === 122) {
-        setFull(!full)
-      }
-    })
+    document.addEventListener('keydown', fullScreen)
+    return () => {
+      document.removeEventListener('keydown', fullScreen)
+    }
   }, [])
 
   /**
@@ -160,7 +166,12 @@ export default function Home() {
 
   return (
     <Layout className='lia_home_container'>
-      <Sider collapsed={collapsed} style={{ overflow: 'auto', paddingTop: 15, display: full ? 'none' : void 0 }} width={230}>
+      <Sider
+        collapsed={collapsed}
+        style={{ overflow: 'auto', paddingTop: 15, display: full ? 'none' : void 0 }}
+        width={230}
+        ref={menuRef}
+      >
         <div className='userInfo'>
           <img
             src={userInfo.headImg

@@ -13,11 +13,11 @@ export default function UserInfo() {
   const userInfo = useSelector((state: any) => state.loginUser.userInfo)
   const dispatch = useDispatch()
 
-  let timeText = '早安'
+  let timeText = '早上好'
   if (new Date().getHours() > 18) {
-    timeText = "晚安"
+    timeText = "晚上好"
   } else if (new Date().getHours() > 12) {
-    timeText = "午安"
+    timeText = "下午好"
   }
 
   /**

@@ -24,7 +24,7 @@ function HomeHeader(props) {
     }
 
     function openGitHub() {
-        window.open(process.env.REACT_APP_GITHUB_NEST_URL)
+        window.open(process.env.REACT_APP_GITHUB_SERVER_URL)
         window.open(process.env.REACT_APP_GITHUB_APP_URL)
     }
 

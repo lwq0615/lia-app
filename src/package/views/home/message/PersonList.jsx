@@ -114,7 +114,7 @@ export default class PersonList extends React.Component {
 
     render() {
         return (
-            <div style={{ backgroundColor: '#ffffff', width: 250 }}>
+            <div style={{ backgroundColor: '#f5f6f7', width: 250 }}>
                 <Input allowClear prefix={<SearchOutlined />} onChange={this.search} placeholder="搜索"/>
                 {this.state.personList.map(item => (
                     <Person
