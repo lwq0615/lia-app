@@ -19,7 +19,9 @@ export function wsOpen(onmessage) {
     //建立长链接，地址为你的服务端地址且以ws开头，以WebSocketConfig配置中的路径 .addHandler(myHandler(), "/ws")结尾
     //如果服务端有配置上下文 context-path，需要加入路径
     webSocket = new WebSocket(`ws://${baseUrl}/ws?${process.env.REACT_APP_HTTP_HEADER}=${localStorage.getItem(process.env.REACT_APP_HTTP_HEADER)}`);
-
+    webSocket.onerror = () => {
+        message.error("WebSocket连接失败")
+    }
     webSocket.onmessage = onmessage
 
     window.addEventListener("close", wsClose)

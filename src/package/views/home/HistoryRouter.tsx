@@ -76,7 +76,7 @@ export default class HistoryRouter extends React.Component {
 
     render() {
         return (
-            <div className='history-router'>
+            <div className='history-router' style={(this.props as any).style}>
                 {
                     this.state.historyRouterList?.map((item: Router) => (
                         <Tag

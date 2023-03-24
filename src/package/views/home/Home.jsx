@@ -42,6 +42,7 @@ function routerMap(router) {
 
 export default function Home() {
 
+  const [full, setFull] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
   const [collapsed, setCollapsed] = useState(false)
@@ -55,6 +56,11 @@ export default function Home() {
     //根据进入时的URI重新渲染视图
     let keyPath = getPathKeys(location.pathname.substring(1).split("/"))
     updateRouterPath(keyPath)
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.keyCode === 122) {
+        setFull(!full)
+      }
+    })
   }, [])
 
   /**
@@ -154,7 +160,7 @@ export default function Home() {
 
   return (
     <Layout className='lia_home_container'>
-      <Sider collapsed={collapsed} style={{ overflow: 'auto', paddingTop: 15 }} width={230}>
+      <Sider collapsed={collapsed} style={{ overflow: 'auto', paddingTop: 15, display: full ? 'none' : void 0 }} width={230}>
         <div className='userInfo'>
           <img
             src={userInfo.headImg
@@ -184,10 +190,12 @@ export default function Home() {
           collapsed={collapsed}
           userInfo={userInfo}
           routePath={routePath}
+          style={{ display: full ? 'none' : void 0 }}
         />
         <HistoryRouter
           ref={historyRouterRef}
           goRouter={goRouter}
+          style={{ display: full ? 'none' : void 0 }}
         />
         <Content className="content-body">
           <RouterBody routers={routers} />

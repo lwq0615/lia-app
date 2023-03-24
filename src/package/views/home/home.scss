@@ -52,7 +52,7 @@
             }
         }
         .history-router{
-            padding: 5px 20px;
+            padding: 5px 20px 1px 20px;
             .ant-tag{
                 cursor: pointer;
                 padding: 5px 10px;
@@ -63,7 +63,7 @@
             overflow: hidden;
         }
         .content-body {
-            margin: 0 4px 0px 10px;
+            margin: 4px 4px 0px 10px;
             overflow: auto;
             background-color: #fff;
             border-radius: 4px;

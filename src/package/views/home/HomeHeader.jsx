@@ -34,7 +34,7 @@ function HomeHeader(props) {
 
 
     return (
-        <Header className="site-layout-background">
+        <Header className="site-layout-background" style={props.style}>
             {React.createElement(props.collapsed ? icons.MenuUnfoldOutlined : icons.MenuFoldOutlined, {
                 className: 'trigger',
                 onClick: props.toggle,
