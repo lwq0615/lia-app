@@ -420,38 +420,38 @@ export default class CodeGenerator extends React.Component {
                             </Select>
                         </Form.Item>
                     </Col>
-                    <Col span={4}>
+                    <Col span={3}>
                         <Form.Item
                             valuePropName="checked"
                             name="CreaterFlag"
-                            label="添加创建人字段"
+                            label="创建人"
                         >
                             <Switch defaultChecked />
                         </Form.Item>
                     </Col>
-                    <Col span={4}>
+                    <Col span={3}>
                         <Form.Item
                             valuePropName="checked"
                             name="createTimeFlag"
-                            label="添加创建时间字段"
+                            label="创建时间"
                         >
                             <Switch defaultChecked />
                         </Form.Item>
                     </Col>
-                    <Col span={4}>
+                    <Col span={3}>
                         <Form.Item
                             valuePropName="checked"
                             name="updateTimeFlag"
-                            label="添加更新时间字段"
+                            label="更新时间"
                         >
                             <Switch defaultChecked />
                         </Form.Item>
                     </Col>
-                    <Col span={4}>
+                    <Col span={3}>
                         <Form.Item
                             valuePropName="checked"
                             name="remarkFlag"
-                            label="添加备注字段"
+                            label="备注"
                         >
                             <Switch defaultChecked />
                         </Form.Item>
