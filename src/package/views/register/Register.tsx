@@ -20,7 +20,11 @@ const Register: React.FC = function (props: any) {
         })
     }, [])
 
-    const onFinish = (values: { nick: string, username: string, password: string, registerCode: string, code: string }) => {
+    const onFinish = (values: { nick: string, username: string, password: string, password2: string, registerCode: string, code: string }) => {
+        if(values.password !== values.password2){
+            message.warning("两次密码不一致")
+            return
+        }
         if(!codeRef?.checkCode(values.code)){
             message.warning("验证码错误")
             return
@@ -68,6 +72,16 @@ const Register: React.FC = function (props: any) {
                                 prefix={<LockOutlined className="site-form-item-icon" />}
                                 type="password"
                                 placeholder="密码"
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            name="password2"
+                            rules={[{ required: true, message: '请确认密码' }]}
+                        >
+                            <Input
+                                prefix={<LockOutlined className="site-form-item-icon" />}
+                                type="password"
+                                placeholder="确认密码"
                             />
                         </Form.Item>
                         <Form.Item name="registerCode">
