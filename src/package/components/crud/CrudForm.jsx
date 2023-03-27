@@ -158,7 +158,7 @@ class CrudForm extends React.Component {
             } else {
                 return (
                     <CrudMultipleTree
-                        defaultValues={values}
+                        checkStrictly
                         treeData={treeData}
                         title={column.title}
                         searchAble
@@ -197,7 +197,6 @@ class CrudForm extends React.Component {
                     <CrudCheckbox
                         disabled={disabled}
                         options={options}
-                        defaultValues={values}
                         title={column.title}
                     />
                 )

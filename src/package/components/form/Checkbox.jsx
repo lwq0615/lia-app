@@ -54,7 +54,6 @@ export default function CrudCheckbox(props) {
 
 
 CrudCheckbox.propTypes = {
-    defaultValues: propTypes.array,
     disabled: propTypes.bool,
     title: propTypes.node,
     options: propTypes.array.isRequired

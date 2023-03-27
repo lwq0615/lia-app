@@ -125,6 +125,14 @@ const MultipleTree = (props) => {
     }
   }
 
+  const change = (checkeds) => {
+    if(props.checkStrictly){
+      props.onChange(checkeds.checked)
+    }else{
+      props.onChange(checkeds)
+    }
+  }
+
   return (
     <>
       <Button type="link" onClick={show} style={style}>编辑</Button>
@@ -155,7 +163,7 @@ const MultipleTree = (props) => {
           checkedKeys={props.value}
           onExpand={(newExpandedKeys) => setExpandedKeys(newExpandedKeys)}
           expandedKeys={expandedKeys}
-          onCheck={(checkedKeys) => props.onChange(checkedKeys)}
+          onCheck={change}
           treeData={loop(treeData)}
         />
       </Modal>
