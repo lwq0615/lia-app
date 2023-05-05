@@ -91,7 +91,7 @@ export default function Code(props) {
             })
         },
         // 需要加载数据时触发 params => {}
-        getPage: (params = {}, page = {}) => {
+        getPage: async (params = {}, page = {}) => {
             params.createTime = params.createTime?.join(",")
             return getSysToolCodePage(params, page.current, page.size)
         },

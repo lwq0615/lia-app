@@ -272,7 +272,7 @@ class CrudForm extends React.Component {
                 formValue[column.dataIndex] = formValue[column.dataIndex]?.map(item => item.format("YYYY-MM-DD"))
             }
             else if (column.type === "date") {
-                formValue[column.dataIndex] = formValue[key].format("YYYY-MM-DD")
+                formValue[column.dataIndex] = formValue[column.dataIndex].format("YYYY-MM-DD")
             }
             else if (column.type === 'datetime') {
                 const datetime = moment(formValue[column.dataIndex]).format("YYYY-MM-DD HH:mm:ss")

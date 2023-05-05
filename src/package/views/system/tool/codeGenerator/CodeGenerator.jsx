@@ -423,7 +423,7 @@ export default class CodeGenerator extends React.Component {
                     <Col span={3}>
                         <Form.Item
                             valuePropName="checked"
-                            name="CreaterFlag"
+                            name="createrFlag"
                             label="创建人"
                         >
                             <Switch defaultChecked />

@@ -38,7 +38,7 @@ export function firstLow(str) {
  */
 export function requestCode({ tableName, httpUrl }) {
     if (httpUrl && httpUrl[0] !== '/') {
-        httpUrl = '/'+httpUrl
+        httpUrl = '/' + httpUrl
     }
     if (httpUrl && httpUrl[httpUrl.length - 1] === '/') {
         httpUrl = httpUrl.substring(0, httpUrl.length - 1)
@@ -154,7 +154,7 @@ export function viewCode({ data, tableName, primaryKey, CreaterFlag, createTimeF
     return `
 import React from 'react'
 import Crud from '@/package/components/crud/Crud'
-import { get${firstUp(toHump(tableName))}Page, save${firstUp(toHump(tableName))}, delete${firstUp(toHump(tableName))}s } from '@/package/request/system/${firstLow(toHump(tableName))}'
+import { get${firstUp(toHump(tableName))}Page, add${firstUp(toHump(tableName))}, edit${firstUp(toHump(tableName))}, delete${firstUp(toHump(tableName))}s } from '@/package/request/system/${firstLow(toHump(tableName))}'
 import { message } from "antd"
 
 
@@ -191,11 +191,18 @@ export default class ${firstUp(toHump(tableName))} extends React.Component{
             // 新增编辑提交钩子 async (form, type) => {}
             // 如果需要获取返回值再关闭弹窗，请使用await
             // return true刷新页面
-            onSave: async (form, type) => {
-                return await save${firstUp(toHump(tableName))}(form).then(res => {
-                    message.success(type + "成功")
-                    return true
-                })
+            onSave: async (form) => {
+                if(form.id) {
+                    return await edit${firstUp(toHump(tableName))}(form).then(res => {
+                        message.success("编辑成功")
+                        return true
+                    })
+                }else {
+                    return await add${firstUp(toHump(tableName))}(form).then(res => {
+                        message.success("新增成功")
+                        return true
+                    })
+                }
             },
             columns: [
 ${getColumnsCode()}
@@ -205,7 +212,7 @@ ${getColumnsCode()}
 
     render(){
         return (
-            <Crud {...this.state.option}/>
+            <Crud {...this.state.option} style={{ padding: 24 }} />
         )
     }
     
@@ -228,13 +235,13 @@ export function entityCode({ data, tableName, primaryKey, CreaterFlag, createTim
 
         data.forEach(item => {
             if (item.type === "date" || item.type === "datetime") {
-                str += `${item.remark ? '    /**\n     * '+item.remark+'\n     */' : ''}
+                str += `${item.remark ? '    /**\n     * ' + item.remark + '\n     */' : ''}
     @${item.updateTime ? "UpdateTime" : item.createTime ? "CreateTime" : ""}
     @TableField("\`${toLine(item.name)}\`")${item.notNull ? "\n    @Required" : ""}
     private String ${item.name};\n\n`
-            } 
+            }
             else {
-                str += `${item.remark ? '    /**\n     * '+item.remark+'\n     */' : ''}
+                str += `${item.remark ? '    /**\n     * ' + item.remark + '\n     */' : ''}
     @TableField("\`${toLine(item.name)}\`")${item.creater ? "\n    @Creater" : ""}${item.like ? "\n    @Like" : ""}${item.notNull ? "\n    @Required" : ""}
     private ${item.type} ${item.name};\n\n`
             }
