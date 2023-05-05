@@ -465,7 +465,7 @@ export function mysqlCode({ tableName, data, primaryKey, CreaterFlag, createTime
     \`${toLine(primaryKey.name)}\` bigint(0) NOT NULL ${primaryKey.type === "autoIncrement" ? "AUTO_INCREMENT" : ""} COMMENT '主键'`)
         data.forEach(item => {
             columns.push(`
-    \`${toLine(item.name)}\` ${mysqlMap[item.type]}(${item.len})${item.createTime || item.updateTime ? " DEFAULT CURRENT_TIMESTAMP(0)" : ""}${item.updateTime ? " ON UPDATE CURRENT_TIMESTAMP(0)" : ""}${["String", "Character"].includes(primaryKey.type) ? " CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci" : ""}${item.notNull ? " NOT NULL" : ""} COMMENT '${item.remark}'`)
+    \`${toLine(item.name)}\` ${mysqlMap[item.type]}${['date', 'datetime'].includes(item.type) ? '' : '('+item.len+')'}${item.createTime || item.updateTime ? " DEFAULT CURRENT_TIMESTAMP(0)" : ""}${item.updateTime ? " ON UPDATE CURRENT_TIMESTAMP(0)" : ""}${["String", "Character"].includes(primaryKey.type) ? " CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci" : ""}${item.notNull ? " NOT NULL" : ""} COMMENT '${item.remark}'`)
         })
         columns.push(`
     PRIMARY KEY (\`${toLine(primaryKey.name)}\`) USING BTREE`)
