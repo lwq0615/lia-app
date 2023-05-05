@@ -269,7 +269,7 @@ class CrudForm extends React.Component {
                 continue
             }
             if ((column.type === 'date' || column.type === 'datetime') && column.range && this.props.title === '搜索') {
-                formValue[column.dataIndex] = formValue[column.dataIndex]?.map(item => item.format("YYYY-MM-DD"))
+                formValue[column.dataIndex] = formValue[column.dataIndex]?.map(item => item.format("YYYY-MM-DD")).join(', ')
             }
             else if (column.type === "date") {
                 formValue[column.dataIndex] = formValue[column.dataIndex].format("YYYY-MM-DD")

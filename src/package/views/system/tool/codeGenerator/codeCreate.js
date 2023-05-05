@@ -236,7 +236,7 @@ export function entityCode({ data, tableName, primaryKey, CreaterFlag, createTim
         data.forEach(item => {
             if (item.type === "date" || item.type === "datetime") {
                 str += `${item.remark ? '    /**\n     * ' + item.remark + '\n     */' : ''}
-    @${item.updateTime ? "UpdateTime" : item.createTime ? "CreateTime" : ""}
+    @${item.updateTime ? "UpdateTime" : item.createTime ? "CreateTime" : "Between"}
     @TableField("\`${toLine(item.name)}\`")${item.notNull ? "\n    @Required" : ""}
     private String ${item.name};\n\n`
             }
