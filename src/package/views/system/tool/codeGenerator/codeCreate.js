@@ -185,7 +185,6 @@ export default class ${firstUp(toHump(tableName))} extends React.Component{
             },
             // 需要加载数据时触发 params => {}
             getPage: (params = {}, page = {}) => {
-                params.createTime = params.createTime?.join(",")
                 return get${firstUp(toHump(tableName))}Page(params, page.current, page.size)
             },
             // 新增编辑提交钩子 async (form, type) => {}
